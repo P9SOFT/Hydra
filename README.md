@@ -1,8 +1,8 @@
 Hydra
 ============
 
-Hydra's aim is to allow the developer to focus on the important implementation, without having to focus on complex things such as: Background tasks, asynchrony, and so on..
-All you need to do is to register your tasks to Hydra framework, and Hydra framework will excute your task in the background thread, finally your callback handler is called by Hydra framework when your task is done.
+Hydra's aim is to allow the developer to focus on the important implementation, without having to focus on complex things such as background tasks, asynchrony, and so on..
+All you need to do is to register your tasks to the Hydra framework, and the framework will excute your task in a background thread. You're callback handler is called by the Hydra framework when your task is complete.
 
 # Installation
 
@@ -12,14 +12,14 @@ pod ‘Hydra’
 
 # Setup
 
-At least, one `HYWorker` module is required.
+At least one `HYWorker` module is required.
 You can make worker module by subclass from `HYworker`.
 
 ```objective-c
 @interface CommonWorker : HYWorker
 ```
 
-Add worker to Hydra and start. It’s all.
+Add the worker to Hydra and start. That's all.
 
 ```objective-c
 [[Hydra defaultHydra] addWorker:[[CommonWorker alloc] init]];
@@ -28,14 +28,14 @@ Add worker to Hydra and start. It’s all.
 
 # Executor
 
-Most of your business logic will be in `HYExecutor` class.
-You can make executor module by subclass from `HYExecutor`.
+Most of your business logic will be in the `HYExecutor` class.
+You can make executor module by subclassing `HYExecutor`.
 
 ```objective-c
 @interface SampleExecutor : HYExecutor
 ```
 
-Following code shows how to set your business logic under `HYExecutor` class.
+The following code shows how to set your business logic under the `HYExecutor` class.
 
 ```objective-c
 - (NSString *)name
@@ -60,7 +60,7 @@ Following code shows how to set your business logic under `HYExecutor` class.
 }
 ```
 
-Make query and push to `Hydra`.
+Make a query and push to `Hydra`.
 
 ```objective-c
 HYQuery *query = [HYQuery queryWithWorkerName:CommonWorker executorName:SampleExecutorName];
@@ -69,7 +69,7 @@ HYQuery *query = [HYQuery queryWithWorkerName:CommonWorker executorName:SampleEx
 [[Hydra defaultHydra] pushQuery:query];
 ```
 
-Register callback handler to get the result of your task.
+Register the callback handler to get the result of your task.
 
 ```objective-c
 [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commonWorkerNotification:) name:CommonWorkerName object:nil];
@@ -90,7 +90,7 @@ Register callback handler to get the result of your task.
 # Manager
 
 A helper class to centralize a set of relative excutors.
-You can make manager class by subclass from `HYManager`.
+You can make the manager class by subclassing `HYManager`.
 
 ```objective-c
 @interface SampleManager : HYManager
@@ -110,7 +110,7 @@ You can make manager class by subclass from `HYManager`.
 [[SampleManager defaultManager] requestSumOfA:1 andB:2];
 ```
 
-Following example shows how to simply add notification callback handler.
+The following example shows how to simply the add notification callback handler.
 
 ```objective-c
 [self registExecutor:[[SampleExecutor alloc] init] withWorkerName:SampleWorkerName action:@selector(sampleExecutorHandlerWithResult:)];
@@ -125,7 +125,7 @@ Following example shows how to simply add notification callback handler.
 }
 ```
 
-Also, `HYManager` is able to send a notification by its own name.
+Also, `HYManager` is able to send a notification with its own name.
 
 ```objective-c
 - (NSString *)name
@@ -150,10 +150,10 @@ Also, `HYManager` is able to send a notification by its own name.
 
 # AsyncTask
 
-You can also perform additional tasks in parallel, using `AsyncTask` class. So it allows `HYExecutor' to do something else immediately after calling `bindAsyncTask:` method to excute 'AsyncTask'. 
+You can also perform additional tasks running parallel to each other using the `AsyncTask` class. So it allows `HYExecutor' to do something else immediately after calling the `bindAsyncTask:` method to excute 'AsyncTask'. 
 
 `calledExecutingWithQuery' can be called by `AsyncTask` when it's job has been done.
-For that reason, you should know that your 'AsyncTask` class have already done it's job or not by checking the `anQuery` parameter. 
+For that reason, you should know that your 'AsyncTask` class has already done it's job by checking the `anQuery` parameter. 
 The following code shows that how to set this `anQuery` parameter.
 
 ```objective-c
@@ -175,7 +175,7 @@ The following code shows that how to set this `anQuery` parameter.
 
 # TrackingResultSet
 
-`TrackingResultSet` is convenient when you want to track all of registered tasks.
+`TrackingResultSet` is convenient when you want to track all of the registered tasks.
 Bellow are the list of when you can get notifications.
 
 1. When all of reigstered tasks have done after these are initilized.
@@ -191,8 +191,8 @@ HYTrackingResultSet *trackingResultSet = [[HYTrackingResultSet alloc] initWithNa
 # Migrator
 
 Your app may be updated many times.
-Sometimes, your users need to update their local data to the latest version of data.
-You can make this migration module to manage it easily by subclass from `HYMigrator`.
+Sometimes, your users need to update their local data to the latest version of their data.
+You can make this migration module to manage it easily by subclassing `HYMigrator`.
 
 ```objective-c
 @interface SampleMigrator : HYMigrator
