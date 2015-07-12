@@ -1,0 +1,41 @@
+//
+//  SampleMigrator.m
+//  Sample05_UsingMigrator
+//
+//  Created by Tae Hyun, Na on 2015. 3. 11..
+//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//
+//  Licensed under the MIT license.
+
+#import "SampleMigrator.h"
+
+@implementation SampleMigrator
+
+- (BOOL)doInitialing
+{
+	// do something when first initialing task at once
+	return YES;
+}
+
+- (NSUInteger)suggestedMigrationNumber
+{
+	// set last version number of migration to 5 for example.
+	return 5;
+}
+
+- (BOOL)isSomethingToDoForMigrationNumber:(NSUInteger)migrationNumber
+{
+	// check migration number and do some task for given migration number.
+	// if something to do for given migration number then return YES, or if not return NO.
+	return YES;
+}
+
+- (BOOL)doMigrationForNumber:(NSUInteger)migrationNumber
+{
+	// if you return YES at method 'isSomethingToDoForMigrationNumber:' for given number then,
+	// this method called for do migration task.
+	// implement your migration code for given number here.
+	return YES;
+}
+
+@end

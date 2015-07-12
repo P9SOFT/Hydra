@@ -1,0 +1,487 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		ACA0C7871B5251D3008DEEAA /* Hydra.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7861B5251D3008DEEAA /* Hydra.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ACA0C78D1B5251D3008DEEAA /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ACA0C7811B5251D3008DEEAA /* Hydra.framework */; };
+		ACA0C7941B5251D3008DEEAA /* HydraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7931B5251D3008DEEAA /* HydraTests.m */; };
+		ACA0C7AF1B525468008DEEAA /* HYAsyncTask.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C79D1B525468008DEEAA /* HYAsyncTask.h */; };
+		ACA0C7B01B525468008DEEAA /* HYAsyncTask.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C79E1B525468008DEEAA /* HYAsyncTask.m */; };
+		ACA0C7B11B525468008DEEAA /* HYDefine.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C79F1B525468008DEEAA /* HYDefine.h */; };
+		ACA0C7B21B525468008DEEAA /* Hydra.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7A01B525468008DEEAA /* Hydra.m */; };
+		ACA0C7B31B525468008DEEAA /* HYExecuter.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7A11B525468008DEEAA /* HYExecuter.h */; };
+		ACA0C7B41B525468008DEEAA /* HYExecuter.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7A21B525468008DEEAA /* HYExecuter.m */; };
+		ACA0C7B51B525468008DEEAA /* HYManager.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7A31B525468008DEEAA /* HYManager.h */; };
+		ACA0C7B61B525468008DEEAA /* HYManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7A41B525468008DEEAA /* HYManager.m */; };
+		ACA0C7B71B525468008DEEAA /* HYMigrator.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7A51B525468008DEEAA /* HYMigrator.h */; };
+		ACA0C7B81B525468008DEEAA /* HYMigrator.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7A61B525468008DEEAA /* HYMigrator.m */; };
+		ACA0C7B91B525468008DEEAA /* HYQuery.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7A71B525468008DEEAA /* HYQuery.h */; };
+		ACA0C7BA1B525468008DEEAA /* HYQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7A81B525468008DEEAA /* HYQuery.m */; };
+		ACA0C7BB1B525468008DEEAA /* HYResult.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7A91B525468008DEEAA /* HYResult.h */; };
+		ACA0C7BC1B525468008DEEAA /* HYResult.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7AA1B525468008DEEAA /* HYResult.m */; };
+		ACA0C7BD1B525468008DEEAA /* HYTrackingResultSet.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7AB1B525468008DEEAA /* HYTrackingResultSet.h */; };
+		ACA0C7BE1B525468008DEEAA /* HYTrackingResultSet.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7AC1B525468008DEEAA /* HYTrackingResultSet.m */; };
+		ACA0C7BF1B525468008DEEAA /* HYWorker.h in Headers */ = {isa = PBXBuildFile; fileRef = ACA0C7AD1B525468008DEEAA /* HYWorker.h */; };
+		ACA0C7C01B525468008DEEAA /* HYWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = ACA0C7AE1B525468008DEEAA /* HYWorker.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		ACA0C78E1B5251D3008DEEAA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = ACA0C7781B5251D2008DEEAA /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = ACA0C7801B5251D3008DEEAA;
+			remoteInfo = Hydra;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		ACA0C7811B5251D3008DEEAA /* Hydra.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Hydra.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACA0C7851B5251D3008DEEAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ACA0C7861B5251D3008DEEAA /* Hydra.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Hydra.h; sourceTree = "<group>"; };
+		ACA0C78C1B5251D3008DEEAA /* HydraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = HydraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		ACA0C7921B5251D3008DEEAA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		ACA0C7931B5251D3008DEEAA /* HydraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HydraTests.m; sourceTree = "<group>"; };
+		ACA0C79D1B525468008DEEAA /* HYAsyncTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYAsyncTask.h; sourceTree = "<group>"; };
+		ACA0C79E1B525468008DEEAA /* HYAsyncTask.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYAsyncTask.m; sourceTree = "<group>"; };
+		ACA0C79F1B525468008DEEAA /* HYDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYDefine.h; sourceTree = "<group>"; };
+		ACA0C7A01B525468008DEEAA /* Hydra.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Hydra.m; sourceTree = "<group>"; };
+		ACA0C7A11B525468008DEEAA /* HYExecuter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYExecuter.h; sourceTree = "<group>"; };
+		ACA0C7A21B525468008DEEAA /* HYExecuter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYExecuter.m; sourceTree = "<group>"; };
+		ACA0C7A31B525468008DEEAA /* HYManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYManager.h; sourceTree = "<group>"; };
+		ACA0C7A41B525468008DEEAA /* HYManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYManager.m; sourceTree = "<group>"; };
+		ACA0C7A51B525468008DEEAA /* HYMigrator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYMigrator.h; sourceTree = "<group>"; };
+		ACA0C7A61B525468008DEEAA /* HYMigrator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYMigrator.m; sourceTree = "<group>"; };
+		ACA0C7A71B525468008DEEAA /* HYQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYQuery.h; sourceTree = "<group>"; };
+		ACA0C7A81B525468008DEEAA /* HYQuery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYQuery.m; sourceTree = "<group>"; };
+		ACA0C7A91B525468008DEEAA /* HYResult.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYResult.h; sourceTree = "<group>"; };
+		ACA0C7AA1B525468008DEEAA /* HYResult.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYResult.m; sourceTree = "<group>"; };
+		ACA0C7AB1B525468008DEEAA /* HYTrackingResultSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYTrackingResultSet.h; sourceTree = "<group>"; };
+		ACA0C7AC1B525468008DEEAA /* HYTrackingResultSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYTrackingResultSet.m; sourceTree = "<group>"; };
+		ACA0C7AD1B525468008DEEAA /* HYWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HYWorker.h; sourceTree = "<group>"; };
+		ACA0C7AE1B525468008DEEAA /* HYWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HYWorker.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		ACA0C77D1B5251D3008DEEAA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ACA0C7891B5251D3008DEEAA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACA0C78D1B5251D3008DEEAA /* Hydra.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		ACA0C7771B5251D2008DEEAA = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7831B5251D3008DEEAA /* Hydra */,
+				ACA0C7901B5251D3008DEEAA /* HydraTests */,
+				ACA0C7821B5251D3008DEEAA /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		ACA0C7821B5251D3008DEEAA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7811B5251D3008DEEAA /* Hydra.framework */,
+				ACA0C78C1B5251D3008DEEAA /* HydraTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		ACA0C7831B5251D3008DEEAA /* Hydra */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7861B5251D3008DEEAA /* Hydra.h */,
+				ACA0C7A01B525468008DEEAA /* Hydra.m */,
+				ACA0C79F1B525468008DEEAA /* HYDefine.h */,
+				ACA0C7A71B525468008DEEAA /* HYQuery.h */,
+				ACA0C7A81B525468008DEEAA /* HYQuery.m */,
+				ACA0C7A91B525468008DEEAA /* HYResult.h */,
+				ACA0C7AA1B525468008DEEAA /* HYResult.m */,
+				ACA0C7AB1B525468008DEEAA /* HYTrackingResultSet.h */,
+				ACA0C7AC1B525468008DEEAA /* HYTrackingResultSet.m */,
+				ACA0C79D1B525468008DEEAA /* HYAsyncTask.h */,
+				ACA0C79E1B525468008DEEAA /* HYAsyncTask.m */,
+				ACA0C7A11B525468008DEEAA /* HYExecuter.h */,
+				ACA0C7A21B525468008DEEAA /* HYExecuter.m */,
+				ACA0C7AD1B525468008DEEAA /* HYWorker.h */,
+				ACA0C7AE1B525468008DEEAA /* HYWorker.m */,
+				ACA0C7A31B525468008DEEAA /* HYManager.h */,
+				ACA0C7A41B525468008DEEAA /* HYManager.m */,
+				ACA0C7A51B525468008DEEAA /* HYMigrator.h */,
+				ACA0C7A61B525468008DEEAA /* HYMigrator.m */,
+				ACA0C7841B5251D3008DEEAA /* Supporting Files */,
+			);
+			path = Hydra;
+			sourceTree = "<group>";
+		};
+		ACA0C7841B5251D3008DEEAA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7851B5251D3008DEEAA /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		ACA0C7901B5251D3008DEEAA /* HydraTests */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7931B5251D3008DEEAA /* HydraTests.m */,
+				ACA0C7911B5251D3008DEEAA /* Supporting Files */,
+			);
+			path = HydraTests;
+			sourceTree = "<group>";
+		};
+		ACA0C7911B5251D3008DEEAA /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				ACA0C7921B5251D3008DEEAA /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		ACA0C77E1B5251D3008DEEAA /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACA0C7BB1B525468008DEEAA /* HYResult.h in Headers */,
+				ACA0C7B31B525468008DEEAA /* HYExecuter.h in Headers */,
+				ACA0C7B51B525468008DEEAA /* HYManager.h in Headers */,
+				ACA0C7BF1B525468008DEEAA /* HYWorker.h in Headers */,
+				ACA0C7B71B525468008DEEAA /* HYMigrator.h in Headers */,
+				ACA0C7BD1B525468008DEEAA /* HYTrackingResultSet.h in Headers */,
+				ACA0C7871B5251D3008DEEAA /* Hydra.h in Headers */,
+				ACA0C7B91B525468008DEEAA /* HYQuery.h in Headers */,
+				ACA0C7AF1B525468008DEEAA /* HYAsyncTask.h in Headers */,
+				ACA0C7B11B525468008DEEAA /* HYDefine.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		ACA0C7801B5251D3008DEEAA /* Hydra */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ACA0C7971B5251D3008DEEAA /* Build configuration list for PBXNativeTarget "Hydra" */;
+			buildPhases = (
+				ACA0C77C1B5251D3008DEEAA /* Sources */,
+				ACA0C77D1B5251D3008DEEAA /* Frameworks */,
+				ACA0C77E1B5251D3008DEEAA /* Headers */,
+				ACA0C77F1B5251D3008DEEAA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Hydra;
+			productName = Hydra;
+			productReference = ACA0C7811B5251D3008DEEAA /* Hydra.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		ACA0C78B1B5251D3008DEEAA /* HydraTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = ACA0C79A1B5251D3008DEEAA /* Build configuration list for PBXNativeTarget "HydraTests" */;
+			buildPhases = (
+				ACA0C7881B5251D3008DEEAA /* Sources */,
+				ACA0C7891B5251D3008DEEAA /* Frameworks */,
+				ACA0C78A1B5251D3008DEEAA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				ACA0C78F1B5251D3008DEEAA /* PBXTargetDependency */,
+			);
+			name = HydraTests;
+			productName = HydraTests;
+			productReference = ACA0C78C1B5251D3008DEEAA /* HydraTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		ACA0C7781B5251D2008DEEAA /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0640;
+				ORGANIZATIONNAME = TeamP9;
+				TargetAttributes = {
+					ACA0C7801B5251D3008DEEAA = {
+						CreatedOnToolsVersion = 6.4;
+					};
+					ACA0C78B1B5251D3008DEEAA = {
+						CreatedOnToolsVersion = 6.4;
+					};
+				};
+			};
+			buildConfigurationList = ACA0C77B1B5251D2008DEEAA /* Build configuration list for PBXProject "Hydra" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = ACA0C7771B5251D2008DEEAA;
+			productRefGroup = ACA0C7821B5251D3008DEEAA /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				ACA0C7801B5251D3008DEEAA /* Hydra */,
+				ACA0C78B1B5251D3008DEEAA /* HydraTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		ACA0C77F1B5251D3008DEEAA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ACA0C78A1B5251D3008DEEAA /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		ACA0C77C1B5251D3008DEEAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACA0C7B21B525468008DEEAA /* Hydra.m in Sources */,
+				ACA0C7B81B525468008DEEAA /* HYMigrator.m in Sources */,
+				ACA0C7B41B525468008DEEAA /* HYExecuter.m in Sources */,
+				ACA0C7BA1B525468008DEEAA /* HYQuery.m in Sources */,
+				ACA0C7BC1B525468008DEEAA /* HYResult.m in Sources */,
+				ACA0C7C01B525468008DEEAA /* HYWorker.m in Sources */,
+				ACA0C7B61B525468008DEEAA /* HYManager.m in Sources */,
+				ACA0C7B01B525468008DEEAA /* HYAsyncTask.m in Sources */,
+				ACA0C7BE1B525468008DEEAA /* HYTrackingResultSet.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		ACA0C7881B5251D3008DEEAA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				ACA0C7941B5251D3008DEEAA /* HydraTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		ACA0C78F1B5251D3008DEEAA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = ACA0C7801B5251D3008DEEAA /* Hydra */;
+			targetProxy = ACA0C78E1B5251D3008DEEAA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		ACA0C7951B5251D3008DEEAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		ACA0C7961B5251D3008DEEAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		ACA0C7981B5251D3008DEEAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Hydra/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		ACA0C7991B5251D3008DEEAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = Hydra/Info.plist;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		ACA0C79B1B5251D3008DEEAA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HydraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		ACA0C79C1B5251D3008DEEAA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = HydraTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		ACA0C77B1B5251D2008DEEAA /* Build configuration list for PBXProject "Hydra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ACA0C7951B5251D3008DEEAA /* Debug */,
+				ACA0C7961B5251D3008DEEAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		ACA0C7971B5251D3008DEEAA /* Build configuration list for PBXNativeTarget "Hydra" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ACA0C7981B5251D3008DEEAA /* Debug */,
+				ACA0C7991B5251D3008DEEAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		ACA0C79A1B5251D3008DEEAA /* Build configuration list for PBXNativeTarget "HydraTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				ACA0C79B1B5251D3008DEEAA /* Debug */,
+				ACA0C79C1B5251D3008DEEAA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = ACA0C7781B5251D2008DEEAA /* Project object */;
+}
