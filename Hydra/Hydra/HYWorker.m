@@ -47,33 +47,26 @@ enum HYWorkerState {
 {
 	if( (self = [super init]) != nil ) {
 		if( [[self name] length] <= 0 ) {
-			[self release];
 			return nil;
 		}
 		if( (_executerDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_queryQueue = [[NSMutableArray alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_condition = [[NSCondition alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		_currentState = kHYWorkerStateStopped;
 		_nextState = kHYWorkerStateNull;
 		if( (_cacheDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForCacheDict = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( [self didInit] == NO ) {
-			[self release];
 			return nil;
 		}
 	}
@@ -84,14 +77,6 @@ enum HYWorkerState {
 - (void) dealloc
 {
 	[self willDealloc];
-		
-	[_executerDict release];
-	[_queryQueue release];
-	[_condition release];
-	[_cacheDict release];
-	[_lockForCacheDict release];
-	
-	[super dealloc];
 }
 
 - (BOOL) addExecuter: (id)anExecuter
@@ -467,11 +452,11 @@ enum HYWorkerState {
 	
 	[_lockForCacheDict lock];
 	
-	anObject = [[_cacheDict objectForKey: key] retain];
+	anObject = [_cacheDict objectForKey: key];
 	
 	[_lockForCacheDict unlock];
 	
-	return [anObject autorelease];
+	return anObject;
 }
 
 - (BOOL) setCacheData: (id)anData forKey: (NSString *)key
@@ -546,7 +531,7 @@ enum HYWorkerState {
 	for( i=0 ; i<count ; ++i ) {
 		anQuery = [_queryQueue objectAtIndex: i];
 		if( ([anQuery canceled] == YES) || ([anQuery paused] == NO) ) {
-			anQuery = [[_queryQueue objectAtIndex: i] retain];
+			anQuery = [_queryQueue objectAtIndex: i];
 			[_queryQueue removeObjectAtIndex: i];
 			return anQuery;
 		}
@@ -646,114 +631,111 @@ enum HYWorkerState {
 
 - (void) fetcher: (id)anParamter
 {
-	NSAutoreleasePool	*pool = [[NSAutoreleasePool alloc] init];
-	NSAutoreleasePool	*poolInLoop;
-	id					anQuery;
-	id					anExecuter;
+    @autoreleasepool {
+        
+        id					anQuery;
+        id					anExecuter;
 
-	[_condition lock];
-	_currentState = kHYWorkerStateRunning;
-	_nextState = kHYWorkerStateNull;
-	[_condition unlock];
+        [_condition lock];
+        _currentState = kHYWorkerStateRunning;
+        _nextState = kHYWorkerStateNull;
+        [_condition unlock];
 
-	[self didStart];
-	[self postNotifyStarted];
-	
-	while( 1 ) {
-		
-		poolInLoop = [[NSAutoreleasePool alloc] init];
-	
-		[_condition lock];
-		
-		_executingQuery = nil;
+        [self didStart];
+        [self postNotifyStarted];
+        
+        while( 1 ) {
+            
+            @autoreleasepool {
+        
+                [_condition lock];
+                
+                _executingQuery = nil;
 
-		while( ([self countOfQueriesInQueue] <= 0) || (_currentState == kHYWorkerStatePaused) ) {
-			[_condition wait];
-			if( _nextState != kHYWorkerStateNull ) {
-				_currentState = _nextState;
-				if( _nextState == kHYWorkerStatePaused ) {
-					[self didPause];
-					[self postNotifyPaused];
-				} else if( _nextState == kHYWorkerStateRunning ) {
-					[self didResume];
-					[self postNotifyResumed];
-				}
-				_nextState = kHYWorkerStateNull;
-			}
-			if( _currentState == kHYWorkerStateStopped ) {
-				break;
-			}
-		}
-		if( _currentState == kHYWorkerStateStopped ) {
-			[_condition unlock];
-			[poolInLoop drain];
-			break;
-		}
-		
-		anQuery = [self popQueryFromQueue];
-		
-		_executingQuery = anQuery;
-		
-		[_condition unlock];
-		
-		if( [anQuery canceled] == YES ) {
-			if( [self didCancelQuery: anQuery] == NO ) {
-				if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
-					[anExecuter clearAllResults];
-					if( [anExecuter cancelWithQuery: anQuery] == YES ) {
-						if( [anExecuter useCustomPostNotification] == YES ) {
-							[anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
-						} else {
-							[self postNotifyWithResultDict: [anExecuter resultDict]];
-						}
-					}
-				}
-			}
-		} else {
-			if( [self didFetchQuery: anQuery] == NO ) {
-				if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
-					[anExecuter clearAllResults];
-					if( [anExecuter shouldSkipExecutingWithQuery: anQuery] == NO ) {
-						if( [anExecuter executeWithQuery: anQuery] == YES ) {
-							if( [anExecuter useCustomPostNotification] == YES ) {
-								[anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
-							} else {
-								[self postNotifyWithResultDict: [anExecuter resultDict]];
-							}
-						}
-					} else {
-						if( [anExecuter skipWithQuery: anQuery] == YES ) {
-							if( [anExecuter useCustomPostNotification] == YES ) {
-								[anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
-							} else {
-								[self postNotifyWithResultDict: [anExecuter resultDict]];
-							}
-						}
-					}
-				}
-			}
-		}
-		if( [anQuery haveAsyncTask] == YES ) {
-			[[Hydra defaultHydra] unbindAsyncTaskForIssuedId: [anQuery issuedIdOfAsyncTask]];
-		}
-		
-		_executingQuery = nil;
-		
-		[anQuery release];
-		
-		[poolInLoop drain];
-				
-	}
-	
-	[_condition lock];
-	_currentState = kHYWorkerStateStopped;
-	_nextState = kHYWorkerStateNull;
-	[_condition unlock];
+                while( ([self countOfQueriesInQueue] <= 0) || (_currentState == kHYWorkerStatePaused) ) {
+                    [_condition wait];
+                    if( _nextState != kHYWorkerStateNull ) {
+                        _currentState = _nextState;
+                        if( _nextState == kHYWorkerStatePaused ) {
+                            [self didPause];
+                            [self postNotifyPaused];
+                        } else if( _nextState == kHYWorkerStateRunning ) {
+                            [self didResume];
+                            [self postNotifyResumed];
+                        }
+                        _nextState = kHYWorkerStateNull;
+                    }
+                    if( _currentState == kHYWorkerStateStopped ) {
+                        break;
+                    }
+                }
+                if( _currentState == kHYWorkerStateStopped ) {
+                    [_condition unlock];
+                    break;
+                }
+                
+                anQuery = [self popQueryFromQueue];
+                
+                _executingQuery = anQuery;
+                
+                [_condition unlock];
+                
+                if( [anQuery canceled] == YES ) {
+                    if( [self didCancelQuery: anQuery] == NO ) {
+                        if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
+                            [anExecuter clearAllResults];
+                            if( [anExecuter cancelWithQuery: anQuery] == YES ) {
+                                if( [anExecuter useCustomPostNotification] == YES ) {
+                                    [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
+                                } else {
+                                    [self postNotifyWithResultDict: [anExecuter resultDict]];
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if( [self didFetchQuery: anQuery] == NO ) {
+                        if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
+                            [anExecuter clearAllResults];
+                            if( [anExecuter shouldSkipExecutingWithQuery: anQuery] == NO ) {
+                                if( [anExecuter executeWithQuery: anQuery] == YES ) {
+                                    if( [anExecuter useCustomPostNotification] == YES ) {
+                                        [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
+                                    } else {
+                                        [self postNotifyWithResultDict: [anExecuter resultDict]];
+                                    }
+                                }
+                            } else {
+                                if( [anExecuter skipWithQuery: anQuery] == YES ) {
+                                    if( [anExecuter useCustomPostNotification] == YES ) {
+                                        [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
+                                    } else {
+                                        [self postNotifyWithResultDict: [anExecuter resultDict]];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if( [anQuery haveAsyncTask] == YES ) {
+                    [[Hydra defaultHydra] unbindAsyncTaskForIssuedId: [anQuery issuedIdOfAsyncTask]];
+                }
+                
+                _executingQuery = nil;
+                                
+            }
+            
+        }
+        
+        [_condition lock];
+        _currentState = kHYWorkerStateStopped;
+        _nextState = kHYWorkerStateNull;
+        [_condition unlock];
 
-	[self didStop];
-	[self postNotifyStopped];
-	
-	[pool drain];
+        [self didStop];
+        [self postNotifyStopped];
+        
+    }
 }
 
 - (NSString *) name

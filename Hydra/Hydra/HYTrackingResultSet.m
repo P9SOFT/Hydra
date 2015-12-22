@@ -25,30 +25,18 @@
 {
 	if( (self = [super init]) != nil ) {
 		if( [name length] <= 0 ) {
-			[self release];
 			return nil;
 		}
-		_name = [name retain];
+		_name = name;
 		if( (_resultNameDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_resultValueDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 	}
 	
 	return self;
-}
-
-- (void) dealloc
-{
-	[_name release];
-	[_resultNameDict release];
-	[_resultValueDict release];
-	
-	[super dealloc];
 }
 
 - (void) setResultNamesFromArray: (NSArray *)resultNames

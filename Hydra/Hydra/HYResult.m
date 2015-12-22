@@ -31,12 +31,10 @@ int32_t			g_HYResult_last_issuedId;
 {
 	if( (self = [super init]) != nil ) {
 		if( [name length] <= 0 ) {
-			[self release];
 			return nil;
 		}
-		_name = [name retain];
+		_name = name;
 		if( (_paramDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		_issuedId = OSAtomicIncrement32( &g_HYResult_last_issuedId );
@@ -45,17 +43,9 @@ int32_t			g_HYResult_last_issuedId;
 	return self;
 }
 
-- (void) dealloc
-{
-	[_name release];
-	[_paramDict release];
-	
-	[super dealloc];
-}
-
 + (HYResult *) resultWithName: (NSString *)name
 {
-	return [[[HYResult alloc] initWithName: name] autorelease];
+	return [[HYResult alloc] initWithName: name];
 }
 
 - (id) parameterForKey: (NSString *)key

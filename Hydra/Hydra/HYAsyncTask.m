@@ -37,18 +37,15 @@ int32_t			g_HYAsyncTask_last_issuedId;
 {
 	if( (self = [super init]) != nil ) {
 		if( (anQuery == nil) || ([anQuery isKindOfClass: [HYQuery class]] == NO) ) {
-			[self release];
 			return nil;
 		}
-		_closeQuery = [anQuery retain];
+		_closeQuery = anQuery;
 		_issuedId = OSAtomicIncrement32( &g_HYAsyncTask_last_issuedId );
 		[_closeQuery setIssuedIdOfAsyncTask: _issuedId];
 		if( (_lock = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( [self didInit] == NO ) {
-			[self release];
 			return nil;
 		}
 	}
@@ -59,14 +56,6 @@ int32_t			g_HYAsyncTask_last_issuedId;
 - (void) dealloc
 {
 	[self willDealloc];
-	
-	[_madeByWorkerName release];
-	[_madeByExecutorName release];
-	[_closeQuery release];
-	[_lock release];
-	[_limiterName release];
-	
-	[super dealloc];
 }
 
 - (BOOL) activeLimiterName: (NSString *)name withCount: (NSInteger)count
@@ -80,9 +69,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 		return NO;
 	}
 	
-	[_limiterName release];
 	_limiterName = [name copy];
-	
 	_limiterCount = count;
 	_limiterOrder = order;
 	
@@ -91,22 +78,14 @@ int32_t			g_HYAsyncTask_last_issuedId;
 
 - (void) deactiveLimiter
 {
-	[_limiterName release];
 	_limiterName = nil;
-	
 	_limiterCount = 0;
 }
 
 - (void) madeByQueryIssuedId: (int32_t)queryIssuedId workerName: (NSString *)workerName executorName: (NSString *)executorName
 {
 	_madeByQueryIssuedId = queryIssuedId;
-	
-	[workerName retain];
-	[_madeByWorkerName release];
 	_madeByWorkerName = workerName;
-	
-	[executorName retain];
-	[_madeByExecutorName release];
 	_madeByExecutorName = executorName;
 }
 
@@ -160,7 +139,6 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	[self willDone];
 	
 	[[Hydra defaultHydra] pushQuery: _closeQuery];
-	[_closeQuery release];
 	_closeQuery = nil;
 }
 
@@ -173,7 +151,6 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	[self willCancel];
 	
 	[[Hydra defaultHydra] pushQuery: _closeQuery];
-	[_closeQuery release];
 	_closeQuery = nil;
 }
 

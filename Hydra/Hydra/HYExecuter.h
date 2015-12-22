@@ -13,7 +13,7 @@
 
 @interface HYExecuter : NSObject
 {
-	id						_employedWorker;
+	__weak id				_employedWorker;
 	NSMutableDictionary		*_resultDict;
 }
 
@@ -68,7 +68,7 @@
 - (void) doCustomPostNotificationForResultDict: (NSDictionary *)resultDict;
 - (BOOL) restoreQueryToQueue: (id)anQuery;
 
-@property (nonatomic, assign) id employedWorker;
+@property (nonatomic, weak) id employedWorker;
 @property (nonatomic, readonly) NSDictionary *resultDict;
 
 @end

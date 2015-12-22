@@ -41,6 +41,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
 	[_playgroundView.inputNumberTextField becomeFirstResponder];
 }
 

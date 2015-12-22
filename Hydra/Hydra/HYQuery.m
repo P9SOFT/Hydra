@@ -37,17 +37,14 @@ int32_t			g_HYQuery_last_issuedId;
 {
 	if( (self = [super init]) != nil ) {
 		if( [workerName length] <= 0 ) {
-			[self release];
 			return nil;
 		}
-		_workerName = [workerName retain];
+		_workerName = workerName;
 		if( [executerName length] <= 0 ) {
-			[self release];
 			return nil;
 		}
-		_executerName = [executerName retain];
+		_executerName = executerName;
 		if( (_paramDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		_issuedId = OSAtomicIncrement32( &g_HYQuery_last_issuedId );
@@ -56,19 +53,9 @@ int32_t			g_HYQuery_last_issuedId;
 	return self;
 }
 
-- (void) dealloc
-{
-	[_workerName release];
-	[_executerName release];
-	[_paramDict release];
-	[_waitingResultName release];
-	
-	[super dealloc];
-}
-
 + (HYQuery *) queryWithWorkerName: (NSString *)workerName executerName: (NSString *)executerName
 {
-	return [[[HYQuery alloc] initWithWorkerName: workerName executerName: executerName] autorelease];
+	return [[HYQuery alloc] initWithWorkerName: workerName executerName: executerName];
 }
 
 - (id) parameterForKey: (NSString *)key
@@ -113,14 +100,9 @@ int32_t			g_HYQuery_last_issuedId;
 		return NO;
 	}
 	
-	[resultName retain];
-	[_waitingResultName release];
 	_waitingResultName = resultName;
-	
 	_waitingTimeoutInterval = timeoutInterval;
-    
     _skipMeIfAlreadyWaiting = skipMeIfAlreadyWaiting;
-	
 	_haveWaitingResult = YES;
 	
 	return YES;
@@ -128,11 +110,8 @@ int32_t			g_HYQuery_last_issuedId;
 
 - (void) clearWaitingResult
 {
-	[_waitingResultName release];
 	_waitingResultName = nil;
-	
 	_waitingTimeoutInterval = 0.0;
-	
 	_haveWaitingResult = NO;
 }
 

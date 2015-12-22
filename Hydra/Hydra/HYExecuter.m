@@ -24,23 +24,14 @@
 {
 	if( (self = [super init]) != nil ) {
 		if( [[self name] length] <= 0 ) {
-			[self release];
 			return nil;
 		}
 		if( (_resultDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 	}
 	
 	return self;
-}
-
-- (void) dealloc
-{
-	[_resultDict release];
-	
-	[super dealloc];
 }
 
 - (BOOL) executeWithQuery: (id)anQuery

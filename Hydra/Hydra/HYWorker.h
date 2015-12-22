@@ -31,7 +31,7 @@
 
 @interface HYWorker : NSObject
 {
-	id						_delegate;
+	__weak id				_delegate;
 	NSMutableDictionary		*_executerDict;
 	NSMutableArray			*_queryQueue;
 	id						_executingQuery;
@@ -101,6 +101,6 @@
 - (void) removeCacheDataForKey: (NSString *)key;
 - (void) removeAllCacheData;
 
-@property (nonatomic, assign) id delegate;
+@property (nonatomic, weak) id delegate;
 
 @end

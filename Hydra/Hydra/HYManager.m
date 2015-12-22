@@ -22,31 +22,24 @@
 {
 	if( (self = [super init]) != nil ) {
 		if( [[self name] length] <= 0 ) {
-			[self release];
 			return nil;
 		}
 		if( (_usingExecutorDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_workerNameForExecutorDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_selectorForExecutorDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_usingWorkerNameDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForExecutorManaging = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( [self didInit] == NO ) {
-			[self release];
 			return nil;
 		}
 	}
@@ -58,15 +51,7 @@
 {
 	[self willDealloc];
 	
-	[[NSNotificationCenter defaultCenter] removeObserver: self];
-	
-	[_usingExecutorDict release];
-	[_workerNameForExecutorDict release];
-	[_selectorForExecutorDict release];
-	[_usingWorkerNameDict release];
-	[_lockForExecutorManaging release];
-	
-	[super dealloc];
+	[[NSNotificationCenter defaultCenter] removeObserver: self];	
 }
 
 - (NSString *) name

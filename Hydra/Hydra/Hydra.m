@@ -54,7 +54,6 @@ Hydra			*g_defaultHydra;
 + (void) destroyDefaultHydra
 {
 	@synchronized( self ) {
-		[g_defaultHydra release];
 		g_defaultHydra = nil;
 	}
 }
@@ -68,75 +67,45 @@ Hydra			*g_defaultHydra;
 {
 	if( (self = [super init]) != nil ) {
 		if( [name length] <= 0 ) {
-			[self release];
 			return nil;
 		}
-		_name = [name retain];
+		_name = name;
 		if( (_workerDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_sharedDataDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForSharedDataDict = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_trackingResultSets = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForTrackingResultSets = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_waitingResults = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForWaitingResults = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_asyncTaskDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_asyncTaskLimiterDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_asyncTaskLimiterPoolDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 		if( (_lockForAsyncTaskDict = [[NSLock alloc] init]) == nil ) {
-			[self release];
 			return nil;
 		}
 	}
 	
 	return self;
-}
-
-- (void) dealloc
-{
-	[_name release];
-	[_workerDict release];
-	[_sharedDataDict release];
-	[_lockForSharedDataDict release];
-	[_trackingResultSets release];
-	[_lockForTrackingResultSets release];
-	[_waitingResults release];
-	[_lockForWaitingResults release];
-	[_asyncTaskDict release];
-	[_asyncTaskLimiterDict release];
-	[_asyncTaskLimiterPoolDict release];
-	[_lockForAsyncTaskDict release];
-	
-	[super dealloc];
 }
 
 - (BOOL) doMigration: (id)migration waitUntilDone: (BOOL)waitUntilDone
@@ -527,11 +496,11 @@ Hydra			*g_defaultHydra;
 	
 	[_lockForSharedDataDict lock];
 	
-	anData = [[_sharedDataDict objectForKey: key] retain];
+	anData = [_sharedDataDict objectForKey: key];
 	
 	[_lockForSharedDataDict unlock];
 	
-	return [anData autorelease];
+	return anData;
 }
 
 - (BOOL) setSharedData: (id)anData forKey: (NSString *)key
@@ -596,13 +565,11 @@ Hydra			*g_defaultHydra;
 				[pair addObject: [NSNumber numberWithUnsignedInteger: 0]];
 				[_asyncTaskLimiterDict setObject: pair forKey: name];
 				[_asyncTaskLimiterPoolDict setObject: pool forKey: name];
-				[pool release];
 				set = YES;
 			}
-			[pair release];
 		}
 	}
-		
+    
 	return set;
 }
 
@@ -666,7 +633,7 @@ Hydra			*g_defaultHydra;
 		[pair addObject: [NSNumber numberWithUnsignedInteger: used]];
 		if( (pool = [_asyncTaskLimiterPoolDict objectForKey: name]) != nil ) {
 			if( [pool count] > 0 ) {
-				anAsyncTask = [[pool objectAtIndex: 0] retain];
+				anAsyncTask = [pool objectAtIndex: 0];
 				[pool removeObjectAtIndex: 0];
 			}
 		}
@@ -858,9 +825,7 @@ Hydra			*g_defaultHydra;
 	for( key in pool ) {
 		[_asyncTaskDict removeObjectForKey: key];
 	}
-	
-	[pool release];
-	
+		
 	[_lockForAsyncTaskDict unlock];
 }
 
@@ -908,9 +873,7 @@ Hydra			*g_defaultHydra;
 	for( key in pool ) {
 		[_asyncTaskDict removeObjectForKey: key];
 	}
-	
-	[pool release];
-	
+		
 	[_lockForAsyncTaskDict unlock];
 }
 
@@ -976,7 +939,7 @@ Hydra			*g_defaultHydra;
 	key = [[NSNumber numberWithUnsignedInteger: (NSUInteger)issuedId] stringValue];
 	
 	if( (anAsyncTask = [_asyncTaskDict objectForKey: key]) != nil ) {
-		limiterName = [[anAsyncTask limiterName] retain];
+		limiterName = [anAsyncTask limiterName];
 		if( [anAsyncTask running] == YES ) {
 			[anAsyncTask unbind];
 		}
@@ -986,14 +949,12 @@ Hydra			*g_defaultHydra;
 		} else {
 			anAsyncTask = nil;
 		}
-		[limiterName release];
 	}
 	
 	[_lockForAsyncTaskDict unlock];
 	
 	if( anAsyncTask != nil ) {
 		[self bindAsyncTask: anAsyncTask];
-		[anAsyncTask release];
 	}
 }
 
@@ -1153,55 +1114,54 @@ Hydra			*g_defaultHydra;
 
 - (void) stepMigration: (id)migration
 {
-	NSAutoreleasePool	*pool;
 	NSUInteger			lastUpdated;
 	NSUInteger			suggested;
 	NSUInteger			step;
 	
-	pool = [[NSAutoreleasePool alloc] init];
+    @autoreleasepool {
 	
-	suggested = [migration suggestedMigrationNumber];
-	lastUpdated = [migration lastUpdatedMigrationNumber];
-	
-	if( lastUpdated == 0 ) {
-		[self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
-		if( [migration doInitialing] == YES ) {
-			lastUpdated = 1;
-			[migration initialingDone];
-			[self postNotificationMigrationStatus: HydraNotificationCodeMigrationDidInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
-		} else {
-			[self postNotificationMigrationStatus: HydraNotificationCodeMigrationFailedAtInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
-		}
-	}
-	
-	if( lastUpdated > 0 ) {
-		if( lastUpdated >= suggested ) {
-			[self postNotificationMigrationStatus: HydraNotificationCodeMigrationNothingToDo suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
-		} else {
-			[self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillStart suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
-			step = lastUpdated + 1;
-			while( 1 ) {
-				if( [migration isSomethingToDoForMigrationNumber: step] == YES ) {
-					[self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
-					if( [migration stepMigrationForNumber: step] == NO ) {
-						[self postNotificationMigrationStatus: HydraNotificationCodeMigrationFailedAtStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
-						-- step;
-						break;
-					}
-					[self postNotificationMigrationStatus: HydraNotificationCodeMigrationDidStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
-					
-				}
-				if( ++step > suggested ) {
-					break;
-				}
-			}
-			if( step > suggested ) {
-				[self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migration lastUpdatedMigrationNumber] thread: [migration useBackgroundThread]];
-			}
-		}
-	}
-	
-	[pool drain];
+        suggested = [migration suggestedMigrationNumber];
+        lastUpdated = [migration lastUpdatedMigrationNumber];
+        
+        if( lastUpdated == 0 ) {
+            [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+            if( [migration doInitialing] == YES ) {
+                lastUpdated = 1;
+                [migration initialingDone];
+                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDidInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+            } else {
+                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationFailedAtInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+            }
+        }
+        
+        if( lastUpdated > 0 ) {
+            if( lastUpdated >= suggested ) {
+                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationNothingToDo suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+            } else {
+                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillStart suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+                step = lastUpdated + 1;
+                while( 1 ) {
+                    if( [migration isSomethingToDoForMigrationNumber: step] == YES ) {
+                        [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
+                        if( [migration stepMigrationForNumber: step] == NO ) {
+                            [self postNotificationMigrationStatus: HydraNotificationCodeMigrationFailedAtStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
+                            -- step;
+                            break;
+                        }
+                        [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDidStep suggestedNumber: suggested referenceNumber: step thread: [migration useBackgroundThread]];
+                        
+                    }
+                    if( ++step > suggested ) {
+                        break;
+                    }
+                }
+                if( step > suggested ) {
+                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migration lastUpdatedMigrationNumber] thread: [migration useBackgroundThread]];
+                }
+            }
+        }
+        
+    }
 }
 
 - (void) updateTrackingResultSetAndNotifyIfNeed: (id)anResult
@@ -1235,13 +1195,9 @@ Hydra			*g_defaultHydra;
 	if( [postNotifyDict count] > 0 ) {
 		for( name in postNotifyDict ) {
 			resultDict = [postNotifyDict objectForKey: name];
-			[[NSNotificationCenter defaultCenter] postNotificationName: name
-																object: self
-															  userInfo: resultDict];
+			[[NSNotificationCenter defaultCenter] postNotificationName: name object: self userInfo: resultDict];
 		}
 	}
-	
-	[postNotifyDict release];
 }
 
 - (BOOL) setWaitingResultWithQuery: (id)anQuery
@@ -1256,7 +1212,6 @@ Hydra			*g_defaultHydra;
 		alreadyWaiting = NO;
 		if( (issuedIdDict = [[NSMutableDictionary alloc] init]) != nil ) {
 			[_waitingResults setObject: issuedIdDict forKey: [anQuery waitingResultName]];
-			[issuedIdDict release];
 		}
 	} else {
 		alreadyWaiting = YES;
@@ -1307,7 +1262,6 @@ Hydra			*g_defaultHydra;
 			if( (expiredQuery = [issuedIdDict objectForKey: [expiredIssuedId stringValue]]) != nil ) {
 				if( [expiredQuery canceled] == NO ) {
 					notifyFlag = YES;
-					[expiredQuery retain];
 				}
 				[issuedIdDict removeObjectForKey: [expiredIssuedId stringValue]];
 				break;
@@ -1321,7 +1275,6 @@ Hydra			*g_defaultHydra;
 		if( (anWorker = [_workerDict objectForKey: [expiredQuery workerName]]) != nil ) {
 			[anWorker expireQuery: expiredQuery];
 		}
-		[expiredQuery release];
 	}
 }
 
@@ -1344,8 +1297,6 @@ Hydra			*g_defaultHydra;
 											  [anWorker name], HydraNotificationWorkerNameKey,
 											  nil]];
 	}
-	
-	[params release];
 }
 
 - (void) workerPaused: (NSDictionary *)params
@@ -1358,8 +1309,6 @@ Hydra			*g_defaultHydra;
 											  [anWorker name], HydraNotificationWorkerNameKey,
 											  nil]];
 	}
-	
-	[params release];
 }
 
 - (void) workerResumed: (NSDictionary *)params
@@ -1372,8 +1321,6 @@ Hydra			*g_defaultHydra;
 											  [anWorker name], HydraNotificationWorkerNameKey,
 											  nil]];
 	}
-	
-	[params release];
 }
 
 - (void) workerStopped: (NSDictionary *)params
@@ -1386,8 +1333,6 @@ Hydra			*g_defaultHydra;
 											  [anWorker name], HydraNotificationWorkerNameKey,
 											  nil]];
 	}
-	
-	[params release];
 }
 
 - (void) workerPostNotifyResult: (NSDictionary *)params
@@ -1398,11 +1343,9 @@ Hydra			*g_defaultHydra;
 	id				anResult;
 	
 	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) == nil ) {
-		[params release];
 		return;
 	}
 	if( (resultDict = [params objectForKey: HYWorkerParameterKeyResultDict]) == nil ) {
-		[params release];
 		return;
 	}
 	
@@ -1417,8 +1360,6 @@ Hydra			*g_defaultHydra;
 														  userInfo: [NSDictionary dictionaryWithObjectsAndKeys: anResult, [anResult name], nil]];
 		[self updateTrackingResultSetAndNotifyIfNeed: anResult];
 	}
-		
-	[params release];
 }
 
 - (NSString *) description
