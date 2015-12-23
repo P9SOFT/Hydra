@@ -633,8 +633,7 @@ enum HYWorkerState {
 {
     @autoreleasepool {
         
-        id					anQuery;
-        id					anExecuter;
+        id	anExecuter;
 
         [_condition lock];
         _currentState = kHYWorkerStateRunning;
@@ -651,7 +650,7 @@ enum HYWorkerState {
                 [_condition lock];
                 
                 _executingQuery = nil;
-
+                
                 while( ([self countOfQueriesInQueue] <= 0) || (_currentState == kHYWorkerStatePaused) ) {
                     [_condition wait];
                     if( _nextState != kHYWorkerStateNull ) {
@@ -674,31 +673,28 @@ enum HYWorkerState {
                     break;
                 }
                 
-                anQuery = [self popQueryFromQueue];
-                
-                _executingQuery = anQuery;
+                _executingQuery = [self popQueryFromQueue];
                 
                 [_condition unlock];
                 
-                if( [anQuery canceled] == YES ) {
-                    if( [self didCancelQuery: anQuery] == NO ) {
-                        if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
-                            [anExecuter clearAllResults];
-                            if( [anExecuter cancelWithQuery: anQuery] == YES ) {
+                if( [_executingQuery canceled] == YES ) {
+                    if( [self didCancelQuery: _executingQuery] == NO ) {
+                        if( (anExecuter = [_executerDict objectForKey: [_executingQuery executerName]]) != nil ) {
+                            if( [anExecuter cancelWithQuery: _executingQuery] == YES ) {
                                 if( [anExecuter useCustomPostNotification] == YES ) {
                                     [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
                                 } else {
                                     [self postNotifyWithResultDict: [anExecuter resultDict]];
                                 }
                             }
+                            [anExecuter clearAllResults];
                         }
                     }
                 } else {
-                    if( [self didFetchQuery: anQuery] == NO ) {
-                        if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
-                            [anExecuter clearAllResults];
-                            if( [anExecuter shouldSkipExecutingWithQuery: anQuery] == NO ) {
-                                if( [anExecuter executeWithQuery: anQuery] == YES ) {
+                    if( [self didFetchQuery: _executingQuery] == NO ) {
+                        if( (anExecuter = [_executerDict objectForKey: [_executingQuery executerName]]) != nil ) {
+                            if( [anExecuter shouldSkipExecutingWithQuery: _executingQuery] == NO ) {
+                                if( [anExecuter executeWithQuery: _executingQuery] == YES ) {
                                     if( [anExecuter useCustomPostNotification] == YES ) {
                                         [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
                                     } else {
@@ -706,7 +702,7 @@ enum HYWorkerState {
                                     }
                                 }
                             } else {
-                                if( [anExecuter skipWithQuery: anQuery] == YES ) {
+                                if( [anExecuter skipWithQuery: _executingQuery] == YES ) {
                                     if( [anExecuter useCustomPostNotification] == YES ) {
                                         [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
                                     } else {
@@ -714,15 +710,14 @@ enum HYWorkerState {
                                     }
                                 }
                             }
+                            [anExecuter clearAllResults];
                         }
                     }
                 }
-                if( [anQuery haveAsyncTask] == YES ) {
-                    [[Hydra defaultHydra] unbindAsyncTaskForIssuedId: [anQuery issuedIdOfAsyncTask]];
+                if( [_executingQuery haveAsyncTask] == YES ) {
+                    [[Hydra defaultHydra] unbindAsyncTaskForIssuedId: [_executingQuery issuedIdOfAsyncTask]];
                 }
                 
-                _executingQuery = nil;
-                                
             }
             
         }
