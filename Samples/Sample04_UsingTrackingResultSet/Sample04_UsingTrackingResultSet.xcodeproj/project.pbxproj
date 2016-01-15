@@ -14,7 +14,6 @@
 		ACF932151AAED5740019580C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACF932141AAED5740019580C /* Images.xcassets */; };
 		ACF932181AAED5740019580C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF932161AAED5740019580C /* LaunchScreen.xib */; };
 		ACF932241AAED5740019580C /* Sample04_UsingTrackingResultSetTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF932231AAED5740019580C /* Sample04_UsingTrackingResultSetTests.m */; };
-		ACF932351AAED6980019580C /* CommonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF932301AAED6980019580C /* CommonWorker.m */; };
 		ACF932361AAED6980019580C /* PlaygroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF932321AAED6980019580C /* PlaygroundView.m */; };
 		ACF932371AAED6980019580C /* SampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF932341AAED6980019580C /* SampleManager.m */; };
 		ACF9323C1AAED7510019580C /* BooExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF932391AAED7510019580C /* BooExecutor.m */; };
@@ -59,8 +58,6 @@
 		ACF9321D1AAED5740019580C /* Sample04_UsingTrackingResultSetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sample04_UsingTrackingResultSetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF932221AAED5740019580C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACF932231AAED5740019580C /* Sample04_UsingTrackingResultSetTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sample04_UsingTrackingResultSetTests.m; sourceTree = "<group>"; };
-		ACF9322F1AAED6980019580C /* CommonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonWorker.h; sourceTree = "<group>"; };
-		ACF932301AAED6980019580C /* CommonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonWorker.m; sourceTree = "<group>"; };
 		ACF932311AAED6980019580C /* PlaygroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaygroundView.h; sourceTree = "<group>"; };
 		ACF932321AAED6980019580C /* PlaygroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaygroundView.m; sourceTree = "<group>"; };
 		ACF932331AAED6980019580C /* SampleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleManager.h; sourceTree = "<group>"; };
@@ -127,8 +124,6 @@
 				ACF9320F1AAED5740019580C /* ViewController.m */,
 				ACF932311AAED6980019580C /* PlaygroundView.h */,
 				ACF932321AAED6980019580C /* PlaygroundView.m */,
-				ACF9322F1AAED6980019580C /* CommonWorker.h */,
-				ACF932301AAED6980019580C /* CommonWorker.m */,
 				ACF932331AAED6980019580C /* SampleManager.h */,
 				ACF932341AAED6980019580C /* SampleManager.m */,
 				ACF932381AAED7510019580C /* BooExecutor.h */,
@@ -291,7 +286,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACF9323C1AAED7510019580C /* BooExecutor.m in Sources */,
-				ACF932351AAED6980019580C /* CommonWorker.m in Sources */,
 				ACF932101AAED5740019580C /* ViewController.m in Sources */,
 				ACF9323D1AAED7510019580C /* FooExecutor.m in Sources */,
 				ACF932361AAED6980019580C /* PlaygroundView.m in Sources */,

@@ -2,8 +2,8 @@
 //  HYMigrator.m
 //  Hydra
 //
-//  Created by Na Tae Hyun on 13. 8. 30..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2013. 8. 30.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 

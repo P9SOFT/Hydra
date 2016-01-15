@@ -2,8 +2,8 @@
 //  Hydra.m
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 12. 5. 2..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 5. 2.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
@@ -122,6 +122,21 @@ Hydra			*g_defaultHydra;
 	}
 	
 	return YES;
+}
+
+- (BOOL) addCommonWorker
+{
+    return [self addWorker:[[HYWorker alloc] initWithCommonWorker]];
+}
+
+- (void) removeCommonWorker
+{
+    [self removeWorkerForName:HydraCommonWorkerName];
+}
+
+- (id) commonWorker
+{
+    return [self workerForName:HydraCommonWorkerName];
 }
 
 - (BOOL) addWorker: (id)anWorker

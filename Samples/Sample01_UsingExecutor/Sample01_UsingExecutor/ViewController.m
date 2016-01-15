@@ -2,13 +2,12 @@
 //  ViewController.m
 //  Sample01_UsingExecutor
 //
-//  Created by Tae Hyun, Na on 2015. 2. 17..
-//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//  Created by Tae Hyun Na on 2015. 2. 17.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
 #import <Hydra/Hydra.h>
-#import "CommonWorker.h"
 #import "SampleExecutor.h"
 #import "ViewController.h"
 
@@ -35,8 +34,8 @@
 	[self.view addSubview:_playgroundView];
 	
 	[_playgroundView.doButton addTarget:self action:@selector(touchUpInsideDoButton:) forControlEvents:UIControlEventTouchUpInside];
-	// observe worker notification
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commonWorkerNotification:) name:CommonWorkerName object:nil];
+	// observe common worker notification
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(commonWorkerNotification:) name:HydraCommonWorkerName object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -57,7 +56,7 @@
 	
 	// make query and push to hydra
 	HYQuery *query;
-	if( (query = [HYQuery queryWithWorkerName:CommonWorkerName executerName:SampleExecutorName]) != nil ) {
+	if( (query = [HYQuery queryWithWorkerName:HydraCommonWorkerName executerName:SampleExecutorName]) != nil ) {
 		_playgroundView.doButton.enabled = NO;
 		[query setParameter:[NSNumber numberWithUnsignedInteger:inputNumberValue] forKey:SampleExecutorParameterKeyInputNumber];
 		[[Hydra defaultHydra] pushQuery:query];

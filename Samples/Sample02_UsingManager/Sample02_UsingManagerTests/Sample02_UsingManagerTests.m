@@ -2,8 +2,8 @@
 //  Sample02_UsingManagerTests.m
 //  Sample02_UsingManagerTests
 //
-//  Created by Tae Hyun, Na on 2015. 2. 17..
-//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//  Created by Tae Hyun Na on 2015. 2. 17.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

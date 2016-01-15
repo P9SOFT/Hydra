@@ -2,8 +2,8 @@
 //  Hydra.h
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 12. 5. 2..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 5. 2.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
@@ -75,6 +75,9 @@ typedef enum _HydraNotificationCode_
 
 - (BOOL) doMigration: (id)migration waitUntilDone: (BOOL)waitUntilDone;
 
+- (BOOL) addCommonWorker;
+- (void) removeCommonWorker;
+- (id) commonWorker;
 - (BOOL) addWorker: (id)anWorker;
 - (void) removeWorkerForName: (NSString *)name;
 - (id) workerForName: (NSString *)name;

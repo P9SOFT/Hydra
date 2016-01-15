@@ -2,8 +2,8 @@
 //  Sample05_UsingMigratorTests.m
 //  Sample05_UsingMigratorTests
 //
-//  Created by Tae Hyun, Na on 2015. 3. 11..
-//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 3. 11.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

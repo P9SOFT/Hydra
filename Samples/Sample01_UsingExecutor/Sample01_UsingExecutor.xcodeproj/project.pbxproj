@@ -14,7 +14,6 @@
 		ACF5F22F1A93274A009D787C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F22E1A93274A009D787C /* Images.xcassets */; };
 		ACF5F2321A93274A009D787C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F2301A93274A009D787C /* LaunchScreen.xib */; };
 		ACF5F23E1A93274B009D787C /* Sample01_UsingExecutorTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F23D1A93274B009D787C /* Sample01_UsingExecutorTests.m */; };
-		ACF5F24D1A932807009D787C /* CommonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F24A1A932807009D787C /* CommonWorker.m */; };
 		ACF5F24E1A932807009D787C /* PlaygroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F24C1A932807009D787C /* PlaygroundView.m */; };
 		ACF5F2511A9329B8009D787C /* SampleExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2501A9329B8009D787C /* SampleExecutor.m */; };
 /* End PBXBuildFile section */
@@ -57,8 +56,6 @@
 		ACF5F2371A93274B009D787C /* Sample01_UsingExecutorTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sample01_UsingExecutorTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF5F23C1A93274B009D787C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACF5F23D1A93274B009D787C /* Sample01_UsingExecutorTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sample01_UsingExecutorTests.m; sourceTree = "<group>"; };
-		ACF5F2491A932807009D787C /* CommonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonWorker.h; sourceTree = "<group>"; };
-		ACF5F24A1A932807009D787C /* CommonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonWorker.m; sourceTree = "<group>"; };
 		ACF5F24B1A932807009D787C /* PlaygroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaygroundView.h; sourceTree = "<group>"; };
 		ACF5F24C1A932807009D787C /* PlaygroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaygroundView.m; sourceTree = "<group>"; };
 		ACF5F24F1A9329B8009D787C /* SampleExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleExecutor.h; sourceTree = "<group>"; };
@@ -121,8 +118,6 @@
 				ACF5F2291A93274A009D787C /* ViewController.m */,
 				ACF5F24B1A932807009D787C /* PlaygroundView.h */,
 				ACF5F24C1A932807009D787C /* PlaygroundView.m */,
-				ACF5F2491A932807009D787C /* CommonWorker.h */,
-				ACF5F24A1A932807009D787C /* CommonWorker.m */,
 				ACF5F24F1A9329B8009D787C /* SampleExecutor.h */,
 				ACF5F2501A9329B8009D787C /* SampleExecutor.m */,
 				ACF5F22E1A93274A009D787C /* Images.xcassets */,
@@ -281,7 +276,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACF5F2511A9329B8009D787C /* SampleExecutor.m in Sources */,
-				ACF5F24D1A932807009D787C /* CommonWorker.m in Sources */,
 				ACF5F22A1A93274A009D787C /* ViewController.m in Sources */,
 				ACF5F24E1A932807009D787C /* PlaygroundView.m in Sources */,
 				ACF5F2271A93274A009D787C /* AppDelegate.m in Sources */,

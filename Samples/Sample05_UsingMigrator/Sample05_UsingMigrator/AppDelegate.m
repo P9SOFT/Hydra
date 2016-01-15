@@ -2,8 +2,8 @@
 //  AppDelegate.m
 //  Sample05_UsingMigrator
 //
-//  Created by Tae Hyun, Na on 2015. 3. 11..
-//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 3. 11.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
@@ -16,7 +16,9 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	
-	// start hydra
+    // in this case, we only check about migrator module do.
+    // so, skip the add some work.
+	// just start hydra with no workers.
 	[[Hydra defaultHydra] startAllWorkers];
 	
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];

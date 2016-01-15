@@ -2,13 +2,16 @@
 //  HYWorker.h
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 12. 5. 2..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 5. 2.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
 #import <Foundation/Foundation.h>
 #import <Hydra/HYDefine.h>
+
+
+#define     HydraCommonWorkerName                   @"hydraCommonWorkerNameLernaean"
 
 
 @protocol HYWorkerDelegate
@@ -32,6 +35,7 @@
 @interface HYWorker : NSObject
 {
 	__weak id				_delegate;
+    NSString                *_name;
 	NSMutableDictionary		*_executerDict;
 	NSMutableArray			*_queryQueue;
 	id						_executingQuery;
@@ -41,6 +45,8 @@
 	NSLock					*_lockForCacheDict;
 	NSMutableDictionary		*_cacheDict;
 }
+
+- (id)initWithCommonWorker;
 
 // you must override and implement these methods.
 

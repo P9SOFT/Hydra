@@ -2,8 +2,8 @@
 //  HYWorker.m
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 12. 5. 2..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 5. 2.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
@@ -72,6 +72,35 @@ enum HYWorkerState {
 	}
 	
 	return self;
+}
+
+- (id)initWithCommonWorker
+{
+    if( (self = [super init]) != nil ) {
+        _name = HydraCommonWorkerName;
+        if( (_executerDict = [[NSMutableDictionary alloc] init]) == nil ) {
+            return nil;
+        }
+        if( (_queryQueue = [[NSMutableArray alloc] init]) == nil ) {
+            return nil;
+        }
+        if( (_condition = [[NSCondition alloc] init]) == nil ) {
+            return nil;
+        }
+        _currentState = kHYWorkerStateStopped;
+        _nextState = kHYWorkerStateNull;
+        if( (_cacheDict = [[NSMutableDictionary alloc] init]) == nil ) {
+            return nil;
+        }
+        if( (_lockForCacheDict = [[NSLock alloc] init]) == nil ) {
+            return nil;
+        }
+        if( [self didInit] == NO ) {
+            return nil;
+        }
+    }
+    
+    return self;
 }
 
 - (void) dealloc
@@ -736,7 +765,7 @@ enum HYWorkerState {
 - (NSString *) name
 {
 	// you must override me :)
-	return nil;
+	return _name;
 }
 
 - (NSString *) brief

@@ -14,7 +14,6 @@
 		AC47ADE61A970BEA00C18907 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AC47ADE51A970BEA00C18907 /* Images.xcassets */; };
 		AC47ADE91A970BEA00C18907 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = AC47ADE71A970BEA00C18907 /* LaunchScreen.xib */; };
 		AC47ADF51A970BEA00C18907 /* Sample03_UsingAsyncTaskTests.m in Sources */ = {isa = PBXBuildFile; fileRef = AC47ADF41A970BEA00C18907 /* Sample03_UsingAsyncTaskTests.m */; };
-		AC47AE061A970CE200C18907 /* CommonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = AC47ADFF1A970CE200C18907 /* CommonWorker.m */; };
 		AC47AE071A970CE200C18907 /* PlaygroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = AC47AE011A970CE200C18907 /* PlaygroundView.m */; };
 		AC47AE081A970CE200C18907 /* SampleExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = AC47AE031A970CE200C18907 /* SampleExecutor.m */; };
 		AC47AE091A970CE200C18907 /* SampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = AC47AE051A970CE200C18907 /* SampleManager.m */; };
@@ -59,8 +58,6 @@
 		AC47ADEE1A970BEA00C18907 /* Sample03_UsingAsyncTaskTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sample03_UsingAsyncTaskTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC47ADF31A970BEA00C18907 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		AC47ADF41A970BEA00C18907 /* Sample03_UsingAsyncTaskTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sample03_UsingAsyncTaskTests.m; sourceTree = "<group>"; };
-		AC47ADFE1A970CE200C18907 /* CommonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonWorker.h; sourceTree = "<group>"; };
-		AC47ADFF1A970CE200C18907 /* CommonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonWorker.m; sourceTree = "<group>"; };
 		AC47AE001A970CE200C18907 /* PlaygroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaygroundView.h; sourceTree = "<group>"; };
 		AC47AE011A970CE200C18907 /* PlaygroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaygroundView.m; sourceTree = "<group>"; };
 		AC47AE021A970CE200C18907 /* SampleExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleExecutor.h; sourceTree = "<group>"; };
@@ -127,8 +124,6 @@
 				AC47ADE01A970BEA00C18907 /* ViewController.m */,
 				AC47AE001A970CE200C18907 /* PlaygroundView.h */,
 				AC47AE011A970CE200C18907 /* PlaygroundView.m */,
-				AC47ADFE1A970CE200C18907 /* CommonWorker.h */,
-				AC47ADFF1A970CE200C18907 /* CommonWorker.m */,
 				AC47AE041A970CE200C18907 /* SampleManager.h */,
 				AC47AE051A970CE200C18907 /* SampleManager.m */,
 				AC47AE021A970CE200C18907 /* SampleExecutor.h */,
@@ -292,7 +287,6 @@
 			files = (
 				AC47AE091A970CE200C18907 /* SampleManager.m in Sources */,
 				AC47AE081A970CE200C18907 /* SampleExecutor.m in Sources */,
-				AC47AE061A970CE200C18907 /* CommonWorker.m in Sources */,
 				AC47ADE11A970BEA00C18907 /* ViewController.m in Sources */,
 				AC47AE071A970CE200C18907 /* PlaygroundView.m in Sources */,
 				AC47ADDE1A970BEA00C18907 /* AppDelegate.m in Sources */,

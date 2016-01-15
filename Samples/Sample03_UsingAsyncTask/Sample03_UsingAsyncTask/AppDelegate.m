@@ -2,15 +2,14 @@
 //  AppDelegate.m
 //  Sample03_UsingAsyncTask
 //
-//  Created by Tae Hyun, Na on 2015. 2. 20..
-//  Copyright (c) 2015년 TeamP9. All rights reserved.
+//  Created by Tae Hyun Na on 2015. 2. 20.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
 #import <Hydra/Hydra.h>
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "CommonWorker.h"
 #import "SampleManager.h"
 
 @implementation AppDelegate
@@ -18,14 +17,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	
-	// make worker
-	CommonWorker *commonWorker = [[CommonWorker alloc] init];
-	
-	// add worker to hydra
-	[[Hydra defaultHydra] addWorker:commonWorker];
+	// add built-in common worker to hydra
+    [[Hydra defaultHydra] addCommonWorker];
 	
 	// stanby manager with worker and bind to hydra
-	[[SampleManager defaultManager] standbyWithWorkerName:commonWorker.name];
+	[[SampleManager defaultManager] standbyWithWorkerName:HydraCommonWorkerName];
 	[[SampleManager defaultManager] bindToHydra:[Hydra defaultHydra]];
 	
 	// start hydra

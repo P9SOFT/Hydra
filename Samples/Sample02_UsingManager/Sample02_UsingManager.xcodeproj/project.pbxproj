@@ -8,14 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		AC3EDF7D1B52792C009F8F43 /* Hydra.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AC3EDF7A1B527923009F8F43 /* Hydra.framework */; };
-		AC47ADCB1A93BA6E00C18907 /* sample.jpg in Resources */ = {isa = PBXBuildFile; fileRef = AC47ADCA1A93BA6E00C18907 /* sample.jpg */; };
 		ACF5F2611A937C2B009D787C /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2601A937C2B009D787C /* main.m */; };
 		ACF5F2641A937C2B009D787C /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2631A937C2B009D787C /* AppDelegate.m */; };
 		ACF5F2671A937C2B009D787C /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2661A937C2B009D787C /* ViewController.m */; };
 		ACF5F26C1A937C2B009D787C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F26B1A937C2B009D787C /* Images.xcassets */; };
 		ACF5F26F1A937C2B009D787C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F26D1A937C2B009D787C /* LaunchScreen.xib */; };
 		ACF5F27B1A937C2B009D787C /* Sample02_UsingManagerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F27A1A937C2B009D787C /* Sample02_UsingManagerTests.m */; };
-		ACF5F28A1A937CC7009D787C /* CommonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2851A937CC7009D787C /* CommonWorker.m */; };
 		ACF5F28B1A937CC7009D787C /* PlaygroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2871A937CC7009D787C /* PlaygroundView.m */; };
 		ACF5F28C1A937CC7009D787C /* SampleExecutor.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2891A937CC7009D787C /* SampleExecutor.m */; };
 		ACF5F2911A9385D1009D787C /* SampleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2901A9385D1009D787C /* SampleManager.m */; };
@@ -47,7 +45,6 @@
 
 /* Begin PBXFileReference section */
 		AC3EDF741B527923009F8F43 /* Hydra.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Hydra.xcodeproj; path = ../../Hydra/Hydra.xcodeproj; sourceTree = "<group>"; };
-		AC47ADCA1A93BA6E00C18907 /* sample.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sample.jpg; sourceTree = "<group>"; };
 		ACF5F25B1A937C2B009D787C /* Sample02_UsingManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample02_UsingManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF5F25F1A937C2B009D787C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACF5F2601A937C2B009D787C /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -60,8 +57,6 @@
 		ACF5F2741A937C2B009D787C /* Sample02_UsingManagerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sample02_UsingManagerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF5F2791A937C2B009D787C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACF5F27A1A937C2B009D787C /* Sample02_UsingManagerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sample02_UsingManagerTests.m; sourceTree = "<group>"; };
-		ACF5F2841A937CC7009D787C /* CommonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonWorker.h; sourceTree = "<group>"; };
-		ACF5F2851A937CC7009D787C /* CommonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonWorker.m; sourceTree = "<group>"; };
 		ACF5F2861A937CC7009D787C /* PlaygroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaygroundView.h; sourceTree = "<group>"; };
 		ACF5F2871A937CC7009D787C /* PlaygroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaygroundView.m; sourceTree = "<group>"; };
 		ACF5F2881A937CC7009D787C /* SampleExecutor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SampleExecutor.h; sourceTree = "<group>"; };
@@ -126,13 +121,10 @@
 				ACF5F2661A937C2B009D787C /* ViewController.m */,
 				ACF5F2861A937CC7009D787C /* PlaygroundView.h */,
 				ACF5F2871A937CC7009D787C /* PlaygroundView.m */,
-				ACF5F2841A937CC7009D787C /* CommonWorker.h */,
-				ACF5F2851A937CC7009D787C /* CommonWorker.m */,
 				ACF5F28F1A9385D1009D787C /* SampleManager.h */,
 				ACF5F2901A9385D1009D787C /* SampleManager.m */,
 				ACF5F2881A937CC7009D787C /* SampleExecutor.h */,
 				ACF5F2891A937CC7009D787C /* SampleExecutor.m */,
-				AC47ADCA1A93BA6E00C18907 /* sample.jpg */,
 				ACF5F26B1A937C2B009D787C /* Images.xcassets */,
 				ACF5F26D1A937C2B009D787C /* LaunchScreen.xib */,
 				ACF5F25E1A937C2B009D787C /* Supporting Files */,
@@ -270,7 +262,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				ACF5F26F1A937C2B009D787C /* LaunchScreen.xib in Resources */,
-				AC47ADCB1A93BA6E00C18907 /* sample.jpg in Resources */,
 				ACF5F26C1A937C2B009D787C /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -291,7 +282,6 @@
 			files = (
 				ACF5F2911A9385D1009D787C /* SampleManager.m in Sources */,
 				ACF5F28C1A937CC7009D787C /* SampleExecutor.m in Sources */,
-				ACF5F28A1A937CC7009D787C /* CommonWorker.m in Sources */,
 				ACF5F2671A937C2B009D787C /* ViewController.m in Sources */,
 				ACF5F28B1A937CC7009D787C /* PlaygroundView.m in Sources */,
 				ACF5F2641A937C2B009D787C /* AppDelegate.m in Sources */,

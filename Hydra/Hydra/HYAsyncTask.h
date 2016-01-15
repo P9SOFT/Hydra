@@ -2,8 +2,8 @@
 //  HYAsyncTask.h
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 13. 3. 29..
-//  Copyright (c) 2013년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2013. 3. 29.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 

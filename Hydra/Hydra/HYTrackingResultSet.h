@@ -2,8 +2,8 @@
 //  HYTrackingResultSet.h
 //  Hydra
 //
-//  Created by  Na Tae Hyun on 12. 5. 11..
-//  Copyright (c) 2012년 Na Tae Hyun. All rights reserved.
+//  Created by Tae Hyun Na on 2012. 5. 11.
+//  Copyright (c) 2014, P9 SOFT, Inc. All rights reserved.
 //
 //  Licensed under the MIT license.
 
