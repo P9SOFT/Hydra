@@ -13,5 +13,6 @@
 
 @property (nonatomic, readonly) UIImageView *imageView;
 @property (nonatomic, readonly) UIButton *doButton;
+@property (nonatomic, readonly) UIActivityIndicatorView *activityIndicator;
 
 @end

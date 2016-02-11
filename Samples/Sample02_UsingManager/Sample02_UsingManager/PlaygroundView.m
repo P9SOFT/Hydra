@@ -30,9 +30,14 @@
 		_doButton.backgroundColor = [UIColor whiteColor];
 		_doButton.titleLabel.font = [UIFont boldSystemFontOfSize:13.0f];
 		[_doButton setTitle:NSLocalizedString(@"Load image", @"") forState:UIControlStateNormal];
+        
+        if( (_activityIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge]) == nil ) {
+            return nil;
+        }
 		
 		[self addSubview:_imageView];
 		[self addSubview:_doButton];
+        [self addSubview:_activityIndicator];
 		
 	}
 	
@@ -56,6 +61,12 @@
 	frame.origin.y = (_imageView.frame.origin.y+_imageView.frame.size.height+20.0f);
 	
 	_doButton.frame = frame;
+    
+    frame.size = _activityIndicator.frame.size;
+    frame.origin.x = (int)((self.bounds.size.width/2.0f)-(frame.size.width/2.0f));
+    frame.origin.y = _imageView.frame.origin.y + (int)((_imageView.frame.size.height/2.0f)-(frame.size.height/2.0f));
+    
+    _activityIndicator.frame = frame;
 }
 
 @end

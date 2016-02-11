@@ -17,11 +17,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	
-	// add built-in common worker to hydra
+	// add a worker to hydra
     [[Hydra defaultHydra] addCommonWorker];
     
     // add executor
-    [[[Hydra defaultHydra] commonWorker] addExecuter:[[SampleExecutor alloc] init]];
+    [[[Hydra defaultHydra] workerForName:HydraCommonWorkerName] addExecuter:[[SampleExecutor alloc] init]];
 	
 	// start hydra
 	[[Hydra defaultHydra] startAllWorkers];

@@ -26,6 +26,7 @@ enum HYWorkerState {
 
 @interface HYWorker( HYWorkerPrivate )
 
+- (BOOL) prepareResources;
 - (NSUInteger) countOfQueriesInQueue;
 - (void) pushQueryToQueue: (id)anQuery toFront: (BOOL)toFront;
 - (id) popQueryFromQueue;
@@ -49,23 +50,9 @@ enum HYWorkerState {
 		if( [[self name] length] <= 0 ) {
 			return nil;
 		}
-		if( (_executerDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			return nil;
-		}
-		if( (_queryQueue = [[NSMutableArray alloc] init]) == nil ) {
-			return nil;
-		}
-		if( (_condition = [[NSCondition alloc] init]) == nil ) {
-			return nil;
-		}
-		_currentState = kHYWorkerStateStopped;
-		_nextState = kHYWorkerStateNull;
-		if( (_cacheDict = [[NSMutableDictionary alloc] init]) == nil ) {
-			return nil;
-		}
-		if( (_lockForCacheDict = [[NSLock alloc] init]) == nil ) {
-			return nil;
-		}
+        if( [self prepareResources] == NO ) {
+            return nil;
+        }
 		if( [self didInit] == NO ) {
 			return nil;
 		}
@@ -74,25 +61,14 @@ enum HYWorkerState {
 	return self;
 }
 
-- (id)initWithCommonWorker
+- (id) initWithName: (NSString *)name
 {
     if( (self = [super init]) != nil ) {
-        _name = HydraCommonWorkerName;
-        if( (_executerDict = [[NSMutableDictionary alloc] init]) == nil ) {
+        if( [name length] <= 0 ) {
             return nil;
         }
-        if( (_queryQueue = [[NSMutableArray alloc] init]) == nil ) {
-            return nil;
-        }
-        if( (_condition = [[NSCondition alloc] init]) == nil ) {
-            return nil;
-        }
-        _currentState = kHYWorkerStateStopped;
-        _nextState = kHYWorkerStateNull;
-        if( (_cacheDict = [[NSMutableDictionary alloc] init]) == nil ) {
-            return nil;
-        }
-        if( (_lockForCacheDict = [[NSLock alloc] init]) == nil ) {
+        _name = [name copy];
+        if( [self prepareResources] == NO ) {
             return nil;
         }
         if( [self didInit] == NO ) {
@@ -523,6 +499,29 @@ enum HYWorkerState {
 	[_cacheDict removeAllObjects];
 	
 	[_lockForCacheDict unlock];
+}
+
+- (BOOL) prepareResources
+{
+    if( (_executerDict = [[NSMutableDictionary alloc] init]) == nil ) {
+        return NO;
+    }
+    if( (_queryQueue = [[NSMutableArray alloc] init]) == nil ) {
+        return NO;
+    }
+    if( (_condition = [[NSCondition alloc] init]) == nil ) {
+        return NO;
+    }
+    _currentState = kHYWorkerStateStopped;
+    _nextState = kHYWorkerStateNull;
+    if( (_cacheDict = [[NSMutableDictionary alloc] init]) == nil ) {
+        return NO;
+    }
+    if( (_lockForCacheDict = [[NSLock alloc] init]) == nil ) {
+        return NO;
+    }
+    
+    return YES;
 }
 
 - (NSUInteger) countOfQueriesInQueue

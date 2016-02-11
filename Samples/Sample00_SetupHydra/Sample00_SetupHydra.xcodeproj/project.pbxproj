@@ -14,7 +14,6 @@
 		ACF5F1F51A932120009D787C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F1F41A932120009D787C /* Images.xcassets */; };
 		ACF5F1F81A932120009D787C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ACF5F1F61A932120009D787C /* LaunchScreen.xib */; };
 		ACF5F2041A932120009D787C /* Sample00_SetupHydraTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2031A932120009D787C /* Sample00_SetupHydraTests.m */; };
-		ACF5F2111A9322F9009D787C /* CommonWorker.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2101A9322F9009D787C /* CommonWorker.m */; };
 		ACF5F2141A932515009D787C /* PlaygroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = ACF5F2131A932515009D787C /* PlaygroundView.m */; };
 /* End PBXBuildFile section */
 
@@ -56,8 +55,6 @@
 		ACF5F1FD1A932120009D787C /* Sample00_SetupHydraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Sample00_SetupHydraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF5F2021A932120009D787C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ACF5F2031A932120009D787C /* Sample00_SetupHydraTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Sample00_SetupHydraTests.m; sourceTree = "<group>"; };
-		ACF5F20F1A9322F9009D787C /* CommonWorker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CommonWorker.h; sourceTree = "<group>"; };
-		ACF5F2101A9322F9009D787C /* CommonWorker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CommonWorker.m; sourceTree = "<group>"; };
 		ACF5F2121A932515009D787C /* PlaygroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlaygroundView.h; sourceTree = "<group>"; };
 		ACF5F2131A932515009D787C /* PlaygroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlaygroundView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -118,8 +115,6 @@
 				ACF5F1EF1A932120009D787C /* ViewController.m */,
 				ACF5F2121A932515009D787C /* PlaygroundView.h */,
 				ACF5F2131A932515009D787C /* PlaygroundView.m */,
-				ACF5F20F1A9322F9009D787C /* CommonWorker.h */,
-				ACF5F2101A9322F9009D787C /* CommonWorker.m */,
 				ACF5F1F41A932120009D787C /* Images.xcassets */,
 				ACF5F1F61A932120009D787C /* LaunchScreen.xib */,
 				ACF5F1E71A93211F009D787C /* Supporting Files */,
@@ -275,7 +270,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				ACF5F2111A9322F9009D787C /* CommonWorker.m in Sources */,
 				ACF5F1F01A932120009D787C /* ViewController.m in Sources */,
 				ACF5F2141A932515009D787C /* PlaygroundView.m in Sources */,
 				ACF5F1ED1A932120009D787C /* AppDelegate.m in Sources */,

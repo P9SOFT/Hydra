@@ -126,17 +126,12 @@ Hydra			*g_defaultHydra;
 
 - (BOOL) addCommonWorker
 {
-    return [self addWorker:[[HYWorker alloc] initWithCommonWorker]];
+    return [self addNormalWorkerForName: HydraCommonWorkerName];
 }
 
-- (void) removeCommonWorker
+- (BOOL) addNormalWorkerForName: (NSString *)name
 {
-    [self removeWorkerForName:HydraCommonWorkerName];
-}
-
-- (id) commonWorker
-{
-    return [self workerForName:HydraCommonWorkerName];
+    return [self addWorker:[[HYWorker alloc] initWithName: name]];
 }
 
 - (BOOL) addWorker: (id)anWorker

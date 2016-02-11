@@ -44,6 +44,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0232E3211C6C12AD00520F75 /* Common.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Common.h; sourceTree = "<group>"; };
 		AC3EDF741B527923009F8F43 /* Hydra.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = Hydra.xcodeproj; path = ../../Hydra/Hydra.xcodeproj; sourceTree = "<group>"; };
 		ACF5F25B1A937C2B009D787C /* Sample02_UsingManager.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sample02_UsingManager.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		ACF5F25F1A937C2B009D787C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -115,6 +116,7 @@
 		ACF5F25D1A937C2B009D787C /* Sample02_UsingManager */ = {
 			isa = PBXGroup;
 			children = (
+				0232E3211C6C12AD00520F75 /* Common.h */,
 				ACF5F2621A937C2B009D787C /* AppDelegate.h */,
 				ACF5F2631A937C2B009D787C /* AppDelegate.m */,
 				ACF5F2651A937C2B009D787C /* ViewController.h */,

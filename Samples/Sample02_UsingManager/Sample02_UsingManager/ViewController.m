@@ -52,6 +52,7 @@
 		_playgroundView.imageView.image = image;
 	} else {
 		_playgroundView.doButton.enabled = NO;
+        [_playgroundView.activityIndicator startAnimating];
 	}
 }
 
@@ -73,6 +74,7 @@
 				_playgroundView.imageView.image = image;
 			}
 			_playgroundView.doButton.enabled = YES;
+            [_playgroundView.activityIndicator stopAnimating];
 			break;
 		default:
 			break;

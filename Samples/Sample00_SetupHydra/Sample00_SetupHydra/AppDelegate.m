@@ -10,7 +10,6 @@
 #import <Hydra/Hydra.h>
 #import "AppDelegate.h"
 #import "ViewController.h"
-#import "CommonWorker.h"
 
 @implementation AppDelegate
 
@@ -18,7 +17,7 @@
 	// Override point for customization after application launch.
 	
 	// add worker to hydra
-	[[Hydra defaultHydra] addWorker:[[CommonWorker alloc] init]];
+    [[Hydra defaultHydra] addCommonWorker];
 	// start hydra
 	[[Hydra defaultHydra] startAllWorkers];
 

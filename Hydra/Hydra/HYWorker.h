@@ -10,9 +10,7 @@
 #import <Foundation/Foundation.h>
 #import <Hydra/HYDefine.h>
 
-
 #define     HydraCommonWorkerName                   @"hydraCommonWorkerNameLernaean"
-
 
 @protocol HYWorkerDelegate
 
@@ -46,7 +44,7 @@
 	NSMutableDictionary		*_cacheDict;
 }
 
-- (id)initWithCommonWorker;
+- (id) initWithName: (NSString *)name;
 
 // you must override and implement these methods.
 

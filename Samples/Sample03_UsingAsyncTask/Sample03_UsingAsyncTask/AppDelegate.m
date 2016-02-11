@@ -8,6 +8,7 @@
 //  Licensed under the MIT license.
 
 #import <Hydra/Hydra.h>
+#import "Common.h"
 #import "AppDelegate.h"
 #import "ViewController.h"
 #import "SampleManager.h"
@@ -17,11 +18,11 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	// Override point for customization after application launch.
 	
-	// add built-in common worker to hydra
-    [[Hydra defaultHydra] addCommonWorker];
+	// add a worker to hydra
+    [[Hydra defaultHydra] addNormalWorkerForName:SampleWorkerName];
 	
 	// stanby manager with worker and bind to hydra
-	[[SampleManager defaultManager] standbyWithWorkerName:HydraCommonWorkerName];
+	[[SampleManager defaultManager] standbyWithWorkerName:SampleWorkerName];
 	[[SampleManager defaultManager] bindToHydra:[Hydra defaultHydra]];
 	
 	// start hydra

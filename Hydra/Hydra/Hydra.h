@@ -76,8 +76,7 @@ typedef enum _HydraNotificationCode_
 - (BOOL) doMigration: (id)migration waitUntilDone: (BOOL)waitUntilDone;
 
 - (BOOL) addCommonWorker;
-- (void) removeCommonWorker;
-- (id) commonWorker;
+- (BOOL) addNormalWorkerForName: (NSString *)name;
 - (BOOL) addWorker: (id)anWorker;
 - (void) removeWorkerForName: (NSString *)name;
 - (id) workerForName: (NSString *)name;
