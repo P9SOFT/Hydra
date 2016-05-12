@@ -30,13 +30,13 @@ typedef enum _HYMigratorStatus_
 
 // public methods.
 
-+ (NSUInteger) countOfToDoMigration;
-+ (NSUInteger) lastUpdatedMigrationNumber;
++ (NSNumber *) countOfToDoMigration;
++ (NSNumber *) lastUpdatedMigrationNumber;
 
 // override these methods if need.
 
 + (NSString *) migrationNumberKeyString;
-+ (NSUInteger) suggestedMigrationNumber;
++ (NSNumber *) suggestedMigrationNumber;
 
 - (BOOL) doInitialing;
 - (BOOL) isSomethingToDoForMigrationNumber: (NSUInteger)migrationNumber;

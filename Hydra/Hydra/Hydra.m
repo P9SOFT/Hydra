@@ -1131,8 +1131,8 @@ Hydra			*g_defaultHydra;
     @autoreleasepool {
 	
         Class migrationClass = [migration class];
-        suggested = [migrationClass performSelector:@selector(suggestedMigrationNumber)];
-        lastUpdated = [migrationClass performSelector:@selector(lastUpdatedMigrationNumber)];
+        suggested = [[migrationClass performSelector:@selector(suggestedMigrationNumber)] unsignedIntegerValue];
+        lastUpdated = [[migrationClass performSelector:@selector(lastUpdatedMigrationNumber)] unsignedIntegerValue];
         
         if( lastUpdated == 0 ) {
             [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
@@ -1149,7 +1149,7 @@ Hydra			*g_defaultHydra;
             if( lastUpdated >= suggested ) {
                 [self postNotificationMigrationStatus: HydraNotificationCodeMigrationNothingToDo suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
             } else {
-                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillStart suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
+                [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDidStart suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
                 step = lastUpdated + 1;
                 while( 1 ) {
                     if( [migration isSomethingToDoForMigrationNumber: step] == YES ) {
@@ -1167,7 +1167,7 @@ Hydra			*g_defaultHydra;
                     }
                 }
                 if( step > suggested ) {
-                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migrationClass lastUpdatedMigrationNumber] thread: [migration useBackgroundThread]];
+                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [[migrationClass lastUpdatedMigrationNumber] unsignedIntegerValue] thread: [migration useBackgroundThread]];
                 }
             }
         }

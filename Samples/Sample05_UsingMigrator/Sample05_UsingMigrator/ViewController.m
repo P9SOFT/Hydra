@@ -35,12 +35,12 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hydraReport:) name:HydraNotification object:nil];
 	
 	// load migration module and pass it to hydra to migration.
-    if( [SampleMigrator countOfToDoMigration] > 0 ) {
+    if( [[SampleMigrator countOfToDoMigration] unsignedIntegerValue] > 0 ) {
         [[Hydra defaultHydra] doMigration:[[SampleMigrator alloc] init] waitUntilDone:NO];
     } else {
         [self appendLog:@"migration skipped"];
     }
-    _playgroundView.suggestedMigrationNumberTextField.text = [[NSNumber numberWithUnsignedInteger:[SampleMigrator suggestedMigrationNumber]] stringValue];
+    _playgroundView.suggestedMigrationNumberTextField.text = [[SampleMigrator suggestedMigrationNumber] stringValue];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -83,18 +83,18 @@
 	NSString *logMessage;
 	
 	switch( code ) {
-		case HydraNotificationCodeMigrationWillStart :
-			logMessage = [NSString stringWithFormat:@"migration will start, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
-			break;
 		case HydraNotificationCodeMigrationWillInitialing :
 			logMessage = [NSString stringWithFormat:@"migration will initialing, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
 			break;
 		case HydraNotificationCodeMigrationDidInitialing :
-			logMessage = [NSString stringWithFormat:@"migration did start, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
+			logMessage = [NSString stringWithFormat:@"migration did initialing, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
 			break;
 		case HydraNotificationCodeMigrationFailedAtInitialing :
 			logMessage = [NSString stringWithFormat:@"migration failed at initialing, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
 			break;
+        case HydraNotificationCodeMigrationDidStart :
+            logMessage = [NSString stringWithFormat:@"migration did start, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
+            break;
 		case HydraNotificationCodeMigrationWillStep :
 			logMessage = [NSString stringWithFormat:@"migration will step, suggest[%@] reference[%@]", suggestNumber, referenceNumber];
 			break;

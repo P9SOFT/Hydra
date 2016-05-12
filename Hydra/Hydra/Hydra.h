@@ -28,10 +28,10 @@
 
 typedef enum _HydraNotificationCode_
 {
-	HydraNotificationCodeMigrationWillStart,
 	HydraNotificationCodeMigrationWillInitialing,
 	HydraNotificationCodeMigrationDidInitialing,
 	HydraNotificationCodeMigrationFailedAtInitialing,
+    HydraNotificationCodeMigrationDidStart,
 	HydraNotificationCodeMigrationWillStep,
 	HydraNotificationCodeMigrationDidStep,
 	HydraNotificationCodeMigrationFailedAtStep,

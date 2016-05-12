@@ -28,17 +28,17 @@
 	return self;
 }
 
-+ (NSUInteger) countOfToDoMigration
++ (NSNumber *) countOfToDoMigration
 {
-    NSUInteger  suggested = [[self class] performSelector:@selector(suggestedMigrationNumber)];
-    NSUInteger  lastUpdated = [[self class] performSelector:@selector(lastUpdatedMigrationNumber)];
+    NSNumber *suggested = [[self class] performSelector:@selector(suggestedMigrationNumber)];
+    NSNumber *lastUpdated = [[self class] performSelector:@selector(lastUpdatedMigrationNumber)];
     
-    return (suggested - lastUpdated);
+    return @([suggested unsignedIntegerValue] - [lastUpdated unsignedIntegerValue]);
 }
 
-+ (NSUInteger) lastUpdatedMigrationNumber
++ (NSNumber *) lastUpdatedMigrationNumber
 {
-    return [[[NSUserDefaults standardUserDefaults] objectForKey: [[self class] migrationNumberKeyString]] unsignedIntegerValue];
+    return [[NSUserDefaults standardUserDefaults] objectForKey: [[self class] migrationNumberKeyString]];
 }
 
 + (NSString *) migrationNumberKeyString
@@ -47,10 +47,10 @@
 	return kDefaultMigrationNumberKey;
 }
 
-+ (NSUInteger) suggestedMigrationNumber
++ (NSNumber *) suggestedMigrationNumber
 {
     // override me, if need :)
-    return 1;
+    return @(1);
 }
 
 - (BOOL) doInitialing
@@ -94,8 +94,8 @@
 	
 	desc = [NSString stringWithFormat: @"<migrator>"];
 	desc = [desc stringByAppendingFormat: @"<migration_number_key>%@</migration_number_key>", [[self class] migrationNumberKeyString]];
-    desc = [desc stringByAppendingFormat: @"<last_updated_migration_number>%lu</last_updated_migration_number>", [[self class] lastUpdatedMigrationNumber]];
-    desc = [desc stringByAppendingFormat: @"<suggested_migration_number>%lu</suggested_migration_number>", [[self class] suggestedMigrationNumber]];
+    desc = [desc stringByAppendingFormat: @"<last_updated_migration_number>%@</last_updated_migration_number>", [[self class] lastUpdatedMigrationNumber]];
+    desc = [desc stringByAppendingFormat: @"<suggested_migration_number>%@</suggested_migration_number>", [[self class] suggestedMigrationNumber]];
 	desc = [desc stringByAppendingString: @"</migrator>"];
 	
 	return desc;
