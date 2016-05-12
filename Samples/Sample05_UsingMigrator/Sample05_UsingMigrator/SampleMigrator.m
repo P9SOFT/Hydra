@@ -17,7 +17,7 @@
 	return YES;
 }
 
-- (NSUInteger)suggestedMigrationNumber
++ (NSUInteger)suggestedMigrationNumber
 {
 	// set last version number of migration to 5 for example.
 	return 5;

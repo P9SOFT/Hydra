@@ -1130,8 +1130,9 @@ Hydra			*g_defaultHydra;
 	
     @autoreleasepool {
 	
-        suggested = [migration suggestedMigrationNumber];
-        lastUpdated = [migration lastUpdatedMigrationNumber];
+        Class migrationClass = [migration class];
+        suggested = [migrationClass performSelector:@selector(suggestedMigrationNumber)];
+        lastUpdated = [migrationClass performSelector:@selector(lastUpdatedMigrationNumber)];
         
         if( lastUpdated == 0 ) {
             [self postNotificationMigrationStatus: HydraNotificationCodeMigrationWillInitialing suggestedNumber: suggested referenceNumber: lastUpdated thread: [migration useBackgroundThread]];
@@ -1166,7 +1167,7 @@ Hydra			*g_defaultHydra;
                     }
                 }
                 if( step > suggested ) {
-                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migration lastUpdatedMigrationNumber] thread: [migration useBackgroundThread]];
+                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migrationClass lastUpdatedMigrationNumber] thread: [migration useBackgroundThread]];
                 }
             }
         }

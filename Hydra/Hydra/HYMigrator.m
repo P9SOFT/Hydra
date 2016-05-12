@@ -16,13 +16,11 @@
 @implementation HYMigrator
 
 @synthesize useBackgroundThread = _useBackgroundThread;
-@synthesize lastUpdatedMigrationNumber = _lastUpdatedMigrationNumber;
 
 - (id) init
 {
 	if( (self = [super init]) != nil ) {
-		_lastUpdatedMigrationNumber = [[[NSUserDefaults standardUserDefaults] objectForKey: [self migrationNumberKeyString]] unsignedIntegerValue];
-		if( [self suggestedMigrationNumber] < 1 ) {
+        if( [[self class] performSelector:@selector(suggestedMigrationNumber)] < 1 ) {
 			return nil;
 		}
 	}
@@ -30,22 +28,35 @@
 	return self;
 }
 
-- (NSString *) migrationNumberKeyString
++ (NSUInteger) countOfToDoMigration
+{
+    NSUInteger  suggested = [[self class] performSelector:@selector(suggestedMigrationNumber)];
+    NSUInteger  lastUpdated = [[self class] performSelector:@selector(lastUpdatedMigrationNumber)];
+    
+    return (suggested - lastUpdated);
+}
+
++ (NSUInteger) lastUpdatedMigrationNumber
+{
+    return [[[NSUserDefaults standardUserDefaults] objectForKey: [[self class] migrationNumberKeyString]] unsignedIntegerValue];
+}
+
++ (NSString *) migrationNumberKeyString
 {
 	// override me, if need :)
 	return kDefaultMigrationNumberKey;
+}
+
++ (NSUInteger) suggestedMigrationNumber
+{
+    // override me, if need :)
+    return 1;
 }
 
 - (BOOL) doInitialing
 {
 	// override me, if need :)
 	return YES;
-}
-
-- (NSUInteger) suggestedMigrationNumber
-{
-	// override me, if need :)
-	return 1;
 }
 
 - (BOOL) isSomethingToDoForMigrationNumber: (NSUInteger)migrationNumber
@@ -60,23 +71,16 @@
 	return NO;
 }
 
-- (NSUInteger) countOfToDoMigration
-{
-	return ([self suggestedMigrationNumber] - [self lastUpdatedMigrationNumber]);
-}
-
 - (void) initialingDone
 {
-	_lastUpdatedMigrationNumber = 1;
-	[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: 1] forKey: [self migrationNumberKeyString]];
+	[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: 1] forKey: [[self class] migrationNumberKeyString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) stepMigrationForNumber: (NSUInteger)migrationNumber
 {
 	if( [self doMigrationForNumber: migrationNumber] == YES ) {
-		_lastUpdatedMigrationNumber = migrationNumber;
-		[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: migrationNumber] forKey: [self migrationNumberKeyString]];
+		[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: migrationNumber] forKey: [[self class] migrationNumberKeyString]];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		return YES;
 	}
@@ -86,12 +90,12 @@
 
 - (NSString *) description
 {
-	NSString	*desc;
+    NSString	*desc;
 	
 	desc = [NSString stringWithFormat: @"<migrator>"];
-	desc = [desc stringByAppendingFormat: @"<migration_number_key>%@</migration_number_key>", [self migrationNumberKeyString]];
-    desc = [desc stringByAppendingFormat: @"<last_updated_migration_number>%lu</last_updated_migration_number>", (unsigned long)_lastUpdatedMigrationNumber];
-    desc = [desc stringByAppendingFormat: @"<suggested_migration_number>%lu</suggested_migration_number>", (unsigned long)[self suggestedMigrationNumber]];
+	desc = [desc stringByAppendingFormat: @"<migration_number_key>%@</migration_number_key>", [[self class] migrationNumberKeyString]];
+    desc = [desc stringByAppendingFormat: @"<last_updated_migration_number>%lu</last_updated_migration_number>", [[self class] lastUpdatedMigrationNumber]];
+    desc = [desc stringByAppendingFormat: @"<suggested_migration_number>%lu</suggested_migration_number>", [[self class] suggestedMigrationNumber]];
 	desc = [desc stringByAppendingString: @"</migrator>"];
 	
 	return desc;

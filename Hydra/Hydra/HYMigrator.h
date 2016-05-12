@@ -26,22 +26,19 @@ typedef enum _HYMigratorStatus_
 @interface HYMigrator : NSObject
 {
 	BOOL			_useBackgroundThread;
-	NSUInteger		_lastUpdatedMigrationNumber;
 }
 
 // public methods.
 
-- (NSUInteger) countOfToDoMigration;
-
-@property (nonatomic, readonly) NSUInteger lastUpdatedMigrationNumber;
++ (NSUInteger) countOfToDoMigration;
++ (NSUInteger) lastUpdatedMigrationNumber;
 
 // override these methods if need.
 
-- (NSString *) migrationNumberKeyString;
++ (NSString *) migrationNumberKeyString;
++ (NSUInteger) suggestedMigrationNumber;
 
 - (BOOL) doInitialing;
-
-- (NSUInteger) suggestedMigrationNumber;
 - (BOOL) isSomethingToDoForMigrationNumber: (NSUInteger)migrationNumber;
 - (BOOL) doMigrationForNumber: (NSUInteger)migrationNumber;
 

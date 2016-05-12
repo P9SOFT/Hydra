@@ -35,9 +35,12 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hydraReport:) name:HydraNotification object:nil];
 	
 	// load migration module and pass it to hydra to migration.
-	SampleMigrator *migrator = [[SampleMigrator alloc] init];
-	_playgroundView.suggestedMigrationNumberTextField.text = [[NSNumber numberWithUnsignedInteger:[migrator suggestedMigrationNumber]] stringValue];
-	[[Hydra defaultHydra] doMigration:migrator waitUntilDone:NO];
+    if( [SampleMigrator countOfToDoMigration] > 0 ) {
+        [[Hydra defaultHydra] doMigration:[[SampleMigrator alloc] init] waitUntilDone:NO];
+    } else {
+        [self appendLog:@"migration skipped"];
+    }
+    _playgroundView.suggestedMigrationNumberTextField.text = [[NSNumber numberWithUnsignedInteger:[SampleMigrator suggestedMigrationNumber]] stringValue];
 }
 
 - (void)didReceiveMemoryWarning {
