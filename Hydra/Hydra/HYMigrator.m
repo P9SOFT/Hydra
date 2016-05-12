@@ -20,7 +20,7 @@
 - (id) init
 {
 	if( (self = [super init]) != nil ) {
-        if( [[self class] performSelector:@selector(suggestedMigrationNumber)] < 1 ) {
+        if( [[[self class] performSelector:@selector(suggestedMigrationNumber)] unsignedIntegerValue] < 1 ) {
 			return nil;
 		}
 	}
