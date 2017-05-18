@@ -14,45 +14,37 @@
 
 
 @interface HYManager : NSObject
-{
-	BOOL					_binded;
-	NSLock					*_lockForExecutorManaging;
-	NSMutableDictionary		*_usingExecutorDict;
-	NSMutableDictionary		*_workerNameForExecutorDict;
-	NSMutableDictionary		*_selectorForExecutorDict;
-	NSMutableDictionary		*_usingWorkerNameDict;
-}
 
 // you must override and implement these methods.
 
-- (NSString *) name;
+- (NSString * _Nullable) name;
 
 // public methods.
 
-- (BOOL) registExecuter: (id)anExecuter withWorkerName: (NSString *)workerName action: (SEL)selector;
-- (BOOL) bindToHydra: (id)hydra;
+- (BOOL) registExecuter: (id _Nullable)anExecuter withWorkerName: (NSString * _Nullable)workerName action: (SEL _Nullable)selector;
+- (BOOL) bindToHydra: (id _Nullable)hydra;
 
-- (HYQuery *) queryForExecutorName: (NSString *)executorName;
-- (NSString *) employedWorkerNameForExecutorName: (NSString *)executorName;
+- (HYQuery * _Nullable) queryForExecutorName: (NSString * _Nullable)executorName;
+- (NSString * _Nullable) employedWorkerNameForExecutorName: (NSString * _Nullable)executorName;
 
 @property (nonatomic, readonly) BOOL binded;
 
 // override these methods if need.
 
-- (NSString *) brief;
-- (NSString *) customDataDescription;
+- (NSString * _Nullable) brief;
+- (NSString * _Nullable) customDataDescription;
 
 - (BOOL) didInit;
 - (void) willDealloc;
 - (BOOL) willBind;
 - (void) didBind;
 
-- (NSDictionary *) notifyParametersForResult: (HYResult *)result fromExecutorName: (NSString *)executorName;
+- (NSDictionary * _Nullable) notifyParametersForResult: (HYResult * _Nullable)result fromExecutorName: (NSString * _Nullable)executorName;
 
 // these methods are used for internal handling.
 // you may not need to using these methods directly.
 
-- (void) workerReport: (NSNotification *)notification;
-- (void) postNotifyWithParamDict: (NSDictionary *)paramDict;
+- (void) workerReport: (NSNotification * _Nullable)notification;
+- (void) postNotifyWithParamDict: (NSDictionary * _Nullable)paramDict;
 
 @end

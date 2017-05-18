@@ -15,15 +15,25 @@
 #import "Hydra.h"
 
 
+@interface HYExecuter ()
+
+{
+    __weak id				_employedWorker;
+    NSMutableDictionary		*_resultDict;
+}
+
+@end
+
+
 @implementation HYExecuter
 
 @synthesize employedWorker = _employedWorker;
 @dynamic resultDict;
 
-- (id) init
+- (instancetype) init
 {
 	if( (self = [super init]) != nil ) {
-		if( [[self name] length] <= 0 ) {
+		if( self.name.length <= 0 ) {
 			return nil;
 		}
 		if( (_resultDict = [[NSMutableDictionary alloc] init]) == nil ) {
@@ -67,7 +77,7 @@
 	id			anResult;
 	
 	for( name in resultDict ) {
-		anResult = [resultDict objectForKey: name];
+		anResult = resultDict[name];
 		if( [anResult isKindOfClass: [HYResult class]] == YES ) {
 			[self calledCustomPostNotificationForResult: anResult];
 		}
@@ -91,12 +101,12 @@
 		return;
 	}
 	
-	[_resultDict setObject: anResult forKey: [anResult name]];
+	_resultDict[[anResult name]] = anResult;
 }
 
 - (void) removeResultForName: (NSString *)resultName
 {
-	if( [resultName length] <= 0 ) {
+	if( resultName.length <= 0 ) {
 		return;
 	}
 	
@@ -331,7 +341,7 @@
 		return nil;
 	}
 	
-	[anResult setIssuedIdOfQuery: [anQuery issuedId]];
+	anResult.issuedIdOfQuery = [anQuery issuedId];
 	[anResult markAutomaticallyMadeByTimeout];
 	
 	return anResult;
@@ -361,9 +371,9 @@
 	NSString	*name;
 	NSString	*dataDescription;
 	
-	desc = [NSString stringWithFormat: @"<executer name=\"%@\">", [self name]];
+	desc = [NSString stringWithFormat: @"<executer name=\"%@\">", self.name];
 	
-	if( (brief = [self brief]) != nil ) {
+	if( (brief = self.brief) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<brief>%@</brief>", brief];
 	}
 	if( [_employedWorker respondsToSelector: @selector(name)] == YES ) {
@@ -371,7 +381,7 @@
 			desc = [desc stringByAppendingFormat: @"<employed name=\"%@\"/>", name];
 		}
 	}
-	if( (dataDescription = [self customDataDescription]) != nil ) {
+	if( (dataDescription = self.customDataDescription) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<custom_data_description>%@</custom_data_description>", dataDescription];
 	}
 	desc = [desc stringByAppendingString: @"</executer>"];

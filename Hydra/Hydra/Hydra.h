@@ -26,7 +26,7 @@
 
 #define		HydraNotifiationCodeKey						@"hydraNotificationCodeKey"
 
-typedef enum _HydraNotificationCode_
+typedef NS_ENUM(NSInteger, HydraNotificationCode)
 {
 	HydraNotificationCodeMigrationWillInitialing,
 	HydraNotificationCodeMigrationDidInitialing,
@@ -44,7 +44,7 @@ typedef enum _HydraNotificationCode_
 	
 	kCountOfHydraNotificationCode
 	
-} HydraNotificationCode;
+};
 
 #define		HydraNotificationWorkerNameKey				@"hydraNotificationWorkerNameKey"
 #define		HydraNotificationMigrationSuggestNumber		@"hydraNotificationMigrationSuggestNumber"
@@ -52,77 +52,62 @@ typedef enum _HydraNotificationCode_
 
 
 @interface Hydra : NSObject <HYWorkerDelegate>
-{
-	NSString				*_name;
-	
-	NSMutableDictionary		*_workerDict;
-	NSMutableDictionary		*_sharedDataDict;
-	NSLock					*_lockForSharedDataDict;
-	NSMutableDictionary		*_trackingResultSets;
-	NSLock					*_lockForTrackingResultSets;
-	NSMutableDictionary		*_waitingResults;
-	NSLock					*_lockForWaitingResults;
-	NSMutableDictionary		*_asyncTaskDict;
-	NSMutableDictionary		*_asyncTaskLimiterDict;
-	NSMutableDictionary		*_asyncTaskLimiterPoolDict;
-	NSLock					*_lockForAsyncTaskDict;
-}
 
 // public methods.
 
-+ (Hydra *) defaultHydra;
++ (Hydra * _Nullable) defaultHydra;
 + (void) destroyDefaultHydra;
 
-- (BOOL) doMigration: (id)migration waitUntilDone: (BOOL)waitUntilDone;
+- (BOOL) doMigration: (id _Nullable)migration waitUntilDone: (BOOL)waitUntilDone;
 
 - (BOOL) addCommonWorker;
-- (BOOL) addNormalWorkerForName: (NSString *)name;
-- (BOOL) addWorker: (id)anWorker;
-- (void) removeWorkerForName: (NSString *)name;
-- (id) workerForName: (NSString *)name;
+- (BOOL) addNormalWorkerForName: (NSString * _Nullable)name;
+- (BOOL) addWorker: (id _Nullable)anWorker;
+- (void) removeWorkerForName: (NSString * _Nullable)name;
+- (id _Nullable) workerForName: (NSString * _Nullable)name;
 
 - (void) startAllWorkers;
-- (void) startWorkerForName: (NSString *)name;
+- (void) startWorkerForName: (NSString * _Nullable)name;
 - (void) pauseAllWorkers;
-- (void) pauseWorkerForName: (NSString *)name;
+- (void) pauseWorkerForName: (NSString * _Nullable)name;
 - (void) resumeAllWorkers;
-- (void) resumeWorkerForName: (NSString *)name;
+- (void) resumeWorkerForName: (NSString * _Nullable)name;
 - (void) stopAllWorkers;
-- (void) stopWorkerForName: (NSString *)name;
+- (void) stopWorkerForName: (NSString * _Nullable)name;
 
-- (BOOL) pushQuery: (id)anQuery;
+- (BOOL) pushQuery: (id _Nullable)anQuery;
 
 - (void) pauseQueryForIssuedId: (int32_t)issuedId;
-- (void) pauseAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName;
+- (void) pauseAllQueriesForExecutorName: (NSString * _Nullable)executorName atWorkerName: (NSString * _Nullable)workerName;
 - (void) resumeQueryForIssuedId: (int32_t)issuedId;
-- (void) resumeAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName;
+- (void) resumeAllQueriesForExecutorName: (NSString * _Nullable)executorName atWorkerName: (NSString * _Nullable)workerName;
 - (void) resumeAllQueries;
 
 - (void) cancelQueryForIssuedId: (int32_t)issuedId;
-- (void) cancelAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName;
-- (void) cancelAllQueriesForWorkerName: (NSString *)workerName;
+- (void) cancelAllQueriesForExecutorName: (NSString * _Nullable)executorName atWorkerName: (NSString * _Nullable)workerName;
+- (void) cancelAllQueriesForWorkerName: (NSString * _Nullable)workerName;
 - (void) cancelAllQueries;
 
-- (BOOL) setTrackingResultSet: (id)anTrackingResultSet;
-- (void) removeTrackingResultSetForName: (NSString *)name;
+- (BOOL) setTrackingResultSet: (id _Nullable)anTrackingResultSet;
+- (void) removeTrackingResultSetForName: (NSString * _Nullable)name;
 
-- (id) cacheDataAtWorker: (NSString *)name forKey: (NSString *)key;
-- (BOOL) setCacheData: (id)anData atWoker: (NSString *)name forKey: (NSString *)key;
-- (void) removeCacheDataAtWorker: (NSString *)name forKey: (NSString *)key;
-- (void) removeAllCacheDataAtWorker: (NSString *)name;
+- (id _Nullable) cacheDataAtWorker: (NSString * _Nullable)name forKey: (NSString * _Nullable)key;
+- (BOOL) setCacheData: (id _Nullable)anData atWoker: (NSString * _Nullable)name forKey: (NSString * _Nullable)key;
+- (void) removeCacheDataAtWorker: (NSString * _Nullable)name forKey: (NSString * _Nullable)key;
+- (void) removeAllCacheDataAtWorker: (NSString * _Nullable)name;
 
-- (id) sharedDataForKey: (NSString *)key;
-- (BOOL) setSharedData: (id)anData forKey: (NSString *)key;
-- (void) removeSharedDataForKey: (NSString *)key;
+- (id _Nullable) sharedDataForKey: (NSString * _Nullable)key;
+- (BOOL) setSharedData: (id _Nullable)anData forKey: (NSString * _Nullable)key;
+- (void) removeSharedDataForKey: (NSString * _Nullable)key;
 - (void) removeAllSharedData;
 
-- (BOOL) bindAsyncTask: (id)anAsyncTask;
+- (BOOL) bindAsyncTask: (id _Nullable)anAsyncTask;
 - (void) unbindAsyncTaskForIssuedId: (int32_t)issuedId;
 - (void) unbindAllAsyncTasks;
 - (void) pauseAsyncTaskForIssuedId: (int32_t)issuedId;
 - (void) resumeAsyncTaskForIssuedId: (int32_t)issuedId;
 - (void) resumeAllAsyncTasks;
 
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString * _Nonnull name;
 
 @end

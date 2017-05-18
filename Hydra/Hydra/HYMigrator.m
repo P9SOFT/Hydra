@@ -13,11 +13,20 @@
 #define		kDefaultMigrationNumberKey		@"HYMigrationDefaultMigrationNumberKey"
 
 
+@interface HYMigrator ()
+
+{
+    BOOL			_useBackgroundThread;
+}
+
+@end
+
+
 @implementation HYMigrator
 
 @synthesize useBackgroundThread = _useBackgroundThread;
 
-- (id) init
+- (instancetype) init
 {
 	if( (self = [super init]) != nil ) {
         if( [[[self class] performSelector:@selector(suggestedMigrationNumber)] unsignedIntegerValue] < 1 ) {
@@ -33,7 +42,7 @@
     NSNumber *suggested = [[self class] performSelector:@selector(suggestedMigrationNumber)];
     NSNumber *lastUpdated = [[self class] performSelector:@selector(lastUpdatedMigrationNumber)];
     
-    return @([suggested unsignedIntegerValue] - [lastUpdated unsignedIntegerValue]);
+    return @(suggested.unsignedIntegerValue - lastUpdated.unsignedIntegerValue);
 }
 
 + (NSNumber *) lastUpdatedMigrationNumber
@@ -73,14 +82,14 @@
 
 - (void) initialingDone
 {
-	[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: 1] forKey: [[self class] migrationNumberKeyString]];
+	[[NSUserDefaults standardUserDefaults] setObject: @1U forKey: [[self class] migrationNumberKeyString]];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
 - (BOOL) stepMigrationForNumber: (NSUInteger)migrationNumber
 {
 	if( [self doMigrationForNumber: migrationNumber] == YES ) {
-		[[NSUserDefaults standardUserDefaults] setObject: [NSNumber numberWithUnsignedInteger: migrationNumber] forKey: [[self class] migrationNumberKeyString]];
+		[[NSUserDefaults standardUserDefaults] setObject: @(migrationNumber) forKey: [[self class] migrationNumberKeyString]];
 		[[NSUserDefaults standardUserDefaults] synchronize];
 		return YES;
 	}

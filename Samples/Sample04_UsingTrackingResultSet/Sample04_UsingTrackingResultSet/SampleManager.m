@@ -52,7 +52,7 @@
 
 - (BOOL)standbyWithWorkerName:(NSString *)workerName
 {
-	if( (self.standby == YES) || ([workerName length] <= 0) ) {
+	if( (self.standby == YES) || (workerName.length <= 0) ) {
 		return NO;
 	}
 	
@@ -62,7 +62,7 @@
 	
 	// set tracking result set
 	HYTrackingResultSet	*trackingResultSet = [[HYTrackingResultSet alloc] initWithName:kTrackingResultNameForBooAndFooAllUpdated];
-	[trackingResultSet setResultNamesFromArray:[NSArray arrayWithObjects:BooExecutorName, FooExecutorName, nil]];
+	[trackingResultSet setResultNamesFromArray:@[BooExecutorName, FooExecutorName]];
 	[[Hydra defaultHydra] setTrackingResultSet:trackingResultSet];
 	// and add observer to get notify by name of TrackingResultSet
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(booAndFooAllUpdated:) name:kTrackingResultNameForBooAndFooAllUpdated object:nil];
@@ -113,7 +113,7 @@
 	}
 	
 	// set operation value
-	[paramDict setObject:[NSNumber numberWithUnsignedInteger:(NSUInteger)SampleManagerOperationBoo] forKey:SampleManagerNotifyParameterKeyOperation];
+	paramDict[SampleManagerNotifyParameterKeyOperation] = @((NSUInteger)SampleManagerOperationBoo);
 	
 	// 'paramDict' will be 'userInfo' of notification, 'SampleManagerNotification'.
 	return paramDict;
@@ -128,7 +128,7 @@
 	}
 	
 	// set operation value
-	[paramDict setObject:[NSNumber numberWithUnsignedInteger:(NSUInteger)SampleManagerOperationFoo] forKey:SampleManagerNotifyParameterKeyOperation];
+	paramDict[SampleManagerNotifyParameterKeyOperation] = @((NSUInteger)SampleManagerOperationFoo);
 	
 	// 'paramDict' will be 'userInfo' of notification, 'SampleManagerNotification'.
 	return paramDict;
@@ -136,7 +136,7 @@
 
 - (void)booAndFooAllUpdated:(NSNotification *)notification
 {
-	NSDictionary *paramDict = @{SampleManagerNotifyParameterKeyOperation:[NSNumber numberWithUnsignedInteger:(NSUInteger)SampleManagerOperationBooAndFooAllUpdated]};
+	NSDictionary *paramDict = @{SampleManagerNotifyParameterKeyOperation:@((NSUInteger)SampleManagerOperationBooAndFooAllUpdated)};
 	[[NSNotificationCenter defaultCenter] postNotificationName:self.name object:self userInfo:paramDict];
 }
 

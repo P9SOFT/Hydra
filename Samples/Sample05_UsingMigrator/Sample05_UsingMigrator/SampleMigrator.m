@@ -11,6 +11,11 @@
 
 @implementation SampleMigrator
 
++ (NSString *) migrationNumberKeyString
+{
+    return kSampleMigrationNumberKey;
+}
+
 - (BOOL)doInitialing
 {
 	// do something when first initialing task at once

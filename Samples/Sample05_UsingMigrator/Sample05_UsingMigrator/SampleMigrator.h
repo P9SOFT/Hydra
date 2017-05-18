@@ -10,6 +10,8 @@
 #import <Foundation/Foundation.h>
 #import <Hydra/Hydra.h>
 
+#define     kSampleMigrationNumberKey       @"kSampleMigrationNumberKey"
+
 @interface SampleMigrator : HYMigrator
 
 @end

@@ -15,7 +15,7 @@
 @synthesize booButton = _booButton;
 @synthesize fooButton = _fooButton;
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
 	if( (self = [super initWithFrame:frame]) != nil ) {
 		

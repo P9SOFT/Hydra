@@ -11,7 +11,7 @@
 #import <Hydra/HYDefine.h>
 
 
-typedef enum _HYMigratorStatus_
+typedef NS_ENUM(NSInteger, HYMigratorStatus)
 {
 	HYMigratorStatusWillStart,
 	HYMigratorStatusWillStep,
@@ -20,23 +20,20 @@ typedef enum _HYMigratorStatus_
 	HYMigratorStatusDone,
 	kCountOfHYMigratorStatus
 	
-} HYMigratorStatus;
+};
 
 
 @interface HYMigrator : NSObject
-{
-	BOOL			_useBackgroundThread;
-}
 
 // public methods.
 
-+ (NSNumber *) countOfToDoMigration;
-+ (NSNumber *) lastUpdatedMigrationNumber;
++ (NSNumber * _Nullable) countOfToDoMigration;
++ (NSNumber * _Nullable) lastUpdatedMigrationNumber;
 
 // override these methods if need.
 
-+ (NSString *) migrationNumberKeyString;
-+ (NSNumber *) suggestedMigrationNumber;
++ (NSString * _Nullable) migrationNumberKeyString;
++ (NSNumber * _Nullable) suggestedMigrationNumber;
 
 - (BOOL) doInitialing;
 - (BOOL) isSomethingToDoForMigrationNumber: (NSUInteger)migrationNumber;

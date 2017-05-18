@@ -15,6 +15,25 @@
 int32_t			g_HYAsyncTask_last_issuedId;
 
 
+@interface HYAsyncTask ()
+
+{
+    int32_t					_issuedId;
+    int32_t					_madeByQueryIssuedId;
+    NSString				*_madeByWorkerName;
+    NSString				*_madeByExecutorName;
+    id						_closeQuery;
+    NSString				*_limiterName;
+    NSInteger				_limiterCount;
+    HYAsyncTaskActiveOrder	_limiterOrder;
+    struct timeval			_tvBinded;
+    NSLock					*_lock;
+    BOOL					_paused;
+}
+
+@end
+
+
 @implementation HYAsyncTask
 
 @synthesize issuedId = _issuedId;
@@ -28,12 +47,12 @@ int32_t			g_HYAsyncTask_last_issuedId;
 @synthesize limiterOrder = _limiterOrder;
 @dynamic passedMilisecondFromBind;
 
-- (id) init
+- (instancetype) init NS_UNAVAILABLE
 {
 	return nil;
 }
 
-- (id) initWithCloseQuery: (id)anQuery
+- (instancetype) initWithCloseQuery: (id)anQuery
 {
 	if( (self = [super init]) != nil ) {
 		if( (anQuery == nil) || ([anQuery isKindOfClass: [HYQuery class]] == NO) ) {
@@ -45,7 +64,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 		if( (_lock = [[NSLock alloc] init]) == nil ) {
 			return nil;
 		}
-		if( [self didInit] == NO ) {
+		if( self.didInit == NO ) {
 			return nil;
 		}
 	}
@@ -65,7 +84,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 
 - (BOOL) activeLimiterName: (NSString *)name withCount: (NSInteger)count byOrder: (HYAsyncTaskActiveOrder)order
 {
-	if( ([name length] <= 0) || (count <= 0) ) {
+	if( (name.length <= 0) || (count <= 0) ) {
 		return NO;
 	}
 	
@@ -156,7 +175,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 
 - (void) bind
 {
-	if( [self didBind] == NO ) {
+	if( self.didBind == NO ) {
 		[self done];
 	}
 	
@@ -237,7 +256,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 		return NO;
 	}
 	
-	return ([self issuedId] == [anObject issuedId]);
+	return (self.issuedId == [anObject issuedId]);
 }
 
 - (NSString *) description
@@ -247,30 +266,30 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	NSString	*dataDescription;
 	
 	desc = [NSString stringWithFormat: @"<async_task issuedid=\"%d\">", _issuedId];
-	if( (brief = [self brief]) != nil ) {
+	if( (brief = self.brief) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<brief>%@</brief>", brief];
 	}
-	if( (_madeByQueryIssuedId > 0) || ([_madeByWorkerName length] > 0) || ([_madeByExecutorName length] > 0) ) {
+	if( (_madeByQueryIssuedId > 0) || (_madeByWorkerName.length > 0) || (_madeByExecutorName.length > 0) ) {
 		desc = [desc stringByAppendingString: @"<made_by_query"];
 		if( _madeByQueryIssuedId > 0 ) {
 			desc = [desc stringByAppendingFormat: @" issudedid=\"%d\"", _madeByQueryIssuedId];
 		}
-		if( [_madeByWorkerName length] > 0 ) {
+		if( _madeByWorkerName.length > 0 ) {
 			desc = [desc stringByAppendingFormat: @" worker=\"%@\"", _madeByWorkerName];
 		}
-		if( [_madeByExecutorName length] > 0 ) {
+		if( _madeByExecutorName.length > 0 ) {
 			desc = [desc stringByAppendingFormat: @" executor=\"%@\"", _madeByExecutorName];
 		}
 		desc = [desc stringByAppendingString: @"/>"];
 	}
-	if( [_limiterName length] > 0 ) {
+	if( _limiterName.length > 0 ) {
 		desc = [desc stringByAppendingFormat: @"<limiter name=\"%@\" count=\"%ld\" order=\"%d\"/>", _limiterName, (long)_limiterCount, (int)_limiterOrder];
 	}
-	desc = [desc stringByAppendingFormat: @"<bind sec=\"%ld\" usec=\"%d\"/ paused=\"%@\">", _tvBinded.tv_sec, _tvBinded.tv_usec, [[NSNumber numberWithBool: _paused] stringValue]];
+	desc = [desc stringByAppendingFormat: @"<bind sec=\"%ld\" usec=\"%d\"/ paused=\"%@\">", _tvBinded.tv_sec, _tvBinded.tv_usec, @(_paused).stringValue];
 	if( _closeQuery != nil ) {
 		desc = [desc stringByAppendingFormat: @"<close_query>%@</close_query>", _closeQuery];
 	}
-	if( (dataDescription = [self customDataDescription]) != nil ) {
+	if( (dataDescription = self.customDataDescription) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<custom_data_description>%@</custom_data_description>", dataDescription];
 	}
 	desc = [desc stringByAppendingString: @"</async_task>"];

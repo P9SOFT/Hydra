@@ -64,13 +64,13 @@
 	
 	// get result of executor and update UI if need
 	
-	userInfo = [notification userInfo];
+	userInfo = notification.userInfo;
 	
-	operation = (SampleManagerOperation)[[userInfo objectForKey:SampleManagerNotifyParameterKeyOperation] integerValue];
+	operation = (SampleManagerOperation)[userInfo[SampleManagerNotifyParameterKeyOperation] integerValue];
 	
 	switch( operation ) {
 		case SampleManagerOperationLoadImage :
-			if( (image = [userInfo objectForKey:SampleManagerNotifyParameterKeyOperandImage]) != nil ) {
+			if( (image = userInfo[SampleManagerNotifyParameterKeyOperandImage]) != nil ) {
 				_playgroundView.imageView.image = image;
 			}
 			_playgroundView.doButton.enabled = YES;

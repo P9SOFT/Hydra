@@ -13,7 +13,7 @@
 
 @synthesize titleLabel = _titleLabel;
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
 	if( (self = [super initWithFrame:frame]) != nil ) {
 		self.backgroundColor = [UIColor lightGrayColor];

@@ -24,7 +24,20 @@ enum HYWorkerState {
 };
 
 
-@interface HYWorker( HYWorkerPrivate )
+@interface HYWorker ()
+
+{
+    __weak id				_delegate;
+    NSString                *_name;
+    NSMutableDictionary		*_executerDict;
+    NSMutableArray			*_queryQueue;
+    id						_executingQuery;
+    NSCondition				*_condition;
+    int						_currentState;
+    int						_nextState;
+    NSLock					*_lockForCacheDict;
+    NSMutableDictionary		*_cacheDict;
+}
 
 - (BOOL) prepareResources;
 - (NSUInteger) countOfQueriesInQueue;
@@ -46,32 +59,32 @@ enum HYWorkerState {
 
 - (id) init
 {
-	if( (self = [super init]) != nil ) {
-		if( [[self name] length] <= 0 ) {
-			return nil;
-		}
-        if( [self prepareResources] == NO ) {
-            return nil;
-        }
-		if( [self didInit] == NO ) {
-			return nil;
-		}
-	}
-	
-	return self;
-}
-
-- (id) initWithName: (NSString *)name
-{
     if( (self = [super init]) != nil ) {
-        if( [name length] <= 0 ) {
+        if( self.name.length <= 0 ) {
             return nil;
         }
-        _name = [name copy];
         if( [self prepareResources] == NO ) {
             return nil;
         }
         if( [self didInit] == NO ) {
+            return nil;
+        }
+    }
+    
+    return self;
+}
+
+- (instancetype) initWithName: (NSString *)name
+{
+    if( (self = [super init]) != nil ) {
+        if( name.length <= 0 ) {
+            return nil;
+        }
+        _name = [name copy];
+        if( self.prepareResources == NO ) {
+            return nil;
+        }
+        if( self.didInit == NO ) {
             return nil;
         }
     }
@@ -94,10 +107,10 @@ enum HYWorkerState {
 	
 	[_condition lock];
 	
-	if( [_executerDict objectForKey: [anExecuter name]] == nil ) {
+	if( _executerDict[[anExecuter name]] == nil ) {
 		[anExecuter clearAllResults];
 		[anExecuter setEmployedWorker: self];
-		[_executerDict setObject: anExecuter forKey: [anExecuter name]];
+		_executerDict[[anExecuter name]] = anExecuter;
 		returnFlag = YES;
 	} else {
 		returnFlag = NO;
@@ -112,13 +125,13 @@ enum HYWorkerState {
 {
 	id			anExecuter;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
 	[_condition lock];
 	
-	if( (anExecuter = [_executerDict objectForKey: name]) != nil ) {
+	if( (anExecuter = _executerDict[name]) != nil ) {
 		[anExecuter setEmployedWorker: nil];
 		[_executerDict removeObjectForKey: name];
 	}
@@ -131,7 +144,7 @@ enum HYWorkerState {
 	[_condition lock];
 	
 	if( (_currentState == kHYWorkerStateStopped) && (_nextState != kHYWorkerStateRunning) ) {
-		if( [self willStart] == YES ) {
+		if( self.willStart == YES ) {
 			_nextState = kHYWorkerStateRunning;
 			[NSThread detachNewThreadSelector: @selector(fetcher:) toTarget: self withObject: nil];
 		}
@@ -149,7 +162,7 @@ enum HYWorkerState {
 	[_executingQuery setPaused: YES];
 	
 	if( (_currentState == kHYWorkerStateRunning) && (_nextState != kHYWorkerStatePaused) ) {
-		if( [self willPause] == YES ) {
+		if( self.willPause == YES ) {
 			_nextState = kHYWorkerStatePaused;
 		}
 	}
@@ -167,7 +180,7 @@ enum HYWorkerState {
 	[_executingQuery setPaused: NO];
 	
 	if( (_currentState == kHYWorkerStatePaused) && (_nextState != kHYWorkerStateRunning) ) {
-		if( [self willResume] == YES ) {
+		if( self.willResume == YES ) {
 			_nextState = kHYWorkerStateRunning;
 		}
 	}
@@ -183,7 +196,7 @@ enum HYWorkerState {
 	[_condition lock];
 	
 	if( _currentState != kHYWorkerStateStopped ) {
-		if( [self willStop] == YES ) {
+		if( self.willStop == YES ) {
 			_nextState = kHYWorkerStateStopped;
 		}
 	}
@@ -256,7 +269,7 @@ enum HYWorkerState {
 {
 	HYQuery			*query;
 	
-	if( [executorName length] <= 0 ) {
+	if( executorName.length <= 0 ) {
 		return;
 	}
 	
@@ -267,7 +280,7 @@ enum HYWorkerState {
 	}
 	
 	for( query in _queryQueue ) {
-		if( [[query executerName] isEqualToString: executorName] == YES ) {
+		if( [query.executerName isEqualToString: executorName] == YES ) {
 			query.paused = YES;
 		}
 	}
@@ -301,7 +314,7 @@ enum HYWorkerState {
 {
 	HYQuery			*query;
 	
-	if( [executorName length] <= 0 ) {
+	if( executorName.length <= 0 ) {
 		return;
 	}
 	
@@ -312,7 +325,7 @@ enum HYWorkerState {
 	}
 	
 	for( query in _queryQueue ) {
-		if( [[query executerName] isEqualToString: executorName] == YES ) {
+		if( [query.executerName isEqualToString: executorName] == YES ) {
 			query.paused = NO;
 		}
 	}
@@ -362,7 +375,7 @@ enum HYWorkerState {
 {
 	HYQuery			*query;
 	
-	if( [executorName length] <= 0 ) {
+	if( executorName.length <= 0 ) {
 		return;
 	}
 	
@@ -373,7 +386,7 @@ enum HYWorkerState {
 	}
 	
 	for( query in _queryQueue ) {
-		if( [[query executerName] isEqualToString: executorName] == YES ) {
+		if( [query.executerName isEqualToString: executorName] == YES ) {
 			query.canceled = YES;
 		}
 	}
@@ -405,10 +418,10 @@ enum HYWorkerState {
 	NSDictionary	*resultDict;
 	
 	if( [self didExpireQuery: anQuery] == NO ) {
-		if( (anExecuter = [_executerDict objectForKey: [anQuery executerName]]) != nil ) {
+		if( (anExecuter = _executerDict[[anQuery executerName]]) != nil ) {
 			if( (anResult = [anExecuter resultForExpiredQuery: anQuery]) != nil ) {
 				if( [anResult isKindOfClass: [HYResult class]] == YES ) {
-					resultDict = [NSDictionary dictionaryWithObject: anResult forKey: [anResult name]];
+					resultDict = @{[anResult name]: anResult};
 					if( [anExecuter useCustomPostNotification] == YES ) {
 						[anExecuter doCustomPostNotificationForResultDict: resultDict];
 					} else {
@@ -451,13 +464,13 @@ enum HYWorkerState {
 {
 	id		anObject;
 	
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return nil;
 	}
 	
 	[_lockForCacheDict lock];
 	
-	anObject = [_cacheDict objectForKey: key];
+	anObject = _cacheDict[key];
 	
 	[_lockForCacheDict unlock];
 	
@@ -466,13 +479,13 @@ enum HYWorkerState {
 
 - (BOOL) setCacheData: (id)anData forKey: (NSString *)key
 {
-	if( ([key length] <= 0) || (anData == nil) ) {
+	if( (key.length <= 0) || (anData == nil) ) {
 		return NO;
 	}
 	
 	[_lockForCacheDict lock];
 	
-	[_cacheDict setObject: anData forKey: key];
+	_cacheDict[key] = anData;
 	
 	[_lockForCacheDict unlock];
 	
@@ -481,7 +494,7 @@ enum HYWorkerState {
 
 - (void) removeCacheDataForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return;
 	}
 	
@@ -554,12 +567,12 @@ enum HYWorkerState {
 	id			anQuery;
 	NSUInteger	i, count;
 	
-	count = [_queryQueue count];
+	count = _queryQueue.count;
 	
 	for( i=0 ; i<count ; ++i ) {
-		anQuery = [_queryQueue objectAtIndex: i];
+		anQuery = _queryQueue[i];
 		if( ([anQuery canceled] == YES) || ([anQuery paused] == NO) ) {
-			anQuery = [_queryQueue objectAtIndex: i];
+			anQuery = _queryQueue[i];
 			[_queryQueue removeObjectAtIndex: i];
 			return anQuery;
 		}
@@ -576,7 +589,7 @@ enum HYWorkerState {
 		return NO;
 	}
 	
-	if( (params = [[NSDictionary alloc] initWithObjectsAndKeys: self, HYWorkerParameterKeyWorker, nil]) == nil ) {
+	if( (params = @{HYWorkerParameterKeyWorker: self}) == nil ) {
 		return NO;
 	}
 	
@@ -593,7 +606,7 @@ enum HYWorkerState {
 		return NO;
 	}
 	
-	if( (params = [[NSDictionary alloc] initWithObjectsAndKeys: self, HYWorkerParameterKeyWorker, nil]) == nil ) {
+	if( (params = @{HYWorkerParameterKeyWorker: self}) == nil ) {
 		return NO;
 	}
 	
@@ -610,7 +623,7 @@ enum HYWorkerState {
 		return NO;
 	}
 	
-	if( (params = [[NSDictionary alloc] initWithObjectsAndKeys: self, HYWorkerParameterKeyWorker, nil]) == nil ) {
+	if( (params = @{HYWorkerParameterKeyWorker: self}) == nil ) {
 		return NO;
 	}
 	
@@ -627,7 +640,7 @@ enum HYWorkerState {
 		return NO;
 	}
 	
-	if( (params = [[NSDictionary alloc] initWithObjectsAndKeys: self, HYWorkerParameterKeyWorker, nil]) == nil ) {
+	if( (params = @{HYWorkerParameterKeyWorker: self}) == nil ) {
 		return NO;
 	}
 	
@@ -644,11 +657,11 @@ enum HYWorkerState {
 		return NO;
 	}
 	
-	if( [resultDict count] <= 0 ) {
+	if( resultDict.count <= 0 ) {
 		return NO;
 	}
 	
-	if( (params = [[NSDictionary alloc] initWithObjectsAndKeys: self, HYWorkerParameterKeyWorker, resultDict, HYWorkerParameterKeyResultDict, nil]) == nil ) {
+	if( (params = @{HYWorkerParameterKeyWorker: self, HYWorkerParameterKeyResultDict: resultDict}) == nil ) {
 		return NO;
 	}
 	
@@ -679,7 +692,7 @@ enum HYWorkerState {
                 
                 _executingQuery = nil;
                 
-                while( ([self countOfQueriesInQueue] <= 0) || (_currentState == kHYWorkerStatePaused) ) {
+                while( (self.countOfQueriesInQueue <= 0) || (_currentState == kHYWorkerStatePaused) ) {
                     [_condition wait];
                     if( _nextState != kHYWorkerStateNull ) {
                         _currentState = _nextState;
@@ -701,13 +714,13 @@ enum HYWorkerState {
                     break;
                 }
                 
-                _executingQuery = [self popQueryFromQueue];
+                _executingQuery = self.popQueryFromQueue;
                 
                 [_condition unlock];
                 
                 if( [_executingQuery canceled] == YES ) {
                     if( [self didCancelQuery: _executingQuery] == NO ) {
-                        if( (anExecuter = [_executerDict objectForKey: [_executingQuery executerName]]) != nil ) {
+                        if( (anExecuter = _executerDict[[_executingQuery executerName]]) != nil ) {
                             if( [anExecuter cancelWithQuery: _executingQuery] == YES ) {
                                 if( [anExecuter useCustomPostNotification] == YES ) {
                                     [anExecuter doCustomPostNotificationForResultDict: [anExecuter resultDict]];
@@ -720,7 +733,7 @@ enum HYWorkerState {
                     }
                 } else {
                     if( [self didFetchQuery: _executingQuery] == NO ) {
-                        if( (anExecuter = [_executerDict objectForKey: [_executingQuery executerName]]) != nil ) {
+                        if( (anExecuter = _executerDict[[_executingQuery executerName]]) != nil ) {
                             if( [anExecuter shouldSkipExecutingWithQuery: _executingQuery] == NO ) {
                                 if( [anExecuter executeWithQuery: _executingQuery] == YES ) {
                                     if( [anExecuter useCustomPostNotification] == YES ) {
@@ -862,7 +875,7 @@ enum HYWorkerState {
 	NSString	*key;
 	NSString	*dataDescription;
 	
-	desc = [NSString stringWithFormat: @"<worker name=\"%@\">", [self name]];
+	desc = [NSString stringWithFormat: @"<worker name=\"%@\">", self.name];
 	switch( _currentState ) {
 		case kHYWorkerStateStopped :
 			desc = [desc stringByAppendingString: @"<current_state value=\"stopped\"/>"];
@@ -891,19 +904,19 @@ enum HYWorkerState {
 			desc = [desc stringByAppendingString: @"<next_state value=\"null\"/>"];
 			break;
 	}
-	if( (brief = [self brief]) != nil ) {
+	if( (brief = self.brief) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<brief>%@</brief>", brief];
 	}
 	desc = [desc stringByAppendingFormat: @"<executers>"];
 	for( name in _executerDict ) {
-		executer = [_executerDict objectForKey: name];
+		executer = _executerDict[name];
 		desc = [desc stringByAppendingFormat: @"%@", executer];
 	}
 	desc = [desc stringByAppendingString: @"</executers>"];
 	desc = [desc stringByAppendingFormat: @"<cached_data>"];
 	[_lockForCacheDict lock];
 	for( key in _cacheDict ) {
-		anObject = [_cacheDict objectForKey: key];
+		anObject = _cacheDict[key];
 		if( [anObject respondsToSelector: @selector(description)] == YES ) {
 			desc = [desc stringByAppendingFormat: @"<key name=\"%@\">", key];
 			desc = [desc stringByAppendingFormat: @"%@", anObject];
@@ -919,7 +932,7 @@ enum HYWorkerState {
 			desc = [desc stringByAppendingFormat: @"<employed name=\"%@\"/>", name];
 		}
 	}
-	if( (dataDescription = [self customDataDescription]) != nil ) {
+	if( (dataDescription = self.customDataDescription) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<custom_data_description>%@</custom_data_description>", dataDescription];
 	}
 	desc = [desc stringByAppendingString: @"</worker>"];

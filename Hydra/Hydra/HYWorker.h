@@ -15,11 +15,11 @@
 @protocol HYWorkerDelegate
 
 @optional
-- (void) workerStarted: (NSDictionary *)params;
-- (void) workerPaused: (NSDictionary *)params;
-- (void) workerResumed: (NSDictionary *)params;
-- (void) workerStopped: (NSDictionary *)params;
-- (void) workerPostNotifyResult: (NSDictionary *)params;
+- (void) workerStarted: (NSDictionary * _Nullable)params;
+- (void) workerPaused: (NSDictionary * _Nullable)params;
+- (void) workerResumed: (NSDictionary * _Nullable)params;
+- (void) workerStopped: (NSDictionary * _Nullable)params;
+- (void) workerPostNotifyResult: (NSDictionary * _Nullable)params;
 
 @end
 
@@ -31,34 +31,20 @@
 
 
 @interface HYWorker : NSObject
-{
-	__weak id				_delegate;
-    NSString                *_name;
-	NSMutableDictionary		*_executerDict;
-	NSMutableArray			*_queryQueue;
-	id						_executingQuery;
-	NSCondition				*_condition;
-	int						_currentState;
-	int						_nextState;
-	NSLock					*_lockForCacheDict;
-	NSMutableDictionary		*_cacheDict;
-}
-
-- (id) initWithName: (NSString *)name;
 
 // you must override and implement these methods.
 
-- (NSString *) name;
+- (NSString * _Nullable) name;
 
 // public methods.
 
-- (BOOL) addExecuter: (id)anExecuter;
-- (void) removeExecuterForName: (NSString *)name;
+- (BOOL) addExecuter: (id _Nullable)anExecuter;
+- (void) removeExecuterForName: (NSString * _Nullable)name;
 
 // override these methods if need.
 
-- (NSString *) brief;
-- (NSString *) customDataDescription;
+- (NSString * _Nullable) brief;
+- (NSString * _Nullable) customDataDescription;
 
 - (BOOL) didInit;
 - (void) willDealloc;
@@ -70,41 +56,43 @@
 - (void) didResume;
 - (BOOL) willStop;
 - (void) didStop;
-- (BOOL) didFetchQuery: (id)anQuery;
-- (BOOL) didCancelQuery: (id)anQuery;
-- (BOOL) didExpireQuery: (id)anQuery;
+- (BOOL) didFetchQuery: (id _Nullable)anQuery;
+- (BOOL) didCancelQuery: (id _Nullable)anQuery;
+- (BOOL) didExpireQuery: (id _Nullable)anQuery;
 
 // these methods are used for internal handling.
 // you may not need to using these methods directly.
+
+- (instancetype _Nullable) initWithName: (NSString * _Nullable)name;
 
 - (BOOL) startWorker;
 - (BOOL) pauseWorker;
 - (BOOL) resumeWorker;
 - (BOOL) stopWorker;
 
-- (BOOL) pushQuery: (id)anQuery;
-- (BOOL) pushQueryToFront: (id)anQuery;
+- (BOOL) pushQuery: (id _Nullable)anQuery;
+- (BOOL) pushQueryToFront: (id _Nullable)anQuery;
 
 - (void) pauseQueryForIssuedId: (int32_t)issuedId;
-- (void) pauseAllQueriesForExecutorName: (NSString *)executorName;
+- (void) pauseAllQueriesForExecutorName: (NSString * _Nullable)executorName;
 - (void) resumeQueryForIssuedId: (int32_t)issuedId;
-- (void) resumeAllQueriesForExecutorName: (NSString *)executorName;
+- (void) resumeAllQueriesForExecutorName: (NSString * _Nullable)executorName;
 - (void) resumeAllQueries;
 
 - (void) cancelQueryForIssuedId: (int32_t)issuedId;
-- (void) cancelAllQueriesForExecutorName: (NSString *)executorName;
+- (void) cancelAllQueriesForExecutorName: (NSString * _Nullable)executorName;
 - (void) cancelAllQueries;
-- (void) expireQuery: (id)anQuery;
+- (void) expireQuery: (id _Nullable)anQuery;
 
 - (BOOL) isStarted;
 - (BOOL) isRunning;
 - (BOOL) isPaused;
 
-- (id) cacheDataForKey: (NSString *)key;
-- (BOOL) setCacheData: (id)anData forKey: (NSString *)key;
-- (void) removeCacheDataForKey: (NSString *)key;
+- (id _Nullable) cacheDataForKey: (NSString * _Nullable)key;
+- (BOOL) setCacheData: (id _Nullable)anData forKey: (NSString * _Nullable)key;
+- (void) removeCacheDataForKey: (NSString * _Nullable)key;
 - (void) removeAllCacheData;
 
-@property (nonatomic, weak) id delegate;
+@property (nonatomic, weak) id _Nullable delegate;
 
 @end

@@ -12,31 +12,26 @@
 
 
 @interface HYTrackingResultSet : NSObject
-{
-	NSString				*_name;
-	NSMutableDictionary		*_resultNameDict;
-	NSMutableDictionary		*_resultValueDict;
-}
 
 // public methods.
 
-- (id) initWithName: (NSString *)name;
+- (instancetype _Nullable) initWithName: (NSString * _Nullable)name NS_DESIGNATED_INITIALIZER;
 
-- (void) setResultNamesFromArray: (NSArray *)resultNames;
-- (BOOL) addResultName: (NSString *)resultName;
-- (void) removeResultName: (NSString *)resultName;
+- (void) setResultNamesFromArray: (NSArray * _Nullable)resultNames;
+- (BOOL) addResultName: (NSString * _Nullable)resultName;
+- (void) removeResultName: (NSString * _Nullable)resultName;
 
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString * _Nonnull name;
 
 // these methods are used for internal handling.
 // you may not need to using these methods directly.
 
-- (BOOL) updateResult: (id)anResult;
-- (void) clearResultForName: (NSString *)resultName;
+- (BOOL) updateResult: (id _Nullable)anResult;
+- (void) clearResultForName: (NSString * _Nullable)resultName;
 
 - (BOOL) refreshed;
 - (void) touch;
 
-@property (nonatomic, readonly) NSDictionary *resultDict;
+@property (NS_NONATOMIC_IOSONLY, readonly) NSDictionary * _Nonnull resultDict;
 
 @end

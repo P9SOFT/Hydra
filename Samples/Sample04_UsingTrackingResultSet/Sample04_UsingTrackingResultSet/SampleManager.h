@@ -27,8 +27,8 @@ typedef enum _SampleManagerOperation_
 + (SampleManager *)defaultManager;
 - (BOOL)standbyWithWorkerName:(NSString *)workerName;
 
-- (BOOL)boo;
-- (BOOL)foo;
+@property (NS_NONATOMIC_IOSONLY, readonly) BOOL boo;
+@property (NS_NONATOMIC_IOSONLY, readonly) BOOL foo;
 
 @property (nonatomic, readonly) BOOL standby;
 

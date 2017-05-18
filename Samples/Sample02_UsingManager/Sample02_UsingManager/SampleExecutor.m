@@ -30,7 +30,7 @@
 	
 	// get parameter value and do job
 	NSString *urlString = (NSString *)anObject;
-	if( [urlString length] > 0 ) {
+	if( urlString.length > 0 ) {
 		//NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:path]];
 		NSError *error;
 		NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:urlString] options:NSDataReadingUncached error:&error];

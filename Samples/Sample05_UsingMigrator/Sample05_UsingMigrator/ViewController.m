@@ -35,12 +35,12 @@
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hydraReport:) name:HydraNotification object:nil];
 	
 	// load migration module and pass it to hydra to migration.
-    if( [[SampleMigrator countOfToDoMigration] unsignedIntegerValue] > 0 ) {
+    if( [SampleMigrator countOfToDoMigration].unsignedIntegerValue > 0 ) {
         [[Hydra defaultHydra] doMigration:[[SampleMigrator alloc] init] waitUntilDone:NO];
     } else {
         [self appendLog:@"migration skipped"];
     }
-    _playgroundView.suggestedMigrationNumberTextField.text = [[SampleMigrator suggestedMigrationNumber] stringValue];
+    _playgroundView.suggestedMigrationNumberTextField.text = [SampleMigrator suggestedMigrationNumber].stringValue;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -50,7 +50,7 @@
 
 - (void)appendLog:(NSString *)logString
 {
-	if( [logString length] <= 0 ) {
+	if( logString.length <= 0 ) {
 		return;
 	}
 	
@@ -64,7 +64,7 @@
 	// here is hard coding for just showing sample.
 	// key "HYMigrationDefaultMigrationNumberKey" is default key of HYMigrator,
 	// you could change this key by overiding method 'migrationNumberKeyString' or just use default key.
-	[[NSUserDefaults standardUserDefaults] removeObjectForKey:@"HYMigrationDefaultMigrationNumberKey"];
+	[[NSUserDefaults standardUserDefaults] removeObjectForKey:kSampleMigrationNumberKey];
 	[[NSUserDefaults standardUserDefaults] synchronize];
 }
 
@@ -75,11 +75,11 @@
 	NSNumber					*suggestNumber;
 	NSNumber					*referenceNumber;
 	
-	userInfo = [notification userInfo];
+	userInfo = notification.userInfo;
 	
-	code = (HydraNotificationCode)[[userInfo objectForKey:HydraNotifiationCodeKey] integerValue];
-	suggestNumber = (NSNumber *)[userInfo objectForKey:HydraNotificationMigrationSuggestNumber];
-	referenceNumber = (NSNumber *)[userInfo objectForKey:HydraNotificationMigrationReferenceNumber];
+	code = (HydraNotificationCode)[userInfo[HydraNotifiationCodeKey] integerValue];
+	suggestNumber = (NSNumber *)userInfo[HydraNotificationMigrationSuggestNumber];
+	referenceNumber = (NSNumber *)userInfo[HydraNotificationMigrationReferenceNumber];
 	NSString *logMessage;
 	
 	switch( code ) {

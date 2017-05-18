@@ -15,7 +15,7 @@
 @synthesize outputNumberTextField = _outputNumberTextField;
 @synthesize doButton = _doButton;
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
 	if( (self = [super initWithFrame:frame]) != nil ) {
 		

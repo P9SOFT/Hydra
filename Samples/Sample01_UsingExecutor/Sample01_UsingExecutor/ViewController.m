@@ -52,34 +52,34 @@
 
 - (void)touchUpInsideDoButton:(id)sender
 {
-	NSUInteger inputNumberValue = (NSUInteger)[_playgroundView.inputNumberTextField.text integerValue];
+	NSUInteger inputNumberValue = (NSUInteger)(_playgroundView.inputNumberTextField.text).integerValue;
 	
 	// make query and push to hydra
 	HYQuery *query;
 	if( (query = [HYQuery queryWithWorkerName:HydraCommonWorkerName executerName:SampleExecutorName]) != nil ) {
 		_playgroundView.doButton.enabled = NO;
-		[query setParameter:[NSNumber numberWithUnsignedInteger:inputNumberValue] forKey:SampleExecutorParameterKeyInputNumber];
+		[query setParameter:@(inputNumberValue) forKey:SampleExecutorParameterKeyInputNumber];
 		[[Hydra defaultHydra] pushQuery:query];
 	}
 }
 
 - (void)commonWorkerNotification:(NSNotification *)notification
 {
-	NSDictionary *userInfo = [notification userInfo];
+	NSDictionary *userInfo = notification.userInfo;
 	
 	// get result of executor and update UI
-	HYResult *result = [userInfo objectForKey:SampleExecutorName];
+	HYResult *result = userInfo[SampleExecutorName];
 	if( result != nil ) {
 		NSNumber *outputNumber = [result parameterForKey:SampleExecutorParameterKeyOutputNumber];
 		if( outputNumber != nil ) {
-			_playgroundView.outputNumberTextField.text = [outputNumber stringValue];
+			_playgroundView.outputNumberTextField.text = outputNumber.stringValue;
 			NSNumber *inputNumber = [result parameterForKey:SampleExecutorParameterKeyInputNumber];
 			if( inputNumber != nil ) {
-				_playgroundView.inputNumberTextField.text = [inputNumber stringValue];
+				_playgroundView.inputNumberTextField.text = inputNumber.stringValue;
 			}
 		} else {
 			NSString *errorMessage = [result parameterForKey:SampleExecutorParameterKeyErrorMessage];
-			if( [errorMessage length] > 0 ) {
+			if( errorMessage.length > 0 ) {
 				_playgroundView.outputNumberTextField.text = errorMessage;
 			}
 		}

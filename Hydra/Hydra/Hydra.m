@@ -13,9 +13,24 @@
 Hydra			*g_defaultHydra;
 
 
-@interface Hydra( HydraPrivate )
+@interface Hydra ()
 
-- (id) initWithName: (NSString *)name;
+{
+    NSString				*_name;
+    NSMutableDictionary		*_workerDict;
+    NSMutableDictionary		*_sharedDataDict;
+    NSLock					*_lockForSharedDataDict;
+    NSMutableDictionary		*_trackingResultSets;
+    NSLock					*_lockForTrackingResultSets;
+    NSMutableDictionary		*_waitingResults;
+    NSLock					*_lockForWaitingResults;
+    NSMutableDictionary		*_asyncTaskDict;
+    NSMutableDictionary		*_asyncTaskLimiterDict;
+    NSMutableDictionary		*_asyncTaskLimiterPoolDict;
+    NSLock					*_lockForAsyncTaskDict;
+}
+
+- (instancetype) initWithName: (NSString *)name;
 - (void) postNotificationMigrationStatus: (HydraNotificationCode)status suggestedNumber: (NSUInteger)suggestedNumber referenceNumber: (NSUInteger)referenceNumber thread: (BOOL)thread;
 - (void) postNotificationWithParamDict: (NSDictionary *)paramDict;
 - (void) stepMigration: (id)migration;
@@ -58,15 +73,15 @@ Hydra			*g_defaultHydra;
 	}
 }
 
-- (id) init
+- (instancetype) init NS_UNAVAILABLE
 {
 	return nil;
 }
 
-- (id) initWithName: (NSString *)name
+- (instancetype) initWithName: (NSString *)name
 {
 	if( (self = [super init]) != nil ) {
-		if( [name length] <= 0 ) {
+		if( name.length <= 0 ) {
 			return nil;
 		}
 		_name = name;
@@ -140,19 +155,19 @@ Hydra			*g_defaultHydra;
 		return NO;
 	}
 	
-	if( [_workerDict objectForKey: [anWorker name]] != nil ) {
+	if( _workerDict[[anWorker name]] != nil ) {
 		return NO;
 	}
 	
-	[(HYWorker *)anWorker setDelegate: self];
-	[_workerDict setObject: anWorker forKey: [anWorker name]];
+	((HYWorker *)anWorker).delegate = self;
+	_workerDict[[anWorker name]] = anWorker;
 	
 	return YES;
 }
 
 - (void) removeWorkerForName: (NSString *)name
 {
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 		
@@ -161,11 +176,11 @@ Hydra			*g_defaultHydra;
 
 - (id) workerForName: (NSString *)name
 {
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return nil;
 	}
 	
-	return [_workerDict objectForKey: name];
+	return _workerDict[name];
 }
 
 - (void) startAllWorkers
@@ -174,7 +189,7 @@ Hydra			*g_defaultHydra;
 	id				anWorker;
 	
 	for( name in _workerDict ) {
-		anWorker = [_workerDict objectForKey: name];
+		anWorker = _workerDict[name];
 		if( [anWorker isRunning] == NO ) {
 			[anWorker startWorker];
 		}
@@ -185,11 +200,11 @@ Hydra			*g_defaultHydra;
 {
 	id				anWorker;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) != nil ) {
+	if( (anWorker = _workerDict[name]) != nil ) {
 		if( [anWorker isRunning] == NO ) {
 			[anWorker startWorker];
 		}
@@ -202,7 +217,7 @@ Hydra			*g_defaultHydra;
 	id				anWorker;
 	
 	for( name in _workerDict ) {
-		anWorker = [_workerDict objectForKey: name];
+		anWorker = _workerDict[name];
 		if( [anWorker isRunning] == YES ) {
 			[anWorker pauseWorker];
 		}
@@ -213,11 +228,11 @@ Hydra			*g_defaultHydra;
 {
 	id				anWorker;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) != nil ) {
+	if( (anWorker = _workerDict[name]) != nil ) {
 		if( [anWorker isRunning] == YES ) {
 			[anWorker pauseWorker];
 		}
@@ -230,7 +245,7 @@ Hydra			*g_defaultHydra;
 	id				anWorker;
 	
 	for( name in _workerDict ) {
-		anWorker = [_workerDict objectForKey: name];
+		anWorker = _workerDict[name];
 		if( [anWorker isPaused] == YES ) {
 			[anWorker resumeWorker];
 		}
@@ -241,11 +256,11 @@ Hydra			*g_defaultHydra;
 {
 	id				anWorker;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) != nil ) {
+	if( (anWorker = _workerDict[name]) != nil ) {
 		if( [anWorker isPaused] == YES ) {
 			[anWorker resumeWorker];
 		}
@@ -258,7 +273,7 @@ Hydra			*g_defaultHydra;
 	id				anWorker;
 	
 	for( name in _workerDict ) {
-		anWorker = [_workerDict objectForKey: name];
+		anWorker = _workerDict[name];
 		if( [anWorker isStarted] == YES ) {
 			[anWorker stopWorker];
 		}
@@ -269,11 +284,11 @@ Hydra			*g_defaultHydra;
 {
 	id				anWorker;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) != nil ) {
+	if( (anWorker = _workerDict[name]) != nil ) {
 		if( [anWorker isStarted] == YES ) {
 			[anWorker stopWorker];
 		}
@@ -288,7 +303,7 @@ Hydra			*g_defaultHydra;
 		return NO;
 	}
 	
-	if( (worker = [_workerDict objectForKey: [anQuery workerName]]) == nil ) {
+	if( (worker = _workerDict[[anQuery workerName]]) == nil ) {
 		return NO;
 	}
 	
@@ -306,7 +321,7 @@ Hydra			*g_defaultHydra;
 	NSString		*workerName;
 	
 	for( workerName in _workerDict ) {
-		[[_workerDict objectForKey: workerName] pauseQueryForIssuedId: issuedId];
+		[_workerDict[workerName] pauseQueryForIssuedId: issuedId];
 	}
 	
 	[self pauseAsyncTaskWithQueryIssuedId: issuedId workerName: nil executorName: nil];
@@ -314,11 +329,11 @@ Hydra			*g_defaultHydra;
 
 - (void) pauseAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName
 {
-	if( ([executorName length] <= 0) || ([workerName length] <= 0) ) {
+	if( (executorName.length <= 0) || (workerName.length <= 0) ) {
 		return;
 	}
 	
-	[[_workerDict objectForKey: workerName] pauseAllQueriesForExecutorName: executorName];
+	[_workerDict[workerName] pauseAllQueriesForExecutorName: executorName];
 	
 	[self pauseAsyncTaskWithQueryIssuedId: 0 workerName: workerName executorName: executorName];
 }
@@ -328,7 +343,7 @@ Hydra			*g_defaultHydra;
 	NSString		*workerName;
 	
 	for( workerName in _workerDict ) {
-		[[_workerDict objectForKey: workerName] resumeQueryForIssuedId: issuedId];
+		[_workerDict[workerName] resumeQueryForIssuedId: issuedId];
 	}
 	
 	[self resumeAsyncTaskWithQueryIssuedId: issuedId workerName: nil executorName: nil];
@@ -336,11 +351,11 @@ Hydra			*g_defaultHydra;
 
 - (void) resumeAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName
 {
-	if( ([executorName length] <= 0) || ([workerName length] <= 0) ) {
+	if( (executorName.length <= 0) || (workerName.length <= 0) ) {
 		return;
 	}
 	
-	[[_workerDict objectForKey: workerName] resumeAllQueriesForExecutorName: executorName];
+	[_workerDict[workerName] resumeAllQueriesForExecutorName: executorName];
 	
 	[self resumeAsyncTaskWithQueryIssuedId: 0 workerName: workerName executorName: executorName];
 }
@@ -351,7 +366,7 @@ Hydra			*g_defaultHydra;
 	id			anWorker;
 	
 	for( workerName in _workerDict ) {
-		anWorker = [_workerDict objectForKey: workerName];
+		anWorker = _workerDict[workerName];
 		[anWorker resumeAllQueries];
 	}
 	
@@ -363,7 +378,7 @@ Hydra			*g_defaultHydra;
 	NSString		*workerName;
 	
 	for( workerName in _workerDict ) {
-		[[_workerDict objectForKey: workerName] cancelQueryForIssuedId: issuedId];
+		[_workerDict[workerName] cancelQueryForIssuedId: issuedId];
 	}
 	
 	[self unbindAsyncTaskWithQueryIssuedId: issuedId workerName: nil executorName: nil];
@@ -371,22 +386,22 @@ Hydra			*g_defaultHydra;
 
 - (void) cancelAllQueriesForExecutorName: (NSString *)executorName atWorkerName: (NSString *)workerName
 {
-	if( ([executorName length] <= 0) || ([workerName length] <= 0) ) {
+	if( (executorName.length <= 0) || (workerName.length <= 0) ) {
 		return;
 	}
 	
-	[[_workerDict objectForKey: workerName] cancelAllQueriesForExecutorName: executorName];
+	[_workerDict[workerName] cancelAllQueriesForExecutorName: executorName];
 	
 	[self unbindAsyncTaskWithQueryIssuedId: 0 workerName: workerName executorName: executorName];
 }
 
 - (void) cancelAllQueriesForWorkerName: (NSString *)workerName
 {
-	if( [workerName length] <= 0 ) {
+	if( workerName.length <= 0 ) {
 		return;
 	}
 	
-	[[_workerDict objectForKey: workerName] cancelAllQueries];
+	[_workerDict[workerName] cancelAllQueries];
 	
 	[self unbindAsyncTaskWithQueryIssuedId: 0 workerName: workerName executorName: nil];
 }
@@ -397,7 +412,7 @@ Hydra			*g_defaultHydra;
 	id			anWorker;
 	
 	for( workerName in _workerDict ) {
-		anWorker = [_workerDict objectForKey: workerName];
+		anWorker = _workerDict[workerName];
 		[anWorker cancelAllQueries];
 	}
 	
@@ -410,13 +425,13 @@ Hydra			*g_defaultHydra;
 		return NO;
 	}
 	
-	if( [_trackingResultSets objectForKey: [anTrackingResultSet name]] != nil ) {
+	if( _trackingResultSets[[anTrackingResultSet name]] != nil ) {
 		return NO;
 	}
 	
 	[_lockForTrackingResultSets lock];
 	
-	[_trackingResultSets setObject: anTrackingResultSet forKey: [anTrackingResultSet name]];
+	_trackingResultSets[[anTrackingResultSet name]] = anTrackingResultSet;
 	
 	[_lockForTrackingResultSets unlock];
 	
@@ -425,7 +440,7 @@ Hydra			*g_defaultHydra;
 
 - (void) removeTrackingResultSetForName: (NSString *)name
 {
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
@@ -440,11 +455,11 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( ([name length] <= 0) || ([key length] <= 0) ) {
+	if( (name.length <= 0) || (key.length <= 0) ) {
 		return nil;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) == nil ) {
+	if( (anWorker = _workerDict[name]) == nil ) {
 		return nil;
 	}
 	
@@ -455,11 +470,11 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( ([name length] <= 0) || ([key length] <= 0) ) {
+	if( (name.length <= 0) || (key.length <= 0) ) {
 		return NO;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) == nil ) {
+	if( (anWorker = _workerDict[name]) == nil ) {
 		return NO;
 	}
 	
@@ -470,11 +485,11 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( ([name length] <= 0) || ([key length] <= 0) ) {
+	if( (name.length <= 0) || (key.length <= 0) ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) == nil ) {
+	if( (anWorker = _workerDict[name]) == nil ) {
 		return;
 	}
 	
@@ -485,11 +500,11 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return;
 	}
 	
-	if( (anWorker = [_workerDict objectForKey: name]) == nil ) {
+	if( (anWorker = _workerDict[name]) == nil ) {
 		return;
 	}
 	
@@ -500,13 +515,13 @@ Hydra			*g_defaultHydra;
 {
 	id		anData;
 	
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return nil;
 	}
 	
 	[_lockForSharedDataDict lock];
 	
-	anData = [_sharedDataDict objectForKey: key];
+	anData = _sharedDataDict[key];
 	
 	[_lockForSharedDataDict unlock];
 	
@@ -515,13 +530,13 @@ Hydra			*g_defaultHydra;
 
 - (BOOL) setSharedData: (id)anData forKey: (NSString *)key
 {
-	if( (anData == nil) || ([key length] <= 0) ) {
+	if( (anData == nil) || (key.length <= 0) ) {
 		return NO;
 	}
 	
 	[_lockForSharedDataDict lock];
 	
-	[_sharedDataDict setObject: anData forKey: key];
+	_sharedDataDict[key] = anData;
 	
 	[_lockForSharedDataDict unlock];
 	
@@ -530,7 +545,7 @@ Hydra			*g_defaultHydra;
 
 - (void) removeSharedDataForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return;
 	}
 	
@@ -556,25 +571,25 @@ Hydra			*g_defaultHydra;
 	NSMutableArray		*pool;
 	BOOL				set;
 	
-	if( (count <= 0) || [name length] <= 0 ) {
+	if( (count <= 0) || name.length <= 0 ) {
 		return NO;
 	}
 	
 	set = NO;
 		
-	if( (pair = [_asyncTaskLimiterDict objectForKey: name]) != nil ) {
-		if( [[pair objectAtIndex: 0] unsignedIntegerValue] != count ) {
+	if( (pair = _asyncTaskLimiterDict[name]) != nil ) {
+		if( [pair[0] unsignedIntegerValue] != count ) {
 			[pair removeObjectAtIndex: 0];
-			[pair insertObject: [NSNumber numberWithUnsignedInteger: count] atIndex: 0];
+			[pair insertObject: @(count) atIndex: 0];
 		}
 		set = YES;
 	} else {
 		if( (pair = [[NSMutableArray alloc] init]) != nil ) {
 			if( (pool = [[NSMutableArray alloc] init]) != nil ) {
-				[pair addObject: [NSNumber numberWithUnsignedInteger: count]];
-				[pair addObject: [NSNumber numberWithUnsignedInteger: 0]];
-				[_asyncTaskLimiterDict setObject: pair forKey: name];
-				[_asyncTaskLimiterPoolDict setObject: pool forKey: name];
+				[pair addObject: @(count)];
+				[pair addObject: @0U];
+				_asyncTaskLimiterDict[name] = pair;
+				_asyncTaskLimiterPoolDict[name] = pool;
 				set = YES;
 			}
 		}
@@ -590,25 +605,25 @@ Hydra			*g_defaultHydra;
 	NSUInteger			used, limit;
 	BOOL				hold;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return NO;
 	}
 	
-	if( (pair = [_asyncTaskLimiterDict objectForKey: name]) == nil ) {
+	if( (pair = _asyncTaskLimiterDict[name]) == nil ) {
 		return NO;
 	}
 	
 	hold = NO;
-	limit = [[pair objectAtIndex: 0] unsignedIntegerValue];
-	used = [[pair objectAtIndex: 1] unsignedIntegerValue];
+	limit = [pair[0] unsignedIntegerValue];
+	used = [pair[1] unsignedIntegerValue];
 	
 	if( used < limit ) {
 		++ used;
 		[pair removeObjectAtIndex: 1];
-		[pair addObject: [NSNumber numberWithUnsignedInteger: used]];
+		[pair addObject: @(used)];
 		hold = YES;
 	} else {
-		if( (pool = [_asyncTaskLimiterPoolDict objectForKey: name]) != nil ) {
+		if( (pool = _asyncTaskLimiterPoolDict[name]) != nil ) {
 			if( [anAsyncTask limiterOrder] == HYAsyncTaskActiveOrderToFirst ) {
 				[pool insertObject: anAsyncTask atIndex: 0];
 			} else {
@@ -627,23 +642,23 @@ Hydra			*g_defaultHydra;
 	NSUInteger			used;
 	id					anAsyncTask;
 	
-	if( [name length] <= 0 ) {
+	if( name.length <= 0 ) {
 		return nil;
 	}
 	
-	if( (pair = [_asyncTaskLimiterDict objectForKey: name]) == nil ) {
+	if( (pair = _asyncTaskLimiterDict[name]) == nil ) {
 		return nil;
 	}
 	
 	anAsyncTask = nil;
 	
-	if( (used = [[pair objectAtIndex: 1] unsignedIntegerValue]) > 0 ) {
+	if( (used = [pair[1] unsignedIntegerValue]) > 0 ) {
 		-- used;
 		[pair removeObjectAtIndex: 1];
-		[pair addObject: [NSNumber numberWithUnsignedInteger: used]];
-		if( (pool = [_asyncTaskLimiterPoolDict objectForKey: name]) != nil ) {
-			if( [pool count] > 0 ) {
-				anAsyncTask = [pool objectAtIndex: 0];
+		[pair addObject: @(used)];
+		if( (pool = _asyncTaskLimiterPoolDict[name]) != nil ) {
+			if( pool.count > 0 ) {
+				anAsyncTask = pool[0];
 				[pool removeObjectAtIndex: 0];
 			}
 		}
@@ -663,12 +678,12 @@ Hydra			*g_defaultHydra;
 	} else {
 		matchQueryIssuedId = YES;
 	}
-	if( [workerName length] > 0 ) {
+	if( workerName.length > 0 ) {
 		matchWorkerName = [[anAsyncTask madeByWorkerName] isEqualToString: workerName];
 	} else {
 		matchWorkerName = YES;
 	}
-	if( [executorName length] > 0 ) {
+	if( executorName.length > 0 ) {
 		matchExecutorName = [[anAsyncTask madeByExecutorName] isEqualToString: executorName];
 	} else {
 		matchExecutorName = YES;
@@ -685,17 +700,17 @@ Hydra			*g_defaultHydra;
 	NSInteger		i, count;
 	id				anAsyncTask;
 	
-	if( (queryIssuedId <= 0) && ([workerName length] <= 0) && ([executorName length] <= 0) ) {
+	if( (queryIssuedId <= 0) && (workerName.length <= 0) && (executorName.length <= 0) ) {
 		return;
 	}
 	
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 					[anAsyncTask pause];
 				}
@@ -704,7 +719,7 @@ Hydra			*g_defaultHydra;
 	}
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
+		anAsyncTask = _asyncTaskDict[key];
 		if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 			[anAsyncTask pause];
 		}
@@ -721,17 +736,17 @@ Hydra			*g_defaultHydra;
 	NSInteger		i, count;
 	id				anAsyncTask;
 	
-	if( (queryIssuedId <= 0) && ([workerName length] <= 0) && ([executorName length] <= 0) ) {
+	if( (queryIssuedId <= 0) && (workerName.length <= 0) && (executorName.length <= 0) ) {
 		return;
 	}
 	
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 					[anAsyncTask resume];
 				}
@@ -740,7 +755,7 @@ Hydra			*g_defaultHydra;
 	}
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
+		anAsyncTask = _asyncTaskDict[key];
 		if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 			[anAsyncTask resume];
 			if( [anAsyncTask running] == NO ) {
@@ -763,11 +778,11 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
-				if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([[anAsyncTask madeByWorkerName] length] > 0) || ([[anAsyncTask madeByExecutorName] length] > 0) ) {
+				anAsyncTask = pool[i];
+				if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([anAsyncTask madeByWorkerName].length > 0) || ([anAsyncTask madeByExecutorName].length > 0) ) {
 					[anAsyncTask resume];
 				}
 			}
@@ -775,8 +790,8 @@ Hydra			*g_defaultHydra;
 	}
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
-		if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([[anAsyncTask madeByWorkerName] length] > 0) || ([[anAsyncTask madeByExecutorName] length] > 0) ) {
+		anAsyncTask = _asyncTaskDict[key];
+		if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([anAsyncTask madeByWorkerName].length > 0) || ([anAsyncTask madeByExecutorName].length > 0) ) {
 			[anAsyncTask resume];
 			if( [anAsyncTask running] == NO ) {
 				[anAsyncTask performSelectorOnMainThread: @selector(bind) withObject: nil waitUntilDone: NO];
@@ -795,17 +810,17 @@ Hydra			*g_defaultHydra;
 	NSInteger		i;
 	id				anAsyncTask;
 	
-	if( (queryIssuedId <= 0) && ([workerName length] <= 0) && ([executorName length] <= 0) ) {
+	if( (queryIssuedId <= 0) && (workerName.length <= 0) && (executorName.length <= 0) ) {
 		return;
 	}
 	
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
+		pool = _asyncTaskLimiterPoolDict[limiterName];
 		i = 0;
-		while( [pool count] > 0 ) {
-			anAsyncTask = [pool objectAtIndex: i];
+		while( pool.count > 0 ) {
+			anAsyncTask = pool[i];
 			if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 				[anAsyncTask cancel];
 				[pool removeObjectAtIndex: i];
@@ -813,7 +828,7 @@ Hydra			*g_defaultHydra;
 				continue;
 			}
 			++ i;
-			if( i >= [pool count] ) {
+			if( i >= pool.count ) {
 				break;
 			}
 		}
@@ -822,7 +837,7 @@ Hydra			*g_defaultHydra;
 	pool = [[NSMutableArray alloc] init];
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
+		anAsyncTask = _asyncTaskDict[key];
 		if( [self matchingAsyncTask: anAsyncTask withQueryIssuedId: queryIssuedId workerName: workerName executorName: executorName] == YES ) {
 			[pool addObject: key];
 			[anAsyncTask cancel];
@@ -850,18 +865,18 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
+		pool = _asyncTaskLimiterPoolDict[limiterName];
 		i = 0;
-		while( [pool count] > 0 ) {
-			anAsyncTask = [pool objectAtIndex: i];
-			if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([[anAsyncTask madeByWorkerName] length] > 0) || ([[anAsyncTask madeByExecutorName] length] > 0) ) {
+		while( pool.count > 0 ) {
+			anAsyncTask = pool[i];
+			if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([anAsyncTask madeByWorkerName].length > 0) || ([anAsyncTask madeByExecutorName].length > 0) ) {
 				[anAsyncTask cancel];
 				[pool removeObjectAtIndex: i];
 				i = 0;
 				continue;
 			}
 			++ i;
-			if( i >= [pool count] ) {
+			if( i >= pool.count ) {
 				break;
 			}
 		}
@@ -870,8 +885,8 @@ Hydra			*g_defaultHydra;
 	pool = [[NSMutableArray alloc] init];
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
-		if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([[anAsyncTask madeByWorkerName] length] > 0) || ([[anAsyncTask madeByExecutorName] length] > 0) ) {
+		anAsyncTask = _asyncTaskDict[key];
+		if( ([anAsyncTask madeByQueryIssuedId] > 0) || ([anAsyncTask madeByWorkerName].length > 0) || ([anAsyncTask madeByExecutorName].length > 0) ) {
 			[pool addObject: key];
 			[anAsyncTask cancel];
 			if( [anAsyncTask running] == YES ) {
@@ -908,7 +923,7 @@ Hydra			*g_defaultHydra;
 	}
 	
 	if( bind == YES ) {
-		[_asyncTaskDict setObject: anAsyncTask forKey: [[NSNumber numberWithUnsignedInteger:(NSUInteger)[anAsyncTask issuedId]] stringValue]];
+		_asyncTaskDict[@((NSUInteger)[anAsyncTask issuedId]).stringValue] = anAsyncTask;
 		if( [anAsyncTask paused] == YES ) {
 			bind = NO;
 		} else {
@@ -932,10 +947,10 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				if( [anAsyncTask issuedId] == issuedId ) {
 					[anAsyncTask cancel];
 					[pool removeObjectAtIndex: i];
@@ -946,15 +961,15 @@ Hydra			*g_defaultHydra;
 		}
 	}
 	
-	key = [[NSNumber numberWithUnsignedInteger: (NSUInteger)issuedId] stringValue];
+	key = @((NSUInteger)issuedId).stringValue;
 	
-	if( (anAsyncTask = [_asyncTaskDict objectForKey: key]) != nil ) {
+	if( (anAsyncTask = _asyncTaskDict[key]) != nil ) {
 		limiterName = [anAsyncTask limiterName];
 		if( [anAsyncTask running] == YES ) {
 			[anAsyncTask unbind];
 		}
 		[_asyncTaskDict removeObjectForKey: key];
-		if( [limiterName length] > 0 ) {
+		if( limiterName.length > 0 ) {
 			anAsyncTask = [self throwawayLimiterForName: limiterName];
 		} else {
 			anAsyncTask = nil;
@@ -979,10 +994,10 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterDict ) {
-		pair = [_asyncTaskLimiterDict objectForKey: limiterName];
+		pair = _asyncTaskLimiterDict[limiterName];
 		[pair removeObjectAtIndex: 1];
-		[pair addObject: [NSNumber numberWithUnsignedInteger: 0]];
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
+		[pair addObject: @0U];
+		pool = _asyncTaskLimiterPoolDict[limiterName];
 		for( anAsyncTask in pool ) {
 			[anAsyncTask cancel];
 		}
@@ -990,7 +1005,7 @@ Hydra			*g_defaultHydra;
 	}
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
+		anAsyncTask = _asyncTaskDict[key];
 		if( [anAsyncTask running] == YES ) {
 			[anAsyncTask unbind];
 		}
@@ -1011,10 +1026,10 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				if( [anAsyncTask issuedId] == issuedId ) {
 					[anAsyncTask pause];
 					[_lockForAsyncTaskDict unlock];
@@ -1024,9 +1039,9 @@ Hydra			*g_defaultHydra;
 		}
 	}
 	
-	key = [[NSNumber numberWithUnsignedInteger: (NSUInteger)issuedId] stringValue];
+	key = @((NSUInteger)issuedId).stringValue;
 	
-	if( (anAsyncTask = [_asyncTaskDict objectForKey: key]) != nil ) {
+	if( (anAsyncTask = _asyncTaskDict[key]) != nil ) {
 		[anAsyncTask pause];
 	}
 	
@@ -1044,10 +1059,10 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				if( [anAsyncTask issuedId] == issuedId ) {
 					[anAsyncTask resume];
 					[_lockForAsyncTaskDict unlock];
@@ -1057,9 +1072,9 @@ Hydra			*g_defaultHydra;
 		}
 	}
 	
-	key = [[NSNumber numberWithUnsignedInteger: (NSUInteger)issuedId] stringValue];
+	key = @((NSUInteger)issuedId).stringValue;
 	
-	if( (anAsyncTask = [_asyncTaskDict objectForKey: key]) != nil ) {
+	if( (anAsyncTask = _asyncTaskDict[key]) != nil ) {
 		[anAsyncTask resume];
 		if( [anAsyncTask running] == NO ) {
 			[anAsyncTask performSelectorOnMainThread: @selector(bind) withObject: nil waitUntilDone: NO];
@@ -1080,17 +1095,17 @@ Hydra			*g_defaultHydra;
 	[_lockForAsyncTaskDict lock];
 	
 	for( limiterName in _asyncTaskLimiterPoolDict ) {
-		pool = [_asyncTaskLimiterPoolDict objectForKey: limiterName];
-		if( (count = [pool count]) > 0 ) {
+		pool = _asyncTaskLimiterPoolDict[limiterName];
+		if( (count = pool.count) > 0 ) {
 			for( i=0 ; i<count ; ++i ) {
-				anAsyncTask = [pool objectAtIndex: i];
+				anAsyncTask = pool[i];
 				[anAsyncTask resume];
 			}
 		}
 	}
 	
 	for( key in _asyncTaskDict ) {
-		anAsyncTask = [_asyncTaskDict objectForKey: key];
+		anAsyncTask = _asyncTaskDict[key];
 		[anAsyncTask resume];
 		if( [anAsyncTask running] == NO ) {
 			[anAsyncTask performSelectorOnMainThread: @selector(bind) withObject: nil waitUntilDone: NO];
@@ -1104,11 +1119,9 @@ Hydra			*g_defaultHydra;
 {
 	NSDictionary		*paramDict;
 	
-	paramDict = [NSDictionary dictionaryWithObjectsAndKeys:
-												[NSNumber numberWithInteger: (NSInteger)status], HydraNotifiationCodeKey,
-												[NSNumber numberWithUnsignedInteger: suggestedNumber], HydraNotificationMigrationSuggestNumber,
-												[NSNumber numberWithUnsignedInteger: referenceNumber], HydraNotificationMigrationReferenceNumber,
-									nil];
+	paramDict = @{HydraNotifiationCodeKey: @((NSInteger)status),
+												HydraNotificationMigrationSuggestNumber: @(suggestedNumber),
+												HydraNotificationMigrationReferenceNumber: @(referenceNumber)};
 	
 	if( thread == YES ) {
 		[self performSelectorOnMainThread: @selector(postNotificationWithParamDict:) withObject: paramDict waitUntilDone: YES];
@@ -1167,7 +1180,7 @@ Hydra			*g_defaultHydra;
                     }
                 }
                 if( step > suggested ) {
-                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [[migrationClass lastUpdatedMigrationNumber] unsignedIntegerValue] thread: [migration useBackgroundThread]];
+                    [self postNotificationMigrationStatus: HydraNotificationCodeMigrationDone suggestedNumber: suggested referenceNumber: [migrationClass lastUpdatedMigrationNumber].unsignedIntegerValue thread: [migration useBackgroundThread]];
                 }
             }
         }
@@ -1186,15 +1199,15 @@ Hydra			*g_defaultHydra;
 	
 	[_lockForTrackingResultSets lock];
 	
-	if( [_trackingResultSets count] > 0 ) {
+	if( _trackingResultSets.count > 0 ) {
 		for( name in _trackingResultSets ) {
-			resultSet = [_trackingResultSets objectForKey: name];
+			resultSet = _trackingResultSets[name];
 			if( [resultSet updateResult: anResult] == YES ) {
-				if( (resultDict = [resultSet resultDict]) != nil ) {
+				if( (resultDict = resultSet.resultDict) != nil ) {
 					if( postNotifyDict == nil ) {
 						postNotifyDict = [[NSMutableDictionary alloc] init];
 					}
-					[postNotifyDict setObject: [NSDictionary dictionaryWithDictionary: resultDict] forKey: [resultSet name]];
+					postNotifyDict[resultSet.name] = [NSDictionary dictionaryWithDictionary: resultDict];
 					[resultSet touch];
 				}
 			}
@@ -1203,9 +1216,9 @@ Hydra			*g_defaultHydra;
 	
 	[_lockForTrackingResultSets unlock];
 	
-	if( [postNotifyDict count] > 0 ) {
+	if( postNotifyDict.count > 0 ) {
 		for( name in postNotifyDict ) {
-			resultDict = [postNotifyDict objectForKey: name];
+			resultDict = postNotifyDict[name];
 			[[NSNotificationCenter defaultCenter] postNotificationName: name object: self userInfo: resultDict];
 		}
 	}
@@ -1219,16 +1232,16 @@ Hydra			*g_defaultHydra;
 		
 	[_lockForWaitingResults lock];
 	
-	if( (issuedIdDict = [_waitingResults objectForKey: [anQuery waitingResultName]]) == nil ) {
+	if( (issuedIdDict = _waitingResults[[anQuery waitingResultName]]) == nil ) {
 		alreadyWaiting = NO;
 		if( (issuedIdDict = [[NSMutableDictionary alloc] init]) != nil ) {
-			[_waitingResults setObject: issuedIdDict forKey: [anQuery waitingResultName]];
+			_waitingResults[[anQuery waitingResultName]] = issuedIdDict;
 		}
 	} else {
 		alreadyWaiting = YES;
 	}
-	issuedId = [NSNumber numberWithLong: [anQuery issuedId]];
-	[issuedIdDict setObject: anQuery forKey: [issuedId stringValue]];
+	issuedId = @([anQuery issuedId]);
+	issuedIdDict[issuedId.stringValue] = anQuery;
 	
 	[_lockForWaitingResults unlock];
 		
@@ -1239,7 +1252,7 @@ Hydra			*g_defaultHydra;
 	[NSTimer scheduledTimerWithTimeInterval: [anQuery waitingTimeoutInterval]
 									 target: self
 								   selector: @selector(timerForWaitingResultTimeout:)
-								   userInfo: [NSDictionary dictionaryWithObject: issuedId forKey: [anQuery waitingResultName]]
+								   userInfo: @{[anQuery waitingResultName]: issuedId}
 									repeats: NO];
 	
 	return YES;
@@ -1255,10 +1268,10 @@ Hydra			*g_defaultHydra;
 	id						anWorker;
 	BOOL					notifyFlag;
 	
-	if( (userInfo = [anTimer userInfo]) == nil ) {
+	if( (userInfo = anTimer.userInfo) == nil ) {
 		return;
 	}
-	if( [userInfo count] != 1 ) {
+	if( userInfo.count != 1 ) {
 		return;
 	}
 	
@@ -1268,13 +1281,13 @@ Hydra			*g_defaultHydra;
 	[_lockForWaitingResults lock];
 	
 	for( resultName in userInfo ) {
-		expiredIssuedId = [userInfo objectForKey: resultName];
-		if( (issuedIdDict = [_waitingResults objectForKey: resultName]) != nil ) {
-			if( (expiredQuery = [issuedIdDict objectForKey: [expiredIssuedId stringValue]]) != nil ) {
+		expiredIssuedId = userInfo[resultName];
+		if( (issuedIdDict = _waitingResults[resultName]) != nil ) {
+			if( (expiredQuery = issuedIdDict[expiredIssuedId.stringValue]) != nil ) {
 				if( [expiredQuery canceled] == NO ) {
 					notifyFlag = YES;
 				}
-				[issuedIdDict removeObjectForKey: [expiredIssuedId stringValue]];
+				[issuedIdDict removeObjectForKey: expiredIssuedId.stringValue];
 				break;
 			}
 		}
@@ -1283,7 +1296,7 @@ Hydra			*g_defaultHydra;
 	[_lockForWaitingResults unlock];
 	
 	if( (notifyFlag == YES) && (expiredQuery != nil) ) {
-		if( (anWorker = [_workerDict objectForKey: [expiredQuery workerName]]) != nil ) {
+		if( (anWorker = _workerDict[[expiredQuery workerName]]) != nil ) {
 			[anWorker expireQuery: expiredQuery];
 		}
 	}
@@ -1302,11 +1315,9 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) != nil ) {
-		[self postNotificationWithParamDict: [NSDictionary dictionaryWithObjectsAndKeys:
-											  [NSNumber numberWithInteger: (NSInteger)HydraNotificationCodeDidStartWorker], HydraNotifiationCodeKey,
-											  [anWorker name], HydraNotificationWorkerNameKey,
-											  nil]];
+	if( (anWorker = params[HYWorkerParameterKeyWorker]) != nil ) {
+		[self postNotificationWithParamDict: @{HydraNotifiationCodeKey: @((NSInteger)HydraNotificationCodeDidStartWorker),
+											  HydraNotificationWorkerNameKey: [anWorker name]}];
 	}
 }
 
@@ -1314,11 +1325,9 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) != nil ) {
-		[self postNotificationWithParamDict: [NSDictionary dictionaryWithObjectsAndKeys:
-											  [NSNumber numberWithInteger: (NSInteger)HydraNotificationCodeDidPauseWorker], HydraNotifiationCodeKey,
-											  [anWorker name], HydraNotificationWorkerNameKey,
-											  nil]];
+	if( (anWorker = params[HYWorkerParameterKeyWorker]) != nil ) {
+		[self postNotificationWithParamDict: @{HydraNotifiationCodeKey: @((NSInteger)HydraNotificationCodeDidPauseWorker),
+											  HydraNotificationWorkerNameKey: [anWorker name]}];
 	}
 }
 
@@ -1326,11 +1335,9 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) != nil ) {
-		[self postNotificationWithParamDict: [NSDictionary dictionaryWithObjectsAndKeys:
-											  [NSNumber numberWithInteger: (NSInteger)HydraNotificationCodeDidResumeWorker], HydraNotifiationCodeKey,
-											  [anWorker name], HydraNotificationWorkerNameKey,
-											  nil]];
+	if( (anWorker = params[HYWorkerParameterKeyWorker]) != nil ) {
+		[self postNotificationWithParamDict: @{HydraNotifiationCodeKey: @((NSInteger)HydraNotificationCodeDidResumeWorker),
+											  HydraNotificationWorkerNameKey: [anWorker name]}];
 	}
 }
 
@@ -1338,11 +1345,9 @@ Hydra			*g_defaultHydra;
 {
 	id		anWorker;
 	
-	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) != nil ) {
-		[self postNotificationWithParamDict: [NSDictionary dictionaryWithObjectsAndKeys:
-											  [NSNumber numberWithInteger: (NSInteger)HydraNotificationCodeDidStopWorker], HydraNotifiationCodeKey,
-											  [anWorker name], HydraNotificationWorkerNameKey,
-											  nil]];
+	if( (anWorker = params[HYWorkerParameterKeyWorker]) != nil ) {
+		[self postNotificationWithParamDict: @{HydraNotifiationCodeKey: @((NSInteger)HydraNotificationCodeDidStopWorker),
+											  HydraNotificationWorkerNameKey: [anWorker name]}];
 	}
 }
 
@@ -1353,22 +1358,22 @@ Hydra			*g_defaultHydra;
 	NSString		*name;
 	id				anResult;
 	
-	if( (anWorker = [params objectForKey: HYWorkerParameterKeyWorker]) == nil ) {
+	if( (anWorker = params[HYWorkerParameterKeyWorker]) == nil ) {
 		return;
 	}
-	if( (resultDict = [params objectForKey: HYWorkerParameterKeyResultDict]) == nil ) {
+	if( (resultDict = params[HYWorkerParameterKeyResultDict]) == nil ) {
 		return;
 	}
 	
 	for( name in resultDict ) {
-		anResult = [resultDict objectForKey: name];
+		anResult = resultDict[name];
 		if( [anResult isKindOfClass: [HYResult class]] == NO ) {
 			continue;
 		}
 		[self clearResultAtWaitings: anResult];
 		[[NSNotificationCenter defaultCenter] postNotificationName: [anWorker name]
 															object: self
-														  userInfo: [NSDictionary dictionaryWithObjectsAndKeys: anResult, [anResult name], nil]];
+														  userInfo: @{[anResult name]: anResult}];
 		[self updateTrackingResultSetAndNotifyIfNeed: anResult];
 	}
 }
@@ -1387,14 +1392,14 @@ Hydra			*g_defaultHydra;
 	desc = [NSString stringWithFormat: @"<hydra name=\"%@\">", _name];
 	desc = [desc stringByAppendingFormat: @"<workers>"];
 	for( name in _workerDict ) {
-		worker = [_workerDict objectForKey: name];
+		worker = _workerDict[name];
 		desc = [desc stringByAppendingFormat: @"%@", worker];
 	}
 	desc = [desc stringByAppendingString: @"</workers>"];
 	desc = [desc stringByAppendingFormat: @"<tracking_resultsets>"];
 	[_lockForTrackingResultSets lock];
 	for( name in _trackingResultSets ) {
-		trackingResultSet = [_trackingResultSets objectForKey: name];
+		trackingResultSet = _trackingResultSets[name];
 		desc = [desc stringByAppendingFormat: @"%@", trackingResultSet];
 	}
 	[_lockForTrackingResultSets unlock];
@@ -1402,7 +1407,7 @@ Hydra			*g_defaultHydra;
 	desc = [desc stringByAppendingFormat: @"<shared_data>"];
 	[_lockForSharedDataDict lock];
 	for( key in _sharedDataDict ) {
-		anObject = [_sharedDataDict objectForKey: key];
+		anObject = _sharedDataDict[key];
 		if( [anObject respondsToSelector: @selector(description)] == YES ) {
 			desc = [desc stringByAppendingFormat: @"<key name=\"%@\">", key];
 			desc = [desc stringByAppendingFormat: @"%@", anObject];
@@ -1417,8 +1422,8 @@ Hydra			*g_defaultHydra;
 	desc = [desc stringByAppendingString: @"<asynctask_limiters>"];
 	[_lockForAsyncTaskDict lock];
 	for( key in _asyncTaskDict ) {
-		pair = [_asyncTaskLimiterDict objectForKey: key];
-		desc = [desc stringByAppendingFormat: @"<asynctask_limiter name=\"%@\" limit=\"%@\" used=\"%@\"", key, [pair objectAtIndex: 0], [pair objectAtIndex: 1]];
+		pair = _asyncTaskLimiterDict[key];
+		desc = [desc stringByAppendingFormat: @"<asynctask_limiter name=\"%@\" limit=\"%@\" used=\"%@\"", key, pair[0], pair[1]];
 	}
 	[_lockForAsyncTaskDict unlock];
 	desc = [desc stringByAppendingString: @"</asynctask_limiters>"];
@@ -1426,7 +1431,7 @@ Hydra			*g_defaultHydra;
 	desc = [desc stringByAppendingString: @"<asynctasks>"];
 	[_lockForAsyncTaskDict lock];
 	for( key in _asyncTaskDict ) {
-		asyncTack = [_asyncTaskDict objectForKey: key];
+		asyncTack = _asyncTaskDict[key];
 		desc = [desc stringByAppendingFormat: @"%@", asyncTack];
 	}
 	[_lockForAsyncTaskDict unlock];

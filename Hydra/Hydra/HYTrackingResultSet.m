@@ -11,20 +11,31 @@
 #import "HYTrackingResultSet.h"
 
 
+@interface HYTrackingResultSet ()
+
+{
+    NSString				*_name;
+    NSMutableDictionary		*_resultNameDict;
+    NSMutableDictionary		*_resultValueDict;
+}
+
+@end
+
+
 @implementation HYTrackingResultSet
 
 @synthesize name = _name;
 @dynamic resultDict;
 
-- (id) init
+- (instancetype) init NS_UNAVAILABLE
 {
 	return nil;
 }
 
-- (id) initWithName: (NSString *)name
+- (instancetype) initWithName: (NSString *)name
 {
 	if( (self = [super init]) != nil ) {
-		if( [name length] <= 0 ) {
+		if( name.length <= 0 ) {
 			return nil;
 		}
 		_name = name;
@@ -46,7 +57,7 @@
 	[_resultNameDict removeAllObjects];
 	[_resultValueDict removeAllObjects];
 	
-	if( [resultNames count] <= 0 ) {
+	if( resultNames.count <= 0 ) {
 		return;
 	}
 	
@@ -57,22 +68,22 @@
 
 - (BOOL) addResultName: (NSString *)resultName
 {
-	if( [resultName length] <= 0 ) {
+	if( resultName.length <= 0 ) {
 		return NO;
 	}
 	
-	if( [_resultNameDict objectForKey: resultName] != nil ) {
+	if( _resultNameDict[resultName] != nil ) {
 		return NO;
 	}
 	
-	[_resultNameDict setObject: resultName forKey: resultName];
+	_resultNameDict[resultName] = resultName;
 	
 	return YES;
 }
 
 - (void) removeResultName: (NSString *)resultName
 {
-	if( [resultName length] <= 0 ) {
+	if( resultName.length <= 0 ) {
 		return;
 	}
 	
@@ -86,18 +97,18 @@
 		return NO;
 	}
 	
-	if( [_resultNameDict objectForKey: [anResult name]] == nil ) {
+	if( _resultNameDict[[anResult name]] == nil ) {
 		return NO;
 	}
 	
-	[_resultValueDict setObject: anResult forKey: [anResult name]];
+	_resultValueDict[[anResult name]] = anResult;
 	
 	return YES;
 }
 
 - (void) clearResultForName: (NSString *)resultName
 {
-	if( [resultName length] <= 0 ) {
+	if( resultName.length <= 0 ) {
 		return;
 	}
 	
@@ -106,11 +117,11 @@
 
 - (BOOL) refreshed
 {
-	if( [_resultNameDict count] <= 0 ) {
+	if( _resultNameDict.count <= 0 ) {
 		return NO;
 	}
 	
-	return ([_resultNameDict count] == [_resultValueDict count]);
+	return (_resultNameDict.count == _resultValueDict.count);
 }
 
 - (void) touch
@@ -120,7 +131,7 @@
 
 - (NSDictionary *) resultDict
 {
-	if( [self refreshed] == NO ) {
+	if( self.refreshed == NO ) {
 		return nil;
 	}
 	
@@ -133,7 +144,7 @@
 	NSString	*key;
 	
 	desc = [NSString stringWithFormat: @"<tracking_resultset name=\"%@\">", _name];
-	if( [_resultNameDict count] > 0 ) {
+	if( _resultNameDict.count > 0 ) {
 		for( key in _resultNameDict ) {
 			desc = [desc stringByAppendingFormat: @"<tracking_result name=\"%@\"/>", key];
 		}

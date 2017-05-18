@@ -42,7 +42,7 @@
 		[result setParameter:@"overflowed Input boundary" forKey:SampleExecutorParameterKeyErrorMessage];
 	} else {
 		resultValue = (inputNumberValue == 0) ? 0 : [self factorial:inputNumberValue];
-		[result setParameter:[NSNumber numberWithUnsignedInteger:resultValue] forKey:SampleExecutorParameterKeyOutputNumber];
+		[result setParameter:@(resultValue) forKey:SampleExecutorParameterKeyOutputNumber];
 	}
 	
 	// stored result will notify by name 'SampleExecutorName'

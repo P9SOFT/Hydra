@@ -14,14 +14,28 @@
 #import "Hydra.h"
 
 
+@interface HYManager ()
+
+{
+    BOOL					_binded;
+    NSLock					*_lockForExecutorManaging;
+    NSMutableDictionary		*_usingExecutorDict;
+    NSMutableDictionary		*_workerNameForExecutorDict;
+    NSMutableDictionary		*_selectorForExecutorDict;
+    NSMutableDictionary		*_usingWorkerNameDict;
+}
+
+@end
+
+
 @implementation HYManager
 
 @synthesize binded = _binded;
 
-- (id) init
+- (instancetype) init
 {
 	if( (self = [super init]) != nil ) {
-		if( [[self name] length] <= 0 ) {
+		if( self.name.length <= 0 ) {
 			return nil;
 		}
 		if( (_usingExecutorDict = [[NSMutableDictionary alloc] init]) == nil ) {
@@ -39,7 +53,7 @@
 		if( (_lockForExecutorManaging = [[NSLock alloc] init]) == nil ) {
 			return nil;
 		}
-		if( [self didInit] == NO ) {
+		if( self.didInit == NO ) {
 			return nil;
 		}
 	}
@@ -68,20 +82,20 @@
 		return NO;
 	}
 	
-	if( [workerName length] <= 0 ) {
+	if( workerName.length <= 0 ) {
 		return NO;
 	}
 	
 	[_lockForExecutorManaging lock];
 	
-	[_usingExecutorDict setObject: anExecuter forKey: [anExecuter name]];
-	[_workerNameForExecutorDict setObject: workerName forKey: [anExecuter name]];
+	_usingExecutorDict[[anExecuter name]] = anExecuter;
+	_workerNameForExecutorDict[[anExecuter name]] = workerName;
 	if( selector != nil ) {
 		if( (value = [NSValue valueWithPointer: selector]) != nil ) {
-			[_selectorForExecutorDict setObject: value forKey: [anExecuter name]];
+			_selectorForExecutorDict[[anExecuter name]] = value;
 		}
 	}
-	[_usingWorkerNameDict setObject: workerName forKey: workerName];
+	_usingWorkerNameDict[workerName] = workerName;
 	
 	[_lockForExecutorManaging unlock];
 	
@@ -104,15 +118,15 @@
 	}
 	
 	for( executorName in _workerNameForExecutorDict ) {
-		workerName = [_workerNameForExecutorDict objectForKey: executorName];
+		workerName = _workerNameForExecutorDict[executorName];
 		if( [hydra workerForName: workerName] == nil ) {
 			return NO;
 		}
 	}
 	
 	for( executorName in _workerNameForExecutorDict ) {
-		anExecutor = [_usingExecutorDict objectForKey: executorName];
-		workerName = [_workerNameForExecutorDict objectForKey: executorName];
+		anExecutor = _usingExecutorDict[executorName];
+		workerName = _workerNameForExecutorDict[executorName];
 		anWorker = [hydra workerForName: workerName];
 		if( [anWorker addExecuter: anExecutor] == NO ) {
 			return NO;
@@ -130,24 +144,24 @@
 
 - (HYQuery *) queryForExecutorName: (NSString *)executorName
 {
-	if( [executorName length] <= 0 ) {
+	if( executorName.length <= 0 ) {
 		return nil;
 	}
 	
-	if( [_usingExecutorDict objectForKey: executorName] == nil ) {
+	if( _usingExecutorDict[executorName] == nil ) {
 		return nil;
 	}
 	
-	return [HYQuery queryWithWorkerName: [_workerNameForExecutorDict objectForKey: executorName] executerName: executorName];
+	return [HYQuery queryWithWorkerName: _workerNameForExecutorDict[executorName] executerName: executorName];
 }
 
 - (NSString *) employedWorkerNameForExecutorName: (NSString *)executorName
 {
-	if( [executorName length] <= 0 ) {
+	if( executorName.length <= 0 ) {
 		return nil;
 	}
 	
-	return [_workerNameForExecutorDict objectForKey: executorName];
+	return _workerNameForExecutorDict[executorName];
 }
 
 - (NSString *) brief
@@ -200,12 +214,12 @@
 	SEL					handlerWithResult;
 	IMP					imp;
 	
-	userInfo = [notification userInfo];
+	userInfo = notification.userInfo;
 	
 	for( executorName in _usingExecutorDict ) {
-		if( (result = [userInfo objectForKey: executorName]) != nil ) {
-			if( (value = [_selectorForExecutorDict objectForKey: executorName]) != nil ) {
-				handlerWithResult = [value pointerValue];
+		if( (result = userInfo[executorName]) != nil ) {
+			if( (value = _selectorForExecutorDict[executorName]) != nil ) {
+				handlerWithResult = value.pointerValue;
 				imp = [self methodForSelector:handlerWithResult];
 				id (*func)(id, SEL, id) = (void *)imp;
 				paramDict = (NSDictionary *)func(self, handlerWithResult, result);
@@ -221,7 +235,7 @@
 
 - (void) postNotifyWithParamDict: (NSDictionary *)paramDict
 {
-	[[NSNotificationCenter defaultCenter] postNotificationName: [self name] object: self userInfo: paramDict];
+	[[NSNotificationCenter defaultCenter] postNotificationName: self.name object: self userInfo: paramDict];
 }
 
 - (NSString *) description
@@ -232,21 +246,21 @@
 	NSString	*executorName;
 	id			anExecutor;
 	
-	desc = [NSString stringWithFormat: @"<manager name=\"%@\">", [self name]];
-	if( (brief = [self brief]) != nil ) {
+	desc = [NSString stringWithFormat: @"<manager name=\"%@\">", self.name];
+	if( (brief = self.brief) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<brief>%@</brief>", brief];
 	}
 	
-	if( [_usingExecutorDict count] > 0 ) {
+	if( _usingExecutorDict.count > 0 ) {
 		desc = [desc stringByAppendingString: @"<executors>"];
 		for( executorName in _usingExecutorDict ) {
-			anExecutor = [_usingExecutorDict objectForKey: executorName];
+			anExecutor = _usingExecutorDict[executorName];
 			desc = [desc stringByAppendingFormat: @"%@", anExecutor];
 		}
 		desc = [desc stringByAppendingString: @"</executors>"];
 	}
 	
-	if( (dataDescription = [self customDataDescription]) != nil ) {
+	if( (dataDescription = self.customDataDescription) != nil ) {
 		desc = [desc stringByAppendingFormat: @"<custom_data_description>%@</custom_data_description>", dataDescription];
 	}
 	desc = [desc stringByAppendingString: @"</manager>"];

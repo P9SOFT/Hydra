@@ -42,7 +42,7 @@
 
 - (void)appendLog:(NSString *)logString
 {
-	if( [logString length] <= 0 ) {
+	if( logString.length <= 0 ) {
 		return;
 	}
 	
@@ -68,9 +68,9 @@
 	
 	// get result of executor and update UI if need
 	
-	userInfo = [notification userInfo];
+	userInfo = notification.userInfo;
 	
-	operation = (SampleManagerOperation)[[userInfo objectForKey:SampleManagerNotifyParameterKeyOperation] integerValue];
+	operation = (SampleManagerOperation)[userInfo[SampleManagerNotifyParameterKeyOperation] integerValue];
 	
 	switch( operation ) {
 		case SampleManagerOperationBoo :

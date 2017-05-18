@@ -14,6 +14,19 @@
 int32_t			g_HYResult_last_issuedId;
 
 
+@interface HYResult ()
+
+{
+    int32_t					_issuedId;
+    int32_t					_issuedIdOfQuery;
+    NSString				*_name;
+    NSMutableDictionary		*_paramDict;
+    BOOL					_automaticallyMadeByTimeout;
+}
+
+@end
+
+
 @implementation HYResult
 
 @synthesize issuedId = _issuedId;
@@ -22,15 +35,15 @@ int32_t			g_HYResult_last_issuedId;
 @synthesize paramDict = _paramDict;
 @synthesize automaticallyMadeByTimeout = _automaticallyMadeByTimeout;
 
-- (id) init
+- (instancetype) init NS_UNAVAILABLE
 {
 	return nil;
 }
 
-- (id) initWithName: (NSString *)name
+- (instancetype) initWithName: (NSString *)name
 {
 	if( (self = [super init]) != nil ) {
-		if( [name length] <= 0 ) {
+		if( name.length <= 0 ) {
 			return nil;
 		}
 		_name = name;
@@ -50,25 +63,25 @@ int32_t			g_HYResult_last_issuedId;
 
 - (id) parameterForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return nil;
 	}
 	
-	return [_paramDict objectForKey: key];
+	return _paramDict[key];
 }
 
 - (void) setParameter: (id)anObject forKey: (NSString *)key
 {
-	if( (anObject == nil) || ([key length] <= 0) ) {
+	if( (anObject == nil) || (key.length <= 0) ) {
 		return;
 	}
 	
-	[_paramDict setObject: anObject forKey: key];
+	_paramDict[key] = anObject;
 }
 
 - (void) setParametersFromDictionary: (NSDictionary *)dict
 {
-	if( [dict count] <= 0 ) {
+	if( dict.count <= 0 ) {
 		return;
 	}
 	
@@ -77,7 +90,7 @@ int32_t			g_HYResult_last_issuedId;
 
 - (void) removeParameterForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return;
 	}
 	
@@ -95,7 +108,7 @@ int32_t			g_HYResult_last_issuedId;
 		return NO;
 	}
 	
-	return ([self issuedId] == [anObject issuedId]);
+	return (self.issuedId == [anObject issuedId]);
 }
 
 - (NSString *) description
@@ -105,10 +118,10 @@ int32_t			g_HYResult_last_issuedId;
 	id			anObject;
 	
 	desc = [NSString stringWithFormat: @"<result issuedid=\"%d\" issuedid_of_query=\"%d\" name=\"%@\">", _issuedId, _issuedIdOfQuery, _name];
-	if( [_paramDict count] > 0 ) {
+	if( _paramDict.count > 0 ) {
 		desc = [desc stringByAppendingString: @"<paramters>"];
 		for( key in _paramDict ) {
-			anObject = [_paramDict objectForKey: key];
+			anObject = _paramDict[key];
 			if( [anObject respondsToSelector: @selector(description)] == YES ) {
 				desc = [desc stringByAppendingFormat: @"<parameter key=\"%@\" value=\"%@\"/>", key, anObject];
 			} else {

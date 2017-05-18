@@ -12,63 +12,59 @@
 
 
 @interface HYExecuter : NSObject
-{
-	__weak id				_employedWorker;
-	NSMutableDictionary		*_resultDict;
-}
 
 // you must override and implement these methods.
 
-- (NSString *) name;
+- (NSString * _Nullable) name;
 
 // public methods for local scope data.
 
-- (void) storeResult: (id)anResult;
-- (void) removeResultForName: (NSString *)resultName;
+- (void) storeResult: (id _Nullable)anResult;
+- (void) removeResultForName: (NSString * _Nullable)resultName;
 - (void) clearAllResults;
-- (NSString *) nameOfEmployedWorker;
-- (NSString *) nameOfEmployedHydra;
-- (BOOL) bindAsyncTask: (id)anAsyncTask;
-- (BOOL) canIKeepGoingWithQuery: (id)anQuery;
+- (NSString * _Nullable) nameOfEmployedWorker;
+- (NSString * _Nullable) nameOfEmployedHydra;
+- (BOOL) bindAsyncTask: (id _Nullable)anAsyncTask;
+- (BOOL) canIKeepGoingWithQuery: (id _Nullable)anQuery;
 
 // public methods for worker scope data.
 
-- (id) workerCacheDataForKey: (NSString *)key;
-- (BOOL) setWorkerCacheData: (id)anData forKey: (NSString *)key;
-- (void) removeWorkerCacheDataForKey: (NSString *)key;
+- (id _Nullable) workerCacheDataForKey: (NSString * _Nullable)key;
+- (BOOL) setWorkerCacheData: (id _Nullable)anData forKey: (NSString * _Nullable)key;
+- (void) removeWorkerCacheDataForKey: (NSString * _Nullable)key;
 - (void) removeAllWorkerCacheData;
 
 // public methods for hydra scope data.
 
-- (id) sharedDataForKey: (NSString *)key;
-- (BOOL) setSharedData: (id)anData forKey: (NSString *)key;
-- (void) removeSharedDataForKey: (NSString *)key;
+- (id _Nullable) sharedDataForKey: (NSString * _Nullable)key;
+- (BOOL) setSharedData: (id _Nullable)anData forKey: (NSString * _Nullable)key;
+- (void) removeSharedDataForKey: (NSString * _Nullable)key;
 - (void) removeAllSharedData;
 
 // override these methods if need.
 
-- (NSString *) brief;
-- (NSString *) customDataDescription;
+- (NSString * _Nullable) brief;
+- (NSString * _Nullable) customDataDescription;
 
-- (BOOL) shouldSkipExecutingWithQuery: (id)anQuery;
-- (BOOL) calledExecutingWithQuery: (id)anQuery;
-- (BOOL) calledCancelingWithQuery: (id)anQuery;
-- (BOOL) calledSkippingWithQuery: (id)anQuery;
-- (id) resultForExpiredQuery: (id)anQuery;
+- (BOOL) shouldSkipExecutingWithQuery: (id _Nullable)anQuery;
+- (BOOL) calledExecutingWithQuery: (id _Nullable)anQuery;
+- (BOOL) calledCancelingWithQuery: (id _Nullable)anQuery;
+- (BOOL) calledSkippingWithQuery: (id _Nullable)anQuery;
+- (id _Nullable) resultForExpiredQuery: (id _Nullable)anQuery;
 - (BOOL) useCustomPostNotification;
-- (void) calledCustomPostNotificationForResult: (id)anResult;
-- (BOOL) queryWillPause: (id)anQuery;
+- (void) calledCustomPostNotificationForResult: (id _Nullable)anResult;
+- (BOOL) queryWillPause: (id _Nullable)anQuery;
 
 // these methods are used for internal handling.
 // you may not need to using these methods directly.
 
-- (BOOL) executeWithQuery: (id)anQuery;
-- (BOOL) cancelWithQuery: (id)anQuery;
-- (BOOL) skipWithQuery: (id)anQuery;
-- (void) doCustomPostNotificationForResultDict: (NSDictionary *)resultDict;
-- (BOOL) restoreQueryToQueue: (id)anQuery;
+- (BOOL) executeWithQuery: (id _Nullable)anQuery;
+- (BOOL) cancelWithQuery: (id _Nullable)anQuery;
+- (BOOL) skipWithQuery: (id _Nullable)anQuery;
+- (void) doCustomPostNotificationForResultDict: (NSDictionary * _Nullable)resultDict;
+- (BOOL) restoreQueryToQueue: (id _Nullable)anQuery;
 
-@property (nonatomic, weak) id employedWorker;
-@property (nonatomic, readonly) NSDictionary *resultDict;
+@property (nonatomic, weak) id _Nullable employedWorker;
+@property (nonatomic, readonly) NSDictionary * _Nonnull resultDict;
 
 @end

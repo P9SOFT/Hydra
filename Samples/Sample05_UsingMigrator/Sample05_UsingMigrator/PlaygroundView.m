@@ -15,7 +15,7 @@
 @synthesize suggestedMigrationNumberTextField = _suggestedMigrationNumberTextField;
 @synthesize resetButton = _resetButton;
 
-- (id)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame
 {
 	if( (self = [super initWithFrame:frame]) != nil ) {
 		

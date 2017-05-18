@@ -13,6 +13,26 @@
 int32_t			g_HYQuery_last_issuedId;
 
 
+@interface HYQuery ()
+
+{
+    int32_t					_issuedId;
+    NSString				*_workerName;
+    NSString				*_executerName;
+    NSMutableDictionary		*_paramDict;
+    NSString				*_waitingResultName;
+    NSTimeInterval			_waitingTimeoutInterval;
+    BOOL                    _skipMeIfAlreadyWaiting;
+    BOOL					_haveWaitingResult;
+    int32_t					_issuedIdOfAsyncTask;
+    BOOL					_haveAsyncTask;
+    BOOL					_paused;
+    BOOL					_canceled;
+}
+
+@end
+
+
 @implementation HYQuery
 
 @synthesize issuedId = _issuedId;
@@ -28,19 +48,19 @@ int32_t			g_HYQuery_last_issuedId;
 @synthesize paused = _paused;
 @synthesize canceled = _canceled;
 
-- (id) init
+- (instancetype) init NS_UNAVAILABLE
 {
 	return nil;
 }
 
-- (id) initWithWorkerName: (NSString *)workerName executerName: (NSString *)executerName;
+- (instancetype) initWithWorkerName: (NSString *)workerName executerName: (NSString *)executerName;
 {
 	if( (self = [super init]) != nil ) {
-		if( [workerName length] <= 0 ) {
+		if( workerName.length <= 0 ) {
 			return nil;
 		}
 		_workerName = workerName;
-		if( [executerName length] <= 0 ) {
+		if( executerName.length <= 0 ) {
 			return nil;
 		}
 		_executerName = executerName;
@@ -60,25 +80,25 @@ int32_t			g_HYQuery_last_issuedId;
 
 - (id) parameterForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return nil;
 	}
 	
-	return [_paramDict objectForKey: key];
+	return _paramDict[key];
 }
 
 - (void) setParameter: (id)anObject forKey: (NSString *)key
 {
-	if( (anObject == nil) || ([key length] <= 0) ) {
+	if( (anObject == nil) || (key.length <= 0) ) {
 		return;
 	}
 	
-	[_paramDict setObject: anObject forKey: key];
+	_paramDict[key] = anObject;
 }
 
 - (void) setParametersFromDictionary: (NSDictionary *)dict
 {
-	if( [dict count] <= 0 ) {
+	if( dict.count <= 0 ) {
 		return;
 	}
 	
@@ -87,7 +107,7 @@ int32_t			g_HYQuery_last_issuedId;
 
 - (void) removeParameterForKey: (NSString *)key
 {
-	if( [key length] <= 0 ) {
+	if( key.length <= 0 ) {
 		return;
 	}
 	
@@ -96,7 +116,7 @@ int32_t			g_HYQuery_last_issuedId;
 
 - (BOOL) setWaitingResultName: (NSString *)resultName withTimeoutInterval: (NSTimeInterval)timeoutInterval skipMeIfAlreadyWaiting: (BOOL)skipMeIfAlreadyWaiting
 {
-	if( ([resultName length] <= 0) || (timeoutInterval <= 0.0) ) {
+	if( (resultName.length <= 0) || (timeoutInterval <= 0.0) ) {
 		return NO;
 	}
 	
@@ -132,7 +152,7 @@ int32_t			g_HYQuery_last_issuedId;
 		return NO;
 	}
 	
-	return ([self issuedId] == [anObject issuedId]);
+	return (self.issuedId == [anObject issuedId]);
 }
 
 - (NSString *) description
@@ -141,11 +161,11 @@ int32_t			g_HYQuery_last_issuedId;
 	NSString	*key;
 	id			anObject;
 	
-	desc = [NSString stringWithFormat: @"<query issuedid=\"%d\" worker=\"%@\" executer=\"%@\" paused=\"%@\" canceled=\"%@\">", _issuedId, _workerName, _executerName, [[NSNumber numberWithBool: _paused] stringValue], [[NSNumber numberWithBool: _canceled] stringValue]];
-	if( [_paramDict count] > 0 ) {
+	desc = [NSString stringWithFormat: @"<query issuedid=\"%d\" worker=\"%@\" executer=\"%@\" paused=\"%@\" canceled=\"%@\">", _issuedId, _workerName, _executerName, @(_paused).stringValue, @(_canceled).stringValue];
+	if( _paramDict.count > 0 ) {
 		desc = [desc stringByAppendingString: @"<paramters>"];
 		for( key in _paramDict ) {
-			anObject = [_paramDict objectForKey: key];
+			anObject = _paramDict[key];
 			if( [anObject respondsToSelector: @selector(description)] == YES ) {
 				desc = [desc stringByAppendingFormat: @"<parameter key=\"%@\" value=\"%@\"/>", key, anObject];
 			} else {
@@ -154,8 +174,8 @@ int32_t			g_HYQuery_last_issuedId;
 		}
 		desc = [desc stringByAppendingString: @"</paramters>"];
 	}
-	if( [_waitingResultName length] > 0 ) {
-		desc = [desc stringByAppendingFormat: @"<waiting_result name=\"%@\" timeout=\"%lf\" skip=\"%@\"/>", _waitingResultName, _waitingTimeoutInterval, [[NSNumber numberWithBool: _skipMeIfAlreadyWaiting] stringValue]];
+	if( _waitingResultName.length > 0 ) {
+		desc = [desc stringByAppendingFormat: @"<waiting_result name=\"%@\" timeout=\"%lf\" skip=\"%@\"/>", _waitingResultName, _waitingTimeoutInterval, @(_skipMeIfAlreadyWaiting).stringValue];
 	}
 	if( _haveAsyncTask == YES ) {
 		desc = [desc stringByAppendingFormat: @"<async_task issuedid=\"%d\"/>", _issuedIdOfAsyncTask];

@@ -29,7 +29,7 @@
 	if( (request = [[NSMutableURLRequest alloc] init]) == nil ) {
 		return NO;
 	}
-	[request setURL:[NSURL URLWithString:urlString]];
+	request.URL = [NSURL URLWithString:urlString];
 	if( (_connection = [[NSURLConnection alloc] initWithRequest: request delegate: self]) == nil ) {
 		return NO;
 	}

@@ -51,7 +51,7 @@
 
 - (BOOL)standbyWithWorkerName:(NSString *)workerName
 {
-	if( (self.standby == YES) || ([workerName length] <= 0) ) {
+	if( (self.standby == YES) || (workerName.length <= 0) ) {
 		return NO;
 	}
 	
@@ -68,12 +68,12 @@
 	if( self.standby == NO ) {
 		return nil;
 	}
-	if( [urlString length] == 0 ) {
+	if( urlString.length == 0 ) {
 		return nil;
 	}
 	
 	UIImage *image;
-	if( (image = [_cachedImageDict objectForKey:urlString]) != nil ) {
+	if( (image = _cachedImageDict[urlString]) != nil ) {
 		return image;
 	}
 	
@@ -97,19 +97,19 @@
 	}
 	
 	// set operation value
-	[paramDict setObject:[NSNumber numberWithUnsignedInteger:(NSUInteger)SampleManagerOperationLoadImage] forKey:SampleManagerNotifyParameterKeyOperation];
+	paramDict[SampleManagerNotifyParameterKeyOperation] = @((NSUInteger)SampleManagerOperationLoadImage);
 	
 	// set image data if have
 	UIImage *image = [result parameterForKey:SampleExecutorParameterKeyImage];
 	if( image != nil ) {
 		NSString *urlString = [result parameterForKey:SampleExecutorParameterKeyUrlString];
-		if( [urlString length] > 0 ) {
-			[_cachedImageDict setObject:image forKey:urlString];
+		if( urlString.length > 0 ) {
+			_cachedImageDict[urlString] = image;
 		}
-		[paramDict setObject:image forKey:SampleManagerNotifyParameterKeyOperandImage];
+		paramDict[SampleManagerNotifyParameterKeyOperandImage] = image;
 	}
 	
-	if( [paramDict count] == 0 ) {
+	if( paramDict.count == 0 ) {
 		return nil;
 	}
 	

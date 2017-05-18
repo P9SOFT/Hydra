@@ -23,30 +23,17 @@ typedef enum _HYAsyncTaskActiveOrder_
 
 
 @interface HYAsyncTask : NSObject
-{
-	int32_t					_issuedId;
-	int32_t					_madeByQueryIssuedId;
-	NSString				*_madeByWorkerName;
-	NSString				*_madeByExecutorName;
-	id						_closeQuery;
-	NSString				*_limiterName;
-	NSInteger				_limiterCount;
-	HYAsyncTaskActiveOrder	_limiterOrder;
-	struct timeval			_tvBinded;
-	NSLock					*_lock;
-	BOOL					_paused;
-}
 
 // public methods.
 
-- (id) initWithCloseQuery: (id)anQuery;
-- (BOOL) activeLimiterName: (NSString *)name withCount: (NSInteger)count;
-- (BOOL) activeLimiterName: (NSString *)name withCount: (NSInteger)count byOrder: (HYAsyncTaskActiveOrder)order;
+- (instancetype _Nullable) initWithCloseQuery: (id _Nullable)anQuery NS_DESIGNATED_INITIALIZER;
+- (BOOL) activeLimiterName: (NSString * _Nullable)name withCount: (NSInteger)count;
+- (BOOL) activeLimiterName: (NSString * _Nullable)name withCount: (NSInteger)count byOrder: (HYAsyncTaskActiveOrder)order;
 - (void) deactiveLimiter;
-- (void) madeByQueryIssuedId: (int32_t)queryIssuedId workerName: (NSString *)workerName executorName: (NSString *)executorName;
-- (id) parameterForKey: (NSString *)key;
-- (void) setParameter: (id)anObject forKey: (NSString *)key;
-- (void) removeParameterForKey: (NSString *)key;
+- (void) madeByQueryIssuedId: (int32_t)queryIssuedId workerName: (NSString * _Nullable)workerName executorName: (NSString * _Nullable)executorName;
+- (id _Nullable) parameterForKey: (NSString * _Nullable)key;
+- (void) setParameter: (id _Nullable)anObject forKey: (NSString * _Nullable)key;
+- (void) removeParameterForKey: (NSString * _Nullable)key;
 - (void) pause;
 - (void) resume;
 - (void) done;
@@ -57,8 +44,8 @@ typedef enum _HYAsyncTaskActiveOrder_
 
 // override these methods if need.
 
-- (NSString *) brief;
-- (NSString *) customDataDescription;
+- (NSString * _Nullable) brief;
+- (NSString * _Nullable) customDataDescription;
 
 - (BOOL) didInit;
 - (void) willDealloc;
@@ -77,9 +64,9 @@ typedef enum _HYAsyncTaskActiveOrder_
 - (void) unbind;
 
 @property (nonatomic, readonly) int32_t madeByQueryIssuedId;
-@property (nonatomic, readonly) NSString *madeByWorkerName;
-@property (nonatomic, readonly) NSString *madeByExecutorName;
-@property (nonatomic, readonly) NSString *limiterName;
+@property (nonatomic, readonly) NSString * _Nullable madeByWorkerName;
+@property (nonatomic, readonly) NSString * _Nullable madeByExecutorName;
+@property (nonatomic, readonly) NSString * _Nullable limiterName;
 @property (nonatomic, readonly) NSInteger limiterCount;
 @property (nonatomic, readonly) HYAsyncTaskActiveOrder limiterOrder;
 @property (nonatomic, readonly) unsigned int passedMilisecondFromBind;

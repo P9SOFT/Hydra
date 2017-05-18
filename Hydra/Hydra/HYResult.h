@@ -13,25 +13,18 @@
 
 
 @interface HYResult : NSObject
-{
-	int32_t					_issuedId;
-	int32_t					_issuedIdOfQuery;
-	NSString				*_name;
-	NSMutableDictionary		*_paramDict;
-	BOOL					_automaticallyMadeByTimeout;
-}
 
 // public methods.
 
-+ (HYResult *) resultWithName: (NSString *)name;
-- (id) initWithName: (NSString *)name;
++ (HYResult * _Nullable) resultWithName: (NSString * _Nullable)name;
+- (instancetype _Nullable) initWithName: (NSString * _Nullable)name NS_DESIGNATED_INITIALIZER;
 
-- (id) parameterForKey: (NSString *)key;
-- (void) setParameter: (id)anObject forKey: (NSString *)key;
-- (void) setParametersFromDictionary: (NSDictionary *)dict;
-- (void) removeParameterForKey: (NSString *)key;
+- (id _Nullable) parameterForKey: (NSString * _Nullable)key;
+- (void) setParameter: (id _Nullable)anObject forKey: (NSString * _Nullable)key;
+- (void) setParametersFromDictionary: (NSDictionary * _Nullable)dict;
+- (void) removeParameterForKey: (NSString * _Nullable)key;
 
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString * _Nonnull name;
 @property (nonatomic, readonly) int32_t issuedId;
 @property (nonatomic, assign) int32_t issuedIdOfQuery;
 @property (nonatomic, readonly) BOOL automaticallyMadeByTimeout;
@@ -41,6 +34,6 @@
 
 - (void) markAutomaticallyMadeByTimeout;
 
-@property (nonatomic, readonly) NSMutableDictionary *paramDict;
+@property (nonatomic, readonly) NSMutableDictionary * _Nonnull paramDict;
 
 @end
