@@ -55,8 +55,7 @@ typedef NS_ENUM(NSInteger, HydraNotificationCode)
 
 // public methods.
 
-+ (Hydra * _Nullable) defaultHydra;
-+ (void) destroyDefaultHydra;
++ (Hydra * _Nonnull) defaultHydra;
 
 - (BOOL) doMigration: (id _Nullable)migration waitUntilDone: (BOOL)waitUntilDone;
 

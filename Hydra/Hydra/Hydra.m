@@ -10,9 +10,6 @@
 #import "Hydra.h"
 
 
-Hydra			*g_defaultHydra;
-
-
 @interface Hydra ()
 
 {
@@ -57,20 +54,10 @@ Hydra			*g_defaultHydra;
 
 + (Hydra *) defaultHydra
 {
-	@synchronized( self ) {
-		if( g_defaultHydra == nil ) {
-			g_defaultHydra = [[Hydra alloc] initWithName: kHydraDefaultName];
-		}
-	}
-	
-	return g_defaultHydra;
-}
-
-+ (void) destroyDefaultHydra
-{
-	@synchronized( self ) {
-		g_defaultHydra = nil;
-	}
+    static dispatch_once_t once;
+    static Hydra *sharedInstance;
+    dispatch_once(&once, ^{sharedInstance = [[self alloc] initWithName:kHydraDefaultName];});
+    return sharedInstance;
 }
 
 - (instancetype) init NS_UNAVAILABLE
