@@ -37,6 +37,7 @@ int32_t			g_HYAsyncTask_last_issuedId;
 @implementation HYAsyncTask
 
 @synthesize issuedId = _issuedId;
+@synthesize closeQuery = _closeQuery;
 @dynamic running;
 @synthesize paused = _paused;
 @synthesize madeByQueryIssuedId = _madeByQueryIssuedId;

@@ -41,6 +41,7 @@ typedef enum _HYAsyncTaskActiveOrder_
 @property (nonatomic, readonly) int32_t issuedId;
 @property (nonatomic, readonly) BOOL running;
 @property (nonatomic, readonly) BOOL paused;
+@property (nonatomic, readonly) id _Nullable closeQuery;
 
 // override these methods if need.
 
