@@ -13,13 +13,11 @@
 #import <Hydra/HYDefine.h>
 
 
-typedef enum _HYAsyncTaskActiveOrder_
+typedef NS_ENUM(NSInteger, HYAsyncTaskActiveOrder)
 {
 	HYAsyncTaskActiveOrderToLast,
-	HYAsyncTaskActiveOrderToFirst,
-	kCountOfHYAsyncTaskActiveOrder
-	
-} HYAsyncTaskActiveOrder;
+	HYAsyncTaskActiveOrderToFirst
+};
 
 
 @interface HYAsyncTask : NSObject

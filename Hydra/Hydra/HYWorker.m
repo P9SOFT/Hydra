@@ -15,12 +15,12 @@
 #import "Hydra.h"
 
 
-enum HYWorkerState {
+typedef NS_ENUM(NSInteger, HYWorkerState)
+{
 	kHYWorkerStateNull,
 	kHYWorkerStateStopped,
 	kHYWorkerStateRunning,
-	kHYWorkerStatePaused,
-	kCountOfHYWorkerState
+	kHYWorkerStatePaused
 };
 
 

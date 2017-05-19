@@ -40,10 +40,7 @@ typedef NS_ENUM(NSInteger, HydraNotificationCode)
 	HydraNotificationCodeDidStartWorker,
 	HydraNotificationCodeDidPauseWorker,
 	HydraNotificationCodeDidResumeWorker,
-	HydraNotificationCodeDidStopWorker,
-	
-	kCountOfHydraNotificationCode
-	
+	HydraNotificationCodeDidStopWorker
 };
 
 #define		HydraNotificationWorkerNameKey				@"hydraNotificationWorkerNameKey"

@@ -17,9 +17,7 @@ typedef NS_ENUM(NSInteger, HYMigratorStatus)
 	HYMigratorStatusWillStep,
 	HYMigratorStatusDidStep,
 	HYMigratorStatusFailedAtStep,
-	HYMigratorStatusDone,
-	kCountOfHYMigratorStatus
-	
+	HYMigratorStatusDone
 };
 
 
@@ -27,8 +25,8 @@ typedef NS_ENUM(NSInteger, HYMigratorStatus)
 
 // public methods.
 
-+ (NSNumber * _Nullable) countOfToDoMigration;
-+ (NSNumber * _Nullable) lastUpdatedMigrationNumber;
++ (NSNumber * _Nonnull) countOfToDoMigration;
++ (NSNumber * _Nonnull) lastUpdatedMigrationNumber;
 
 // override these methods if need.
 
