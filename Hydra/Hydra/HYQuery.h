@@ -42,6 +42,7 @@
 @property (nonatomic, readonly) BOOL haveWaitingResult;
 @property (nonatomic, assign) int32_t issuedIdOfAsyncTask;
 @property (nonatomic, readonly) BOOL haveAsyncTask;
+@property (nonatomic, assign) BOOL needUnbindAsyncTask;
 @property (nonatomic, assign) BOOL canceled;
 
 @end

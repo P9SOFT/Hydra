@@ -14,26 +14,7 @@
 int32_t			g_HYResult_last_issuedId;
 
 
-@interface HYResult ()
-
-{
-    int32_t					_issuedId;
-    int32_t					_issuedIdOfQuery;
-    NSString				*_name;
-    NSMutableDictionary		*_paramDict;
-    BOOL					_automaticallyMadeByTimeout;
-}
-
-@end
-
-
 @implementation HYResult
-
-@synthesize issuedId = _issuedId;
-@synthesize issuedIdOfQuery = _issuedIdOfQuery;
-@synthesize name = _name;
-@synthesize paramDict = _paramDict;
-@synthesize automaticallyMadeByTimeout = _automaticallyMadeByTimeout;
 
 - (instancetype) init NS_UNAVAILABLE
 {

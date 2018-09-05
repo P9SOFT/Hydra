@@ -15,22 +15,17 @@
 
 
 @interface HYManager ()
-
 {
-    BOOL					_binded;
     NSLock					*_lockForExecutorManaging;
     NSMutableDictionary		*_usingExecutorDict;
     NSMutableDictionary		*_workerNameForExecutorDict;
     NSMutableDictionary		*_selectorForExecutorDict;
     NSMutableDictionary		*_usingWorkerNameDict;
 }
-
 @end
 
 
 @implementation HYManager
-
-@synthesize binded = _binded;
 
 - (instancetype) init
 {

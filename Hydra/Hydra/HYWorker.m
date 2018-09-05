@@ -25,9 +25,7 @@ typedef NS_ENUM(NSInteger, HYWorkerState)
 
 
 @interface HYWorker ()
-
 {
-    __weak id				_delegate;
     NSString                *_name;
     NSMutableDictionary		*_executerDict;
     NSMutableArray			*_queryQueue;
@@ -55,9 +53,7 @@ typedef NS_ENUM(NSInteger, HYWorkerState)
 
 @implementation HYWorker
 
-@synthesize delegate = _delegate;
-
-- (id) init
+- (instancetype) init
 {
     if( (self = [super init]) != nil ) {
         if( self.name.length <= 0 ) {
@@ -755,7 +751,7 @@ typedef NS_ENUM(NSInteger, HYWorkerState)
                         }
                     }
                 }
-                if( [_executingQuery haveAsyncTask] == YES ) {
+                if( [_executingQuery needUnbindAsyncTask] == YES ) {
                     [[Hydra defaultHydra] unbindAsyncTaskForIssuedId: [_executingQuery issuedIdOfAsyncTask]];
                 }
                 

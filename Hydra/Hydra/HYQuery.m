@@ -14,39 +14,15 @@ int32_t			g_HYQuery_last_issuedId;
 
 
 @interface HYQuery ()
-
 {
-    int32_t					_issuedId;
-    NSString				*_workerName;
-    NSString				*_executerName;
-    NSMutableDictionary		*_paramDict;
-    NSString				*_waitingResultName;
-    NSTimeInterval			_waitingTimeoutInterval;
-    BOOL                    _skipMeIfAlreadyWaiting;
-    BOOL					_haveWaitingResult;
-    int32_t					_issuedIdOfAsyncTask;
-    BOOL					_haveAsyncTask;
-    BOOL					_paused;
-    BOOL					_canceled;
+    int32_t		_issuedIdOfAsyncTask;
 }
-
 @end
 
 
 @implementation HYQuery
 
-@synthesize issuedId = _issuedId;
-@synthesize workerName = _workerName;
-@synthesize executerName = _executerName;
-@synthesize paramDict = _paramDict;
-@synthesize waitingResultName = _waitingResultName;
-@synthesize waitingTimeoutInterval = _waitingTimeoutInterval;
-@synthesize skipMeIfAlreadyWaiting = _skipMeIfAlreadyWaiting;
-@synthesize haveWaitingResult = _haveWaitingResult;
 @dynamic issuedIdOfAsyncTask;
-@synthesize haveAsyncTask = _haveAsyncTask;
-@synthesize paused = _paused;
-@synthesize canceled = _canceled;
 
 - (instancetype) init NS_UNAVAILABLE
 {
