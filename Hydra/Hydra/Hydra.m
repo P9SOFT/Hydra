@@ -11,9 +11,7 @@
 
 
 @interface Hydra ()
-
 {
-    NSString				*_name;
     NSMutableDictionary		*_workerDict;
     NSMutableDictionary		*_sharedDataDict;
     NSLock					*_lockForSharedDataDict;
@@ -49,8 +47,6 @@
 
 
 @implementation Hydra
-
-@synthesize name = _name;
 
 + (Hydra *) defaultHydra
 {
@@ -574,7 +570,7 @@
 		if( (pair = [[NSMutableArray alloc] init]) != nil ) {
 			if( (pool = [[NSMutableArray alloc] init]) != nil ) {
 				[pair addObject: @(count)];
-				[pair addObject: @0U];
+				[pair addObject: @(0)];
 				_asyncTaskLimiterDict[name] = pair;
 				_asyncTaskLimiterPoolDict[name] = pool;
 				set = YES;

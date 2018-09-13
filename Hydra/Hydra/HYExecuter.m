@@ -16,18 +16,14 @@
 
 
 @interface HYExecuter ()
-
 {
-    __weak id				_employedWorker;
     NSMutableDictionary		*_resultDict;
 }
-
 @end
 
 
 @implementation HYExecuter
 
-@synthesize employedWorker = _employedWorker;
 @dynamic resultDict;
 
 - (instancetype) init

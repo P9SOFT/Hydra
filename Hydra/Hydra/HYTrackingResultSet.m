@@ -12,19 +12,15 @@
 
 
 @interface HYTrackingResultSet ()
-
 {
-    NSString				*_name;
     NSMutableDictionary		*_resultNameDict;
     NSMutableDictionary		*_resultValueDict;
 }
-
 @end
 
 
 @implementation HYTrackingResultSet
 
-@synthesize name = _name;
 @dynamic resultDict;
 
 - (instancetype) init NS_UNAVAILABLE

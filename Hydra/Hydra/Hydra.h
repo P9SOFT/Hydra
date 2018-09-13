@@ -21,10 +21,8 @@
 
 #define		kHydraDefaultName				@"__THE_LERNAEAN_HYDRA__"
 
-
 #define		HydraNotification				@"hydraNotification"
-
-#define		HydraNotifiationCodeKey						@"hydraNotificationCodeKey"
+#define		HydraNotifiationCodeKey			@"hydraNotificationCodeKey"
 
 typedef NS_ENUM(NSInteger, HydraNotificationCode)
 {

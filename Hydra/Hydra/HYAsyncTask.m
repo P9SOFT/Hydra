@@ -16,36 +16,16 @@ int32_t			g_HYAsyncTask_last_issuedId;
 
 
 @interface HYAsyncTask ()
-
 {
-    int32_t					_issuedId;
-    int32_t					_madeByQueryIssuedId;
-    NSString				*_madeByWorkerName;
-    NSString				*_madeByExecutorName;
-    id						_closeQuery;
-    NSString				*_limiterName;
-    NSInteger				_limiterCount;
-    HYAsyncTaskActiveOrder	_limiterOrder;
     struct timeval			_tvBinded;
     NSLock					*_lock;
-    BOOL					_paused;
 }
-
 @end
 
 
 @implementation HYAsyncTask
 
-@synthesize issuedId = _issuedId;
-@synthesize closeQuery = _closeQuery;
 @dynamic running;
-@synthesize paused = _paused;
-@synthesize madeByQueryIssuedId = _madeByQueryIssuedId;
-@synthesize madeByWorkerName = _madeByWorkerName;
-@synthesize madeByExecutorName = _madeByExecutorName;
-@synthesize limiterName = _limiterName;
-@synthesize limiterCount = _limiterCount;
-@synthesize limiterOrder = _limiterOrder;
 @dynamic passedMilisecondFromBind;
 
 - (instancetype) init NS_UNAVAILABLE
@@ -158,6 +138,9 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	
 	[self willDone];
 	
+    if( [_closeQuery isKindOfClass: [HYQuery class]] == YES ) {
+        ((HYQuery *)_closeQuery).needUnbindAsyncTask = YES;
+    }
 	[[Hydra defaultHydra] pushQuery: _closeQuery];
 	_closeQuery = nil;
 }
@@ -170,6 +153,9 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	
 	[self willCancel];
 	
+    if( [_closeQuery isKindOfClass: [HYQuery class]] == YES ) {
+        ((HYQuery *)_closeQuery).needUnbindAsyncTask = YES;
+    }
 	[[Hydra defaultHydra] pushQuery: _closeQuery];
 	_closeQuery = nil;
 }
@@ -179,13 +165,13 @@ int32_t			g_HYAsyncTask_last_issuedId;
 	if( self.didBind == NO ) {
 		[self done];
 	}
-	
 	gettimeofday( &_tvBinded, NULL );
 }
 
 - (void) unbind
 {
 	[self willUnbind];
+    bzero( &_tvBinded, sizeof(_tvBinded) );
 }
 
 - (BOOL) running

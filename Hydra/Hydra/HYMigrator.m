@@ -13,18 +13,7 @@
 #define		kDefaultMigrationNumberKey		@"HYMigrationDefaultMigrationNumberKey"
 
 
-@interface HYMigrator ()
-
-{
-    BOOL			_useBackgroundThread;
-}
-
-@end
-
-
 @implementation HYMigrator
-
-@synthesize useBackgroundThread = _useBackgroundThread;
 
 - (instancetype) init
 {
