@@ -1,5 +1,8 @@
 Hydra
 ============
+[![Version](https://img.shields.io/cocoapods/v/Hydra.svg?style=flat)](http://cocoapods.org/pods/Hydra)
+[![License](https://img.shields.io/cocoapods/l/Hydra.svg?style=flat)](http://cocoapods.org/pods/Hydra)
+[![Platform](https://img.shields.io/cocoapods/p/Hydra.svg?style=flat)](http://cocoapods.org/pods/Hydra)
 
 Hydra's aim is to allow the developer to focus on the important implementation, without having to focus on complex things such as background tasks, asynchrony, and so on..
 All you need to do is to register your tasks to the Hydra framework, and the framework will excute your task in a background thread. You're callback handler is called by the Hydra framework when your task is complete.
